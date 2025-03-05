@@ -1,6 +1,3 @@
-function fnLocal_Tpm($tpm){
-    return ($tpm -split ",")[0]
-}
 
 function Get-fnTpm {
     [CmdletBinding()]
@@ -17,7 +14,7 @@ function Get-fnTpm {
                     }, 
                     @{
                         label = "TpmVersion"
-                        expression = {fnLocal_Tpm($_.SpecVersion)}
+                        expression = {($_.SpecVersion -split ",")[0]}
                     }
     }
     catch {
