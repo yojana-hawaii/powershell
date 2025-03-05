@@ -4,10 +4,10 @@ function Get-fnDomainClaimType {
     param()
 
     try{
-        Write-Verbose "Getting Domain Claim Type"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Domain Claim Type"
         return Get-ADClaimType -Filter *
     } catch {
-        Write-Error "Failed Get-fnDomainClaimType: $($_.Exception.Message)"
+        Write-Error "$($MyInvocation.MyCommand.Name) Failed: $($_.Exception.Message)"
         continue
     }
 }

@@ -1,4 +1,4 @@
-use inventory
+use DaHubInventory
 go
 set ansi_nulls on
 go
@@ -6,9 +6,9 @@ set quoted_identifier on
 go
 
 
-drop table if exists dbo.active_directory;
+drop table if exists dbo.ActiveDirectory;
 go
-create table dbo.active_directory 
+create table dbo.ActiveDirectory 
 (
 	id				int identity(1,1),
 	name			varchar(100),
@@ -19,7 +19,7 @@ create table dbo.active_directory
 )
 go
 
-select * from inventory.dbo.active_directory
+select * from dbo.ActiveDirectory
 go
 
 /*testing last_modified -> directory to table

@@ -1,9 +1,9 @@
 
-use inventory
+use DaHubInventory
 go
-drop proc if exists dbo.active_directory_spInsert;
+drop proc if exists dbo.spActiveDirectory;
 go
-create proc dbo.active_directory_spInsert 
+create proc dbo.spActiveDirectory 
 (
 	@name			varchar(100),
 	@value			varchar(100) = null,
@@ -23,7 +23,7 @@ begin
 		(
 			select @name, @value
 		)
-	merge dbo.active_directory with (holdlock) as [target]
+	merge dbo.ActiveDirectory with (holdlock) as [target]
 		using [source] on [target].name = [source].name
 	when matched and [target].value <> [source].value
 		then update set [target].value	= @value,
@@ -34,7 +34,7 @@ begin
 	
 end
 go
-select * from inventory.dbo.active_directory
+select * from dbo.ActiveDirectory
 
 /*test insert using stored procedure
 exec dbo.active_directory_spInsert

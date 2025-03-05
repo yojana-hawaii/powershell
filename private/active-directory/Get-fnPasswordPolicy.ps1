@@ -4,14 +4,14 @@ function Get-fnPasswordPolicy {
     
 
     try {
-        Write-Verbose "Getting Password Policy"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Password Policy"
         return Get-ADDefaultDomainPasswordPolicy | 
             Select-Object ComplexityEnabled, LockoutDuration, LockoutObservationWindow, LockoutThreshold, `
                 MaxPasswordAge, MinPasswordAge, MinPasswordLength, PasswordHistoryCount, ReversibleEncryptionEnabled                
 
         
      } catch {
-         Write-Warning "Get-fnPasswordPolicy failed: $($_.Exception.Message) "
+         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
      continue
      }
 }

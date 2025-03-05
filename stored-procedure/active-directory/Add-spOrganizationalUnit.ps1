@@ -6,7 +6,7 @@ function Add-spOrganizationalUnit {
     )
 
 
-    $StoredProcedure = 'dbo.organizational_unit_spInsert'
+    $StoredProcedure = 'dbo.spOrganizationalUnit'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]

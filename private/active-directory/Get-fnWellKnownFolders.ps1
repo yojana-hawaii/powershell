@@ -4,7 +4,7 @@ function Get-fnWellKnownFolders {
         [Parameter()]
         [Microsoft.ActiveDirectory.Management.ADDomain]$domain
     )
-    Write-Verbose "Getting Well Known Folders"
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Well Known Folders"
 
     $WellKnownFolder = [ordered]@{
         UsersContainer              = $domain.UsersContainer

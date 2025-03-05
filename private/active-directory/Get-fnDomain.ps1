@@ -2,11 +2,11 @@ function Get-fnDomain {
     [CmdletBinding()]
     param()
     try {
-        Write-Verbose -Message "Getting information about the domain"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name): Getting information about the domain"
         Get-ADDomain -ErrorAction Stop
 
     } catch {
-        Write-Warning "Get-fnDomain failed: $($_.Exception.Message)."
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)."
         continue
     }
 }

@@ -4,7 +4,7 @@ function Get-fnSpnSuffixes {
         [Parameter(Mandatory)]
         [PSCustomObject]$forest
     )
-    Write-Verbose "Getting SPN Suffixes"
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Getting SPN Suffixes"
     return @(
         foreach($Spn in $forest.SPNSuffixes){
             [PSCustomObject]@{

@@ -6,11 +6,11 @@ function Get-fnGlobalCatalog {
     
 
     try {
-        Write-Verbose "Getting global catalog server Names"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting global catalog server Names"
         return @((Get-ADDomainController -Filter {IsGlobalCatalog -eq $true}).Hostname)
 
      } catch {
-         Write-Warning "Get-fnGlobalCatalog failed: $($_.Exception.Message) "
+         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
          continue
      }
 }

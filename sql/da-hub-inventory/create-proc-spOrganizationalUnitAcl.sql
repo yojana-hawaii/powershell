@@ -1,8 +1,8 @@
-use inventory
+use DaHubInventory
 go
-drop proc if exists dbo.organizational_unit_acl_spInsert;
+drop proc if exists dbo.spOrganizationalUnitAcl;
 go
-create proc dbo.organizational_unit_acl_spInsert
+create proc dbo.spOrganizationalUnitAcl
 (
     @ObjectGuid				varchar(100)=null,
 
@@ -37,7 +37,7 @@ begin
                     @ActiveDirectoryRights,@ObjectType, @PropagationFlags, @ObjectFlags,
 					@last_modified
 		)
-	merge dbo.organizational_unit_acl with (holdlock) as target
+	merge dbo.OrganizationalUnitAcl with (holdlock) as target
 		using [source] on [target].ObjectGuid = [source].ObjectGuid and [target].IdentityReference = [source].IdentityReference
 
 	when matched and [target].IsInherited				<> [source].IsInherited
@@ -65,5 +65,5 @@ begin
 end
 go
 
-select * from inventory.dbo.organizational_unit_acl 
+select * from DaHubInventory.dbo.OrganizationalUnitAcl 
 go

@@ -5,10 +5,10 @@ function Get-fnDomainCentralAccessPolicy {
     param()
 
     try{
-        Write-Verbose "Getting Domain Central Access Policy"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Domain Central Access Policy"
         return Get-ADCentralAccessPolicy -Filter *
     } catch {
-        Write-Error "Failed Get-fnDomainCentralAccessPolicy: $($_.Exception.Message)"
+        Write-Error "$($MyInvocation.MyCommand.Name) Failed: $($_.Exception.Message)"
         continue
     }
 }

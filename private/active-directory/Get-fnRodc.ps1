@@ -4,10 +4,10 @@ function Get-fnRodc {
     
 
     try {
-        Write-Verbose "Getting RODC Names"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting RODC Names"
         return @((Get-ADDomainController -Filter {isreadonly -eq $true}).hostname)
      } catch {
-         Write-Warning "Get-fnRodc failed: $($_.Exception.Message) "
+         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
          continue
      }
 }

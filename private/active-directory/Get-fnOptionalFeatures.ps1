@@ -3,14 +3,14 @@ function Get-fnOptionalFeatures {
     param()
 
     try {
-        Write-Verbose "Getting Optional Features"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Optional Features"
         return @(
         foreach($feature in Get-ADOptionalFeature -Filter *){
             $feature.Name
         }
     )
      } catch {
-         Write-Warning "Get-fnOptionalFeatures failed: $($_.Exception.Message) "
+         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
          continue
      }
 }

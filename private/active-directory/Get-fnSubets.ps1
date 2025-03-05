@@ -3,12 +3,12 @@ function Get-fnSubets {
     param ()
 
     try {
-        Write-Verbose "Getting subnets"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting subnets"
 
         $subnets = Get-ADReplicationSubnet -Filter * -Properties * | Select-Object Name, DisplayName, Description, Site, ProtectionFromAccientalDeletion, Created, Modified, Deleted
         return $subnets
      } catch {
-         Write-Warning "Get-fnSubets failed: $($_.Exception.Message) "
+         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
          continue
      }
 }

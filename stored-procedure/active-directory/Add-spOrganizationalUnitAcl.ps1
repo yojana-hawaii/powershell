@@ -6,7 +6,7 @@ function Add-spOrganizationalUnitAcl{
         [Parameter()]
         [guid]$guid
     )
-    $StoredProcedure = 'dbo.organizational_unit_acl_spInsert'
+    $StoredProcedure = 'dbo.spOrganizationalUnitAcl'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]

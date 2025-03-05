@@ -9,7 +9,7 @@ function Get-fnOrganizationalUnit {
         
         $OUs = Get-ADOrganizationalUnit -Filter * -Properties * 
         foreach($ou in $OUs){
-            Write-Verbose "Working on $($ou.CanonicalName)"
+            Write-Verbose "$($MyInvocation.MyCommand.Name) working on $($ou.CanonicalName)"
             
             $acl = Get-fnOrganizationalUnitAcl -DistinguishedName $ou.DistinguishedName -NetBiosName $NetBiosName
             
@@ -37,7 +37,7 @@ function Get-fnOrganizationalUnit {
     
         return $ouList
     } catch {
-        Write-Error "Failed getting Get-fnOrganizationalUnit: $($_.Exception.Message)"
+        Write-Error "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
     }
     
 }

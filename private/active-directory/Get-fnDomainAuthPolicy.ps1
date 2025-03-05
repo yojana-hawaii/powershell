@@ -3,10 +3,10 @@ function Get-fnDomainAuthPolicy{
     param()
 
     try{
-        Write-Verbose "Getting Domain Authentication Policy"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Domain Authentication Policy"
         return Get-ADAuthenticationPolicy -LDAPFilter '(name=AuthenticationPolicy*)'
     } catch {
-        Write-Error "Failed Get-fnDomainAuthPolicy: $($_.Exception.Message)"
+        Write-Error "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
         continue
     }
 }

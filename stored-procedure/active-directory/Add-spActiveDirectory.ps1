@@ -4,7 +4,7 @@ function Add-spActiveDirectory {
         [Parameter()]
         [System.Collections.DictionaryEntry]$ActiveDirectory
     )
-    $StoredProcedure = 'dbo.active_directory_spInsert'
+    $StoredProcedure = 'dbo.spActiveDirectory'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]

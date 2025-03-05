@@ -3,10 +3,10 @@ function Get-fnDomainAuthPolicySilo {
     param()
 
     try{
-        Write-Verbose "Getting Domain Authentication Policy Silo"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Domain Authentication Policy Silo"
         return Get-ADAuthenticationPolicySilo -Filter '(name -like "AuthenticationPolicySilo*")'
     } catch {
-        Write-Error "Failed Get-fnDomainAuthPolicySilo: $($_.Exception.Message)"
+        Write-Error "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
         continue
     }
 }

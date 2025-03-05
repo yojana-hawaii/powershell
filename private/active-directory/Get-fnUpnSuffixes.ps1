@@ -4,7 +4,7 @@ function Get-fnUpnSuffixes {
         [Parameter(Mandatory)]
         [PSCustomObject]$Forest
     )
-    Write-Verbose "Getting UPN Suffixes"
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Getting UPN Suffixes"
     return   @(
             [PSCustomObject]@{
                 Name = $Forest.RootDomain

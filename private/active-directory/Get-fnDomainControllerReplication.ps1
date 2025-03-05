@@ -8,7 +8,7 @@ function Get-fnDomainControllerReplication {
     )
     
     try {
-        Write-Verbose "Getting Domain Controller Replication Details"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Domain Controller Replication Details"
         foreach ($dc in $server){
             Get-ADReplicationPartnerMetadata -target $dc | 
                 Select-Object Server, `
@@ -23,7 +23,7 @@ function Get-fnDomainControllerReplication {
         }
         
     } catch {
-        Write-Warning "Get-fnDomainControllerReplication failed: $($_.Exception.Message) "
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
         continue
     }
 }

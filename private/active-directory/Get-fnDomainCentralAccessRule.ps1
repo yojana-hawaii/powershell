@@ -5,10 +5,10 @@ function Get-fnDomainCentralAccessRule {
     param()
 
     try{
-        Write-Verbose "Getting Domain Central Access Rule"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Domain Central Access Rule"
         return Get-ADCentralAccessRule -Filter *
     } catch {
-        Write-Error "Failed Get-fnDomainCentralAccessRule: $($_.Exception.Message)"
+        Write-Error "$($MyInvocation.MyCommand.Name) Failed: $($_.Exception.Message)"
         continue
     }
 }

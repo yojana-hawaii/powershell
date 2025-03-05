@@ -1,14 +1,14 @@
 
 
-use inventory
+use DaHubInventory
 go
 set ansi_nulls on
 go
 set quoted_identifier on
 go
-drop table if exists dbo.organizational_unit_acl;
+drop table if exists dbo.OrganizationalUnitAcl;
 go
-create table dbo.organizational_unit_acl
+create table dbo.OrganizationalUnitAcl
 (
 	ObjectGuid				varchar(100),
 
@@ -30,5 +30,5 @@ create table dbo.organizational_unit_acl
 )
 go
 
-select * from inventory.dbo.organizational_unit_acl
+select * from DaHubInventory.dbo.OrganizationalUnitAcl
 go

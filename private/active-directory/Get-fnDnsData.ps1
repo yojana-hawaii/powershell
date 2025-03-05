@@ -7,7 +7,7 @@ function Get-fnDnsData{
     
 
     try {
-        Write-Verbose "Getting DNS Names"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting DNS Names"
         $dnsRecord = "_kerberos._tcp.$domain", "_ldap._tcp.$domain"
         $dnsData = foreach($dns in $dnsRecord){
             Resolve-DnsName -name   $dns -Type SRV
@@ -18,7 +18,7 @@ function Get-fnDnsData{
 
         }
      } catch {
-         Write-Warning "Get-fnDnsData failed: $($_.Exception.Message) "
+         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
      continue
      }
 

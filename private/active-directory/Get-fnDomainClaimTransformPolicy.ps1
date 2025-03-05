@@ -4,10 +4,10 @@ function Get-fnDomainClaimTransformPolicy {
     param()
 
     try{
-        Write-Verbose "Getting Domain Claim TransformPolicy"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting Domain Claim TransformPolicy"
         return Get-ADClaimTransformPolicy -Filter *
     } catch {
-        Write-Error "Failed Get-fnDomainClaimTransformPolicy: $($_.Exception.Message)"
+        Write-Error "$($MyInvocation.MyCommand.Name) Failed: $($_.Exception.Message)"
         continue
     }
 }

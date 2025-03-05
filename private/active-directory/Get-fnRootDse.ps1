@@ -3,10 +3,10 @@ function Get-fnRootDse {
     param()
 
     try {
-        Write-Verbose -Message "Getting information about the Root Dse"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name): Getting information about the Root Dse"
         Get-ADRootDSE -Properties *
     } catch {
-        Write-Warning "Get-fnRootDse failed: $($_.Exception.Message) "
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
         continue
     }
 }

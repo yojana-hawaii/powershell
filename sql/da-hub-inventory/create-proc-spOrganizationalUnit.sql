@@ -1,9 +1,9 @@
 
-use inventory
+use DaHubInventory
 go
-drop proc if exists dbo.organizational_unit_spInsert;
+drop proc if exists dbo.spOrganizationalUnit;
 go
-create proc dbo.organizational_unit_spInsert
+create proc dbo.spOrganizationalUnit
 (
 	@CanonicalName			varchar(100),
 	@Description			varchar(100) = null,
@@ -52,7 +52,7 @@ begin
 					@AreAccessRulesCanonical,@AreAuditRulesCanonical,
 					@last_modified
 		)
-	merge dbo.organizational_unit with (holdlock) as target
+	merge dbo.OrganizationalUnit with (holdlock) as target
 		using [source] on [target].ObjectGuid = [source].ObjectGuid
 
 	when matched and [target].ou_modified <> [source].ou_modified
@@ -96,6 +96,6 @@ begin
 end
 go
 
-select * from inventory.dbo.organizational_unit
+select * from DaHubInventory.dbo.OrganizationalUnit
 go
 

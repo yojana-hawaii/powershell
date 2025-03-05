@@ -4,10 +4,10 @@ function Get-fnDhcpServer {
     
 
     try {
-        Write-Verbose "Getting DHCP Names"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Getting DHCP Names"
         return @((Get-DhcpServerInDC).dnsname)
      } catch {
-         Write-Warning "Get-fnDhcpServer failed: $($_.Exception.Message) "
+         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
          continue
      }
 }
