@@ -25,7 +25,7 @@ function Invoke-fnSpWorkstationSpecsOffline {
         }
 
     } catch {
-        Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
         continue
     } finally {
         Write-Verbose -Message "Closing Sql Connection"

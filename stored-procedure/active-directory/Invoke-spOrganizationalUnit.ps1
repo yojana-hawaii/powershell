@@ -50,13 +50,14 @@ function Invoke-spOrganizationalUnit {
         $cmd.Parameters[15].Value = $ou.AreAuditRulesCanonical
         
         $return = $cmd.ExecuteNonQuery()
-        if($return -eq -1){
-            Write-Verbose "Sql command to insert OU data success."
+        if($return -eq 1){
+            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
         } else {
-            Write-Warning "Sql command failed to insert OU data: $($_.Exception.Message) "
+            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
         }
+
     } catch {
-        Write-Warning "Add-spOrganizationalUnit failed: $($_.Exception.Message) "
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
         continue
     } finally {
         Write-Verbose -Message "Closing Sql Connection"

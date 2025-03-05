@@ -39,13 +39,14 @@ function Invoke-spOrganizationalUnitAcl{
         $cmd.Parameters[10].Value = $guid
         
         $return = $cmd.ExecuteNonQuery()
-        if($return -eq -1){
-            Write-Verbose "Sql command to insert OU ACL data success."
+        if($return -eq 1){
+            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
         } else {
-            Write-Warning "Sql command failed to insert OU ACL data: $($_.Exception.Message) "
+            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
         }
+
     } catch {
-        Write-Warning "Add-spOrganizationalUnitAcl failed: $($_.Exception.Message) "
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
         continue
     } finally {
         Write-Verbose -Message "Closing Sql Connection"
