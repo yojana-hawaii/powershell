@@ -29,7 +29,7 @@ function New-fnComputerDetails {
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
     
-    $computer = "952-damien-22"
+    $computer = "comp1"
     $ping = Test-Connection $computer -Quiet -Count 1
     if($ping){
         $compDetails =  Get-fnWorkstationSpecs -computerName $computer
