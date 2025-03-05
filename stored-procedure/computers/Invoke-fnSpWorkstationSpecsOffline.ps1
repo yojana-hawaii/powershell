@@ -1,4 +1,4 @@
-function Invoke-fnSpWorkStationOffline {
+function Invoke-fnSpWorkstationSpecsOffline {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]

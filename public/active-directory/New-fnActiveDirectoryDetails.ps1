@@ -1,24 +1,20 @@
 
 set-location "\\fileserver\it\apps\powershell"
 
-
-
 function New-fnActiveDirectoryDetails{
     [CmdletBinding()]
     param (
     )
-
-    
     #region - Import necessary configs and private functions #>
-    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnConfig.ps1"                          -ErrorAction SilentlyContinue -Recurse)
+    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
     $private            = @(Get-ChildItem -Path "$PWD\private\active-directory\*.ps1"               -ErrorAction SilentlyContinue -Recurse)
     $storedProcedure    = @(Get-ChildItem -Path "$PWD\stored-procedure\active-directory\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
-    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
-    $sqlConection       = @(Get-ChildItem -Path "$PWD\stored-procedure\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
+    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
+    $sqlConection       = @(Get-ChildItem -Path "$PWD\stored-procedure\SqlConnection\*.ps1"         -ErrorAction SilentlyContinue -Recurse)
 
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
     #import all function
-    foreach ($import in @($configHelper + $private + $public + $storedProcedure + $utility + $sqlConection)){
+    foreach ($import in @($configHelper + $private + $storedProcedure + $utility + $sqlConection)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -35,19 +31,17 @@ function New-fnActiveDirectoryDetails{
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
 
 
-    $ActiveDirectoryData = Get-fnActiveDirectory -Verbose
-        
+    $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){
-        Add-spActiveDirectory -ActiveDirectory $data -Verbose
+        Invoke-spActiveDirectory -ActiveDirectory $data -Verbose
     }
     
     $organizationalUnits = Get-fnOrganizationalUnit -Verbose
-    
     foreach($ou in $organizationalUnits)
     {
-        Add-spOrganizationalUnit -organizational_unit $ou -Verbose
+        Invoke-spOrganizationalUnit -organizational_unit $ou -Verbose
         foreach($acl in $ou.ExtendedAcl){
-            Add-spOrganizationalUnitAcl -acl $acl -guid $ou.ObjectGuid
+            Invoke-spOrganizationalUnitAcl -acl $acl -guid $ou.ObjectGuid
         }
     }
 
@@ -63,5 +57,5 @@ $today = Get-Date
 $mmddyyyy = Get-Date -Format "MM-dd-yyyy"
 
 Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$mmddyyyy.txt" -Append
-New-fnComputerDetails  -Verbose -InformationAction Continue
+New-fnActiveDirectoryDetails  -Verbose -InformationAction Continue
 Stop-Transcript

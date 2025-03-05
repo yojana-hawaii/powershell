@@ -1,4 +1,4 @@
-function Add-spOrganizationalUnitAcl{
+function Invoke-spOrganizationalUnitAcl{
     [CmdletBinding()]
     param(
         [Parameter()]

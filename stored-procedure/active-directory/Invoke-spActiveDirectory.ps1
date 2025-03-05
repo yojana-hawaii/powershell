@@ -1,4 +1,4 @@
-function Add-spActiveDirectory {
+function Invoke-spActiveDirectory {
     [CmdletBinding()]
     param(
         [Parameter()]

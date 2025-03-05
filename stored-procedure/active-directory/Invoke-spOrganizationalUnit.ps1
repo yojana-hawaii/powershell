@@ -1,4 +1,4 @@
-function Add-spOrganizationalUnit {
+function Invoke-spOrganizationalUnit {
     [CmdletBinding()]
     param(
         [Parameter()]
