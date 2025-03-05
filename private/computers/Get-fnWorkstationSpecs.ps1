@@ -6,7 +6,7 @@ function Get-fnWorkstationSpecs {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     $comp = [PSCustomObject]@{
-        Name                = $computerName
+        ComputerName        = $computerName
         SerialNumber        = (Get-fnBios -computerName $computerName).SerialNumber
         BiosVersion         = (Get-fnBios -computerName $computerName).BiosVersion
         BiosReleaseDate     = (Get-fnBios -computerName $computerName).BiosReleaseDate
@@ -28,7 +28,7 @@ function Get-fnWorkstationSpecs {
         TpmEnabled          = (Get-fnTpm -computerName $computerName).TpmEnabled
         TpmVersion          = (Get-fnTpm -computerName $computerName).TpmVersion
         MacAddresses        = (Get-fnMacAddress -computerName $computerName).MacAddresses
-        LastReboot          = (Get-fnOperatingSystem -computerName $computerName).LastReboot
+        LastRebootDate      = (Get-fnOperatingSystem -computerName $computerName).LastReboot
         EncryptionLevel     = (Get-fnOperatingSystem -computerName $computerName).EncryptionLevel
         OsArchitecture      = (Get-fnOperatingSystem -computerName $computerName).OsArchitecture
         NumberOfUsers       = (Get-fnOperatingSystem -computerName $computerName).NumberOfUsers
