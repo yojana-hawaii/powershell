@@ -35,7 +35,10 @@ function New-fnComputerDetails {
         $compDetails =  Get-fnWorkstationSpecs -computerName $computer
         Invoke-fnSpWorkstationSpecs -workstation $compDetails -Verbose
         
-        # Get-fnServices -computerName $comp
+        $services = Get-fnServices -computerName $computer
+        foreach($service in $services){
+            Invoke-fnSpWorkstationServices -workstation $service -Verbose
+        }
     }
     else {
         Invoke-fnSpWorkstationSpecsOffline -computerName $computer -Verbose 
