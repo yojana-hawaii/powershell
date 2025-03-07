@@ -7,12 +7,12 @@ create proc dbo.spWorkstationServices
 (
 	@ComputerName varchar(50) ,
 	@ServiceName varchar(50),
-	@ServiceDisplayName varchar(50),
-	@ServiceStatus varchar(50),
-	@ServiceStartType varchar(50),
-	@ServiceCanPauseAndContinue bit,
-	@ServiceCanShutdown bit,
-	@ServiceCanStop bit
+	@ServiceDisplayName varchar(50) = null,
+	@ServiceStatus varchar(50) = null,
+	@ServiceStartType varchar(50) = null,
+	@ServiceCanPauseAndContinue bit = null,
+	@ServiceCanShutdown bit = null,
+	@ServiceCanStop bit = null
 )
 as 
 begin
@@ -27,12 +27,12 @@ begin
 		ServiceCanPauseAndContinue = convert(bit, @ServiceCanPauseAndContinue),
 		ServiceCanShutdown = convert(bit,@ServiceCanShutdown),
 		ServiceCanStop = convert(bit,@ServiceCanStop),
-		ScanSuccessDate	= @now
+		ServiceScanSuccessDate	= @now
 	where ComputerName = @ComputerName and ServiceName = @ServiceName;
 
 	if @@ROWCOUNT = 0
 	begin
-		insert into dbo.WorkstationServices(ComputerName, ServiceName, ServiceDisplayName,ServiceStatus, ServiceStartType, ServiceCanPauseAndContinue, ServiceCanShutdown, ServiceCanStop, ScanSuccessDate)
+		insert into dbo.WorkstationServices(ComputerName, ServiceName, ServiceDisplayName,ServiceStatus, ServiceStartType, ServiceCanPauseAndContinue, ServiceCanShutdown, ServiceCanStop, ServiceScanSuccessDate)
 		select @ComputerName,@ServiceName, @ServiceDisplayName,@ServiceStatus, @ServiceStartType, convert(bit, @ServiceCanPauseAndContinue), convert(bit,@ServiceCanShutdown), convert(bit,@ServiceCanStop), @now
 	end
 

@@ -14,7 +14,7 @@ create table dbo.WorkstationServices
 	ServiceCanPauseAndContinue bit,
 	ServiceCanShutdown bit,
 	ServiceCanStop bit,
-	ScanSuccessDate datetime
+	ServiceScanSuccessDate datetime
 );
 
 go

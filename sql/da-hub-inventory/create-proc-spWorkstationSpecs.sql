@@ -8,38 +8,38 @@ create proc dbo.spWorkstationSpecs
 (
 	@ComputerName varchar(50),
 	@SerialNumber varchar(50),
-	@BiosVersion varchar(50),
-	@BiosReleaseDate varchar(50),
-	@Manufacturer varchar(50),
-	@Model varchar(50),
-	@WakeUpType varchar(50),
-	@CurrentUser varchar(50),
-	@RamInstalledGb varchar(50),
-	@RamUpgradableGb varchar(50),
-	@RamSlotTotal varchar(50),
-	@RamSlotUsed varchar(50),
-	@Processor varchar(50),
-	@NumberOfCores varchar(50),
-	@NumberOfEnabledCore varchar(50),
-	@CurrentClockSpeed varchar(50),
-	@DiskModel varchar(50),
-	@DiskSizeGb varchar(50),
-	@DiskType varchar(50),
-	@TpmEnabled varchar(50),
-	@TpmVersion varchar(50),
-	@MacAddresses varchar(50),
-	@LastRebootDate varchar(50),
-	@EncryptionLevel varchar(50),
-	@OsArchitecture varchar(50),
-	@NumberOfUsers varchar(50),
-	@OsBuildNumber varchar(50),
-	@OsBuildType varchar(50),
-	@OsVersion varchar(50),
-	@OsCountryCode varchar(50),
-	@LastSecurityUpdateDate varchar(50),
-	@LastSecurityUpdate varchar(50),
-	@LastPatch varchar(50),
-	@LastPatchDate varchar(50)
+	@BiosVersion varchar(50) = null,
+	@BiosReleaseDate varchar(50) = null,
+	@Manufacturer varchar(50) = null,
+	@Model varchar(50) = null,
+	@WakeUpType varchar(50) = null,
+	@CurrentUser varchar(50) = null,
+	@RamInstalledGb varchar(50) = null,
+	@RamUpgradableGb varchar(50) = null,
+	@RamSlotTotal varchar(50) = null,
+	@RamSlotUsed varchar(50) = null,
+	@Processor varchar(50) = null,
+	@NumberOfCores varchar(50) = null,
+	@NumberOfEnabledCore varchar(50) = null,
+	@CurrentClockSpeed varchar(50) = null,
+	@DiskModel varchar(50) = null,
+	@DiskSizeGb varchar(50) = null,
+	@DiskType varchar(50) = null,
+	@TpmEnabled varchar(50) = null,
+	@TpmVersion varchar(50) = null,
+	@MacAddresses varchar(50) = null,
+	@LastRebootDate varchar(50) = null,
+	@EncryptionLevel varchar(50) = null,
+	@OsArchitecture varchar(50) = null,
+	@NumberOfUsers varchar(50) = null,
+	@OsBuildNumber varchar(50) = null,
+	@OsBuildType varchar(50) = null,
+	@OsVersion varchar(50) = null,
+	@OsCountryCode varchar(50) = null,
+	@LastSecurityUpdateDate varchar(50) = null,
+	@LastSecurityUpdate varchar(50) = null,
+	@LastPatch varchar(50) = null,
+	@LastPatchDate varchar(50) = null
 )
 as 
 begin
@@ -172,4 +172,7 @@ begin
 	 end
 
 end
+go
+
+select * from dbo.WorkstationSpecs
 go
