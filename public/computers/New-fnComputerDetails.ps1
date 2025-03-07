@@ -29,15 +29,20 @@ function New-fnComputerDetails {
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
     
-    $computer = "comp1"
+    $computer = "952-damien-22"
     $ping = Test-Connection $computer -Quiet -Count 1
     if($ping){
         $compDetails =  Get-fnWorkstationSpecs -computerName $computer
         Invoke-fnSpWorkstationSpecs -workstation $compDetails -Verbose
         
+        $softwares = Get-fnSoftwareFromRegistry -computerName $computer
+        foreach($software in $softwares){
+            Invoke-fnSpWorkstationSoftware -software $software -Verbose
+        }
+
         $services = Get-fnServices -computerName $computer
         foreach($service in $services){
-            Invoke-fnSpWorkstationServices -workstation $service -Verbose
+            Invoke-fnSpWorkstationServices -service $service -Verbose
         }
     }
     else {
