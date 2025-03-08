@@ -1,4 +1,4 @@
-function Get-fnServices {
+function Get-fnWorkstationServices {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]

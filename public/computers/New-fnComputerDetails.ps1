@@ -35,16 +35,16 @@ function New-fnComputerDetails {
         $compDetails =  Get-fnWorkstationSpecs -computerName $computer
         Invoke-fnSpWorkstationSpecs -workstation $compDetails -Verbose
         
-        $softwares = Get-fnSoftwareFromRegistry -computerName $computer
+        $softwares = Get-fnWorkstationSoftware -computerName $computer
         foreach($software in $softwares){
             Invoke-fnSpWorkstationSoftware -software $software -Verbose
         }
 
-        $localusers = Get-fnLocalUser -computerName $computer
+        $localusers = Get-fnWorkstationLocalUser -computerName $computer
         foreach($user in $localusers){
             Invoke-fnSpWorkstationLocalUser -localUser $user
         }
-        $services = Get-fnServices -computerName $computer
+        $services = Get-fnWorkstationServices -computerName $computer
         foreach($service in $services){
             Invoke-fnSpWorkstationServices -service $service -Verbose
         }

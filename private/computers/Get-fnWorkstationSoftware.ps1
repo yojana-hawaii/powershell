@@ -1,4 +1,4 @@
-function Get-fnSoftwareFromRegistry {
+function Get-fnWorkstationSoftware {
     [CmdletBinding()]
     param (
         [parameter(Mandatory)]

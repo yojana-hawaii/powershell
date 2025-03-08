@@ -11,7 +11,7 @@ function fnLocal_AccountType($type){
     }
     return $value
 }
-function Get-fnLocalUser {
+function Get-fnWorkstationLocalUser {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
