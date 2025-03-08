@@ -40,6 +40,10 @@ function New-fnComputerDetails {
             Invoke-fnSpWorkstationSoftware -software $software -Verbose
         }
 
+        $printers = Get-fnWorkstationPrinter -computerName $computer
+        foreach( $printer in $printers){
+            Invoke-fnSpWorkstationPrinters -printer $printer
+        }
         $localusers = Get-fnWorkstationLocalUser -computerName $computer
         foreach($user in $localusers){
             Invoke-fnSpWorkstationLocalUser -localUser $user
