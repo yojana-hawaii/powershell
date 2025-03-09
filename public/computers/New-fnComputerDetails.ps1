@@ -29,10 +29,13 @@ function New-fnComputerDetails {
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
     
+    $config = Get-fnConfig 
+    $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
+
     $computer = "comp1"
     $ping = Test-Connection $computer -Quiet -Count 1
     if($ping){
-        $workstation =  Get-fnWorkstationSpecs -computerName $computer
+        $workstation =  Get-fnWorkstationSpecs -computerName $computer -vpnIp $vpnIp
         Invoke-fnSpWorkstationSpecs -workstation $workstation -Verbose
         
         $softwares = Get-fnWorkstationSoftware -computerName $computer

@@ -32,16 +32,31 @@ function fnLocal_isDesktop($computername){
     $isDesktop = if ($chasis_type.chassistypes -eq 3) {1} else {0}
     return $isDesktop
 }
-function fnLocal_isVpn($computerName){
-    $dns = Resolve-DnsName -Name $computerName
-    $isVpn = if($dns.IPAddress -like '10.10.*'){1}else{0}
-    return $isVpn
+function fnLocal_isVpn(){
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string]$computerName,
+        [Parameter(Mandatory)]
+        [string]$vpnIp
+    )
+    try{
+        Write-Verbose "$($MyInvocation.MyCommand.Name): VPN check for $($computerName) with IP $($vpnIp)"
+        $dns = Resolve-DnsName -Name $computerName
+        $isVpn = if($dns.IPAddress -like "$vpnIp*" ){1}else{0}
+        return $isVpn
+    }catch{
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
+
+    }
 }
 function Get-fnComputerSystem {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [string]$computerName
+        [string]$computerName,
+        [Parameter(Mandatory)]
+        [string]$vpnIp
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
@@ -72,7 +87,7 @@ function Get-fnComputerSystem {
                              },
                              @{
                                 label = "isVpn"
-                                expression = {fnLocal_isVpn($computerName)}
+                                expression = {fnLocal_isVpn -computerName $computerName -vpnIp $vpnIp}
                              }
     }
     catch {

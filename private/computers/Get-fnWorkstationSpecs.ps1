@@ -2,12 +2,14 @@ function Get-fnWorkstationSpecs {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [string]$computerName
+        [string]$computerName,
+        [Parameter(Mandatory)]
+        [string]$vpnIp
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
 
     $bios = (Get-fnBios -computerName $computerName)
-    $system = (Get-fnComputerSystem -computerName $computerName)
+    $system = (Get-fnComputerSystem -computerName $computerName -vpnIp $vpnIp)
     $memoryArray = (Get-fnPhysicalMemoryArray -computerName $computerName)
     $processor = (Get-fnProcessor -computerName $computerName)
     $disk = (Get-fnDisk -computerName $computerName)
