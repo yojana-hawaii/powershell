@@ -26,16 +26,16 @@ function Invoke-fnSpWorkstationSpecs {
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@RamUpgradableGb", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@RamSlotTotal", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@RamSlotUsed", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
-        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@Processor", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@Processor", [System.Data.SqlDbType]::Varchar, 500)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@NumberOfCores", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@NumberOfEnabledCore", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@CurrentClockSpeed", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
-        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@DiskModel", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@DiskModel", [System.Data.SqlDbType]::Varchar, 1000)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@DiskSizeGb", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@DiskType", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@TpmEnabled", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@TpmVersion", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
-        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@MacAddresses", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@MacAddresses", [System.Data.SqlDbType]::Varchar, 300)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@LastRebootDate", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@EncryptionLevel", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@OsArchitecture", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
@@ -48,6 +48,12 @@ function Invoke-fnSpWorkstationSpecs {
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@LastSecurityUpdate", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@LastPatch", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@LastPatchDate", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@IsLaptop", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@IsDesktop", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@IsThinClient", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@IsServer", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@IsVm", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@IsVpn", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
 
         $cmd.Parameters[0].Value = $workstation.ComputerName
         $cmd.Parameters[1].Value = $workstation.SerialNumber
@@ -83,6 +89,14 @@ function Invoke-fnSpWorkstationSpecs {
         $cmd.Parameters[31].Value = $workstation.LastSecurityUpdate
         $cmd.Parameters[32].Value = $workstation.LastPatch
         $cmd.Parameters[33].Value = $workstation.LastPatchDate
+
+        $cmd.Parameters[34].Value = $workstation.IsLaptop
+        $cmd.Parameters[35].Value = $workstation.IsDesktop
+        $cmd.Parameters[36].Value = $workstation.IsThinClient
+        $cmd.Parameters[37].Value = $workstation.IsServer
+        $cmd.Parameters[38].Value = $workstation.IsVm
+        $cmd.Parameters[39].Value = $workstation.IsVpn
+
 
         $return = $cmd.ExecuteNonQuery()
         if($return -eq 1){

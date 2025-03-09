@@ -14,6 +14,29 @@ function fnLocal_WakeupType($pWakeUpType){
     }
     return $wake
 }
+function fnLocal_isLaptop($ComputerName){
+
+    $isLaptop = 0
+    $chasis_type = Get-WmiObject -class win32_systemenclosure -computerName $ComputerName | select-object chassistypes
+    $battery = Get-WmiObject -class win32_battery -ComputerName $ComputerName 
+
+    # $battery + chassis
+    $isLaptop = if ($chasis_type.chassistypes -eq 9 -or $chasis_type.chassistypes -eq 10 -or $chasis_type.chassistypes -eq 14 -or $battery )
+                    {1}
+                    else {0}
+    
+    return $isLaptop
+}
+function fnLocal_isDesktop($computername){
+    $chasis_type = Get-WmiObject -class win32_systemenclosure -computerName $ComputerName | select-object chassistypes
+    $isDesktop = if ($chasis_type.chassistypes -eq 3) {1} else {0}
+    return $isDesktop
+}
+function fnLocal_isVpn($computerName){
+    $dns = Resolve-DnsName -Name $computerName
+    $isVpn = if($dns.IPAddress -like '10.10.*'){1}else{0}
+    return $isVpn
+}
 function Get-fnComputerSystem {
     [CmdletBinding()]
     param (
@@ -34,6 +57,22 @@ function Get-fnComputerSystem {
                              @{
                                 label='RamInstalledGb'
                                 expression= {[MATH]::Round(($_.TotalPhysicalMemory / 1Gb), 2)} 
+                             },
+                             @{
+                                label = "isVM"
+                                expression = {if ($_.Model -like 'virtual*' -or $_.Model -like "VMWare*") {1} else {0}}
+                             },
+                             @{
+                                label = "isLaptop"
+                                expression = {fnLocal_isLaptop($computerName)}
+                             },
+                             @{
+                                label = "isThinClient"
+                                expression = {if($_.Model -like '*wyse*') {1} else {0}}
+                             },
+                             @{
+                                label = "isVpn"
+                                expression = {fnLocal_isVpn($computerName)}
                              }
     }
     catch {

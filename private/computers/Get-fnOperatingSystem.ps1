@@ -7,7 +7,7 @@ function Get-fnOperatingSystem {
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
         $os = Get-WmiObject -Class Win32_OperatingSystem -ComputerName $computerName | 
-                Select-Object EncryptionLevel,NumberOfUsers, OsArchitecture, BuildNumber, Version, Caption,
+                Select-Object EncryptionLevel,NumberOfUsers, OsArchitecture, BuildNumber, BuildType, Version, Caption,
                 @{
                     label = "LastReboot"
                     expression = {$_.ConvertToDateTime($_.LastBootUpTime)}

@@ -21,9 +21,12 @@ function Get-fnPhysicalDisk {
                         label = "DiskType"
                         expression = {fnLocal_DiskTyp($_.MediaType)}
                     }
+        $diskObject = [PSCustomObject]@{
+            DiskType = $disk.DiskType -join ", "
+        }
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     }
-    return $disk
+    return $diskObject
 }

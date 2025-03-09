@@ -12,9 +12,13 @@ function Get-fnDisk {
                         label = "DiskSizeGb"
                         expression = {[Math]::Round($_.Size / 1Gb, 2)}
                     }
+        $diskObject = [PSCustomObject]@{
+            Model = $disk.Model -join ", "
+            DiskSizeGb = $disk.DiskSizeGb -join ", "
+        }
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     }
-    return $disk
+    return $diskObject
 }

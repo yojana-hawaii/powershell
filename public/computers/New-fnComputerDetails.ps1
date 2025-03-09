@@ -32,8 +32,8 @@ function New-fnComputerDetails {
     $computer = "comp1"
     $ping = Test-Connection $computer -Quiet -Count 1
     if($ping){
-        $compDetails =  Get-fnWorkstationSpecs -computerName $computer
-        Invoke-fnSpWorkstationSpecs -workstation $compDetails -Verbose
+        $workstation =  Get-fnWorkstationSpecs -computerName $computer
+        Invoke-fnSpWorkstationSpecs -workstation $workstation -Verbose
         
         $softwares = Get-fnWorkstationSoftware -computerName $computer
         foreach($software in $softwares){

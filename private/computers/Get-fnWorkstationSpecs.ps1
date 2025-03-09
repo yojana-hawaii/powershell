@@ -5,41 +5,58 @@ function Get-fnWorkstationSpecs {
         [string]$computerName
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
+
+    $bios = (Get-fnBios -computerName $computerName)
+    $system = (Get-fnComputerSystem -computerName $computerName)
+    $memoryArray = (Get-fnPhysicalMemoryArray -computerName $computerName)
+    $processor = (Get-fnProcessor -computerName $computerName)
+    $disk = (Get-fnDisk -computerName $computerName)
+    $tpm = (Get-fnTpm -computerName $computerName)
+    $os = (Get-fnOperatingSystem -computerName $computerName)
+    $hotfix = (Get-fnHotFix -computerName $computerName)
+
     $comp = [PSCustomObject]@{
         ComputerName        = $computerName
-        SerialNumber        = (Get-fnBios -computerName $computerName).SerialNumber
-        BiosVersion         = (Get-fnBios -computerName $computerName).BiosVersion
-        BiosReleaseDate     = (Get-fnBios -computerName $computerName).BiosReleaseDate
-        Manufacturer        = (Get-fnComputerSystem -computerName $computerName).Manufacturer
-        Model               = (Get-fnComputerSystem -computerName $computerName).Model
-        WakeUpType          = (Get-fnComputerSystem -computerName $computerName).WakeUpType
-        CurrentUser         = (Get-fnComputerSystem -computerName $computerName).CurrentUser
-        RamInstalledGb      = (Get-fnComputerSystem -computerName $computerName).RamInstalledGb
-        RamUpgradableGb     = (Get-fnPhysicalMemoryArray -computerName $computerName).RamUpgradableGb
-        RamSlotTotal        = (Get-fnPhysicalMemoryArray -computerName $computerName).RamSlotTotal
+        SerialNumber        = $bios.SerialNumber
+        BiosVersion         = $bios.BiosVersion
+        BiosReleaseDate     = $bios.BiosReleaseDate
+        Manufacturer        = $system.Manufacturer
+        Model               = $system.Model
+        WakeUpType          = $system.WakeUpType
+        CurrentUser         = $system.CurrentUser
+        IsLaptop            = $system.IsLaptop
+        IsVpn               = $system.IsVpn
+        IsVm                = $system.IsVm
+        IsThinClient        = $system.isThinClient
+        IsServer            = if($os.Caption -like "*Server*"){1}else{0}
+        IsDesktop            = if($os.Caption -notlike "*server*" -and $system.IsLaptop -eq 0 -and $system.isVm -eq 0 -and $system.IsThinClient -eq 0){1}else{0}
+        RamInstalledGb      = $system.RamInstalledGb
+        RamUpgradableGb     = $memoryArray.RamUpgradableGb
+        RamSlotTotal        = $memoryArray.RamSlotTotal
         RamSlotUsed         = (Get-fnPhysicalMemory -computerName $computerName).RamSlotUsed
-        Processor           = (Get-fnProcessor -computerName $computerName).Name
-        NumberOfCores       = (Get-fnProcessor -computerName $computerName).NumberOfCores
-        NumberOfEnabledCore = (Get-fnProcessor -computerName $computerName).NumberOfEnabledCore
-        CurrentClockSpeed   = (Get-fnProcessor -computerName $computerName).CurrentClockSpeed
-        DiskModel           = (Get-fnDisk -computerName $computerName).Model
-        DiskSizeGb          = (Get-fnDisk -computerName $computerName).DiskSizeGb
+        Processor           = $processor.Name
+        NumberOfCores       = $processor.NumberOfCores
+        NumberOfEnabledCore = $processor.NumberOfEnabledCore
+        CurrentClockSpeed   = $processor.CurrentClockSpeed
+        DiskModel           = $disk.Model
+        DiskSizeGb          = $disk.DiskSizeGb
         DiskType            = (Get-fnPhysicalDisk -computerName $computerName).DiskType
-        TpmEnabled          = (Get-fnTpm -computerName $computerName).TpmEnabled
-        TpmVersion          = (Get-fnTpm -computerName $computerName).TpmVersion
+        TpmEnabled          = $tpm.TpmEnabled
+        TpmVersion          = $tpm.TpmVersion
         MacAddresses        = (Get-fnMacAddress -computerName $computerName).MacAddresses
-        LastRebootDate      = (Get-fnOperatingSystem -computerName $computerName).LastReboot
-        EncryptionLevel     = (Get-fnOperatingSystem -computerName $computerName).EncryptionLevel
-        OsArchitecture      = (Get-fnOperatingSystem -computerName $computerName).OsArchitecture
-        NumberOfUsers       = (Get-fnOperatingSystem -computerName $computerName).NumberOfUsers
-        OsBuildNumber       = (Get-fnOperatingSystem -computerName $computerName).BuildNumber
-        OsBuildType         = (Get-fnOperatingSystem -computerName $computerName).Version
-        OsVersion           = (Get-fnOperatingSystem -computerName $computerName).Caption 
-        OsCountryCode       = (Get-fnOperatingSystem -computerName $computerName).OsCountryCode
-        LastSecurityUpdateDate = (Get-fnHotFix -computerName $computerName).LastSecurityUpdateDate
-        LastSecurityUpdate  = (Get-fnHotFix -computerName $computerName).LastSecurityUpdate
-        LastPatch           = (Get-fnHotFix -computerName $computerName).LastPatch
-        LastPatchDate       = (Get-fnHotFix -computerName $computerName).LastPatchDate
+        LastRebootDate      = $os.LastReboot
+        EncryptionLevel     = $os.EncryptionLevel
+        OsArchitecture      = $os.OsArchitecture
+        NumberOfUsers       = $os.NumberOfUsers
+        OsBuildNumber       = $os.BuildNumber
+        OsBuildType         = $os.OsBuildType
+        OsVersion           = $os.Version
+        Caption             = $os.Caption 
+        OsCountryCode       = $os.OsCountryCode
+        LastSecurityUpdateDate = $hotfix.LastSecurityUpdateDate
+        LastSecurityUpdate  = $hotfix.LastSecurityUpdate
+        LastPatch           = $hotfix.LastPatch
+        LastPatchDate       = $hotfix.LastPatchDate
     }
     
     return $comp

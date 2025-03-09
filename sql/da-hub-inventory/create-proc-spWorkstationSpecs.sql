@@ -7,6 +7,12 @@ go
 create proc dbo.spWorkstationSpecs
 (
 	@ComputerName varchar(50),
+	@IsLaptop varchar(50),
+	@IsVm varchar(50),
+	@IsVpn varchar(50),
+	@IsDesktop varchar(50),
+	@IsThinClient varchar(50),
+	@IsServer varchar(50),
 	@SerialNumber varchar(50),
 	@BiosVersion varchar(50) = null,
 	@BiosReleaseDate varchar(50) = null,
@@ -18,16 +24,16 @@ create proc dbo.spWorkstationSpecs
 	@RamUpgradableGb varchar(50) = null,
 	@RamSlotTotal varchar(50) = null,
 	@RamSlotUsed varchar(50) = null,
-	@Processor varchar(50) = null,
+	@Processor varchar(500) = null,
 	@NumberOfCores varchar(50) = null,
 	@NumberOfEnabledCore varchar(50) = null,
 	@CurrentClockSpeed varchar(50) = null,
-	@DiskModel varchar(50) = null,
+	@DiskModel varchar(1000) = null,
 	@DiskSizeGb varchar(50) = null,
 	@DiskType varchar(50) = null,
 	@TpmEnabled varchar(50) = null,
 	@TpmVersion varchar(50) = null,
-	@MacAddresses varchar(50) = null,
+	@MacAddresses varchar(300) = null,
 	@LastRebootDate varchar(50) = null,
 	@EncryptionLevel varchar(50) = null,
 	@OsArchitecture varchar(50) = null,
@@ -45,10 +51,20 @@ as
 begin
 	declare @now datetime2 = getdate();
 
+	-- If current VPN then update else keep old. Once VPN always VPN
+	update dbo.WorkstationSpecs
+	set IsVpn = 1
+	where @IsVpn = 1 and ComputerName = @ComputerName;
+	
 	--update existing Computers
 	update dbo.WorkstationSpecs
 	set
 		SerialNumber = @SerialNumber, 
+		IsLaptop = convert(bit,@IsLaptop),
+		IsDesktop = convert(bit,@IsDesktop),
+		IsVm = convert(bit,@IsVm),
+		IsServer = convert(bit,@IsServer),
+		IsThinClient = convert(bit,@IsThinClient),
 		BiosVersion = @BiosVersion, 
 		BiosReleaseDate = convert(date,@BiosReleaseDate), 
 		Manufacturer = @Manufacturer, 
@@ -60,9 +76,9 @@ begin
 		RamSlotTotal = convert(int,@RamSlotTotal), 
 		RamSlotUsed = convert(int,@RamSlotUsed), 
 		Processor = @Processor, 
-		NumberOfCores = convert(int,@NumberOfCores), 
-		NumberOfEnabledCore = convert(int,@NumberOfEnabledCore), 
-		CurrentClockSpeed = convert(int,@CurrentClockSpeed), 
+		NumberOfCores = @NumberOfCores,
+		NumberOfEnabledCore = @NumberOfEnabledCore, 
+		CurrentClockSpeed = @CurrentClockSpeed, 
 		DiskModel = @DiskModel, 
 		DiskSizeGb = @DiskSizeGb, 
 		DiskType = @DiskType, 
@@ -95,6 +111,12 @@ begin
 		(
 			ComputerName,
 			SerialNumber,
+			IsDesktop,
+			IsLaptop,
+			IsVm,
+			IsVpn,
+			IsServer,
+			IsThinClient,
 			BiosVersion,
 			BiosReleaseDate,
 			Manufacturer,
@@ -134,6 +156,12 @@ begin
 		select
 			@ComputerName,
 			@SerialNumber,
+			convert(bit,@IsDesktop),
+			convert(bit,@IsLaptop),
+			convert(bit,@IsVm),
+			convert(bit,@IsVpn),
+			convert(bit,@IsServer),
+			convert(bit,@IsThinClient),
 			@BiosVersion,
 			convert(date,@BiosReleaseDate),
 			@Manufacturer,
@@ -145,9 +173,9 @@ begin
 			convert(int,@RamSlotTotal),
 			convert(int,@RamSlotUsed),
 			@Processor,
-			convert(int,@NumberOfCores),
-			convert(int,@NumberOfEnabledCore),
-			convert(int,@CurrentClockSpeed),
+			@NumberOfCores,
+			@NumberOfEnabledCore,
+			@CurrentClockSpeed,
 			@DiskModel,
 			@DiskSizeGb,
 			@DiskType,

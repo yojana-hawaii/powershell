@@ -7,6 +7,13 @@ function Get-fnProcessor {
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
         $processor = Get-WmiObject -Class Win32_Processor -ComputerName $computerName | Select-Object Name, NumberOfCores, NumberOfEnabledCore, CurrentClockSpeed
+        $processorObject  = [PSCustomObject]@{
+            Name = $processor.Name -join ", "
+            NumberOfCores = $processor.NumberOfCores -join ", "
+            NumberOfEnabledCore = $processor.NumberOfEnabledCore -join ", "
+            CurrentClockSpeed = $processor.NumberOfCores -join ", "
+        }
+        return $processorObject
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"

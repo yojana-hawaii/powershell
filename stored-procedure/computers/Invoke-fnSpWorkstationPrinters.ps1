@@ -26,7 +26,7 @@ function Invoke-fnSpWorkstationPrinters {
         $cmd.Parameters[2].Value = $printer.PrinterShared
         $cmd.Parameters[3].Value = $printer.PrinterShareaName
         $cmd.Parameters[4].Value = $printer.PrinterDriverName
-        $cmd.Parameters[5].Value = $printer.PritnerDriverVersion
+        $cmd.Parameters[5].Value = $printer.PrinterDriverVersion
         $cmd.Parameters[6].Value = $printer.PrinterIP
 
         $return = $cmd.ExecuteNonQuery()
