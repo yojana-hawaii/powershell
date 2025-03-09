@@ -6,7 +6,15 @@ to do
 * AD computer - bitlocker,LAPS
 * password
 * gpo
-* computer details
+* <del> computer details
+   * <del> Monitors
+   * <del> Printers
+   * <del> Users Logged In
+   * <del> Local Users
+   * <del> Services
+   * <del> Software
+   * <del> Model, Ram, Disk, Tpm, Processor, Bios, OS, Last Patch
+   * <del> laptop vs desktop vs VM vs server vs thin client vs vpn
 * OU
 * groups
 * domain admin, enterprise admin
