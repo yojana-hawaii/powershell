@@ -3,10 +3,12 @@
 learning GPO & powershell from https://github.com/EotecIT/ 
 
 to do
-* AD computer - bitlocker,LAPS
-* password
+* AD computer
+   * LAPS
+   * bitlocker
+* password policy
 * gpo
-* <del> computer details
+* computer details
    * <del> Monitors
    * <del> Printers
    * <del> Users Logged In
@@ -15,6 +17,8 @@ to do
    * <del> Software
    * <del> Model, Ram, Disk, Tpm, Processor, Bios, OS, Last Patch
    * <del> laptop vs desktop vs VM vs server vs thin client vs vpn
+  
+ * Get-Process of cmputer
 * OU
 * groups
 * domain admin, enterprise admin
