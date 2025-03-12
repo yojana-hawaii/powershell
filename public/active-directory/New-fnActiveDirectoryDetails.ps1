@@ -29,7 +29,8 @@ function New-fnActiveDirectoryDetails{
 
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
-
+    $config = Get-fnConfig
+    $dc = $config.domainController -replace '"', ""
 
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){
@@ -45,6 +46,10 @@ function New-fnActiveDirectoryDetails{
         }
     }
 
+    $computers = Get-fnAdComputers -dc $dc
+    foreach($computer in $computers){
+        Invoke-spAdComputer -computer $computer
+    }
     
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Active Diretory details complete. It took $totalTime" 
