@@ -7,8 +7,9 @@ function Get-fnWorkstationSoftware {
     Write-Information "$($MyInvocation.MyCommand.Name): Get software information from $($computerName)"
 
     $softwareObject = @()
+    $serviceName = "RemoteRegistry"
     try {
-        $service = Start-fnRemoteRegistryService -ComputerName $computerName
+        $service = Start-fnService -ComputerName $computerName -serviceName $serviceName
 
         if($service.Status -eq "Running"){
 
@@ -53,6 +54,7 @@ function Get-fnWorkstationSoftware {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     } 
     finally {
+        Stop-fnService -computerName $computerName -serviceName $serviceName -returnToOriginalStatus $false
         Write-Information "$($MyInvocation.MyCommand.Name): Final Remote Registry Status $($finalServiceStatus.Status)"
     }
     return $softwareObject
