@@ -1,5 +1,5 @@
 set-location "\\fileserver\it\apps\powershell"
-function New-fnComputerDetails {
+function Get-fnOneComputerDetail {
     [CmdletBinding()]
     param (
     )
@@ -32,12 +32,8 @@ function New-fnComputerDetails {
     $config = Get-fnConfig 
     $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
 
-    # $computer = "comp1"
-
-    $computers = Invoke-spGetComputersToScan -count 300
-    foreach($computer in $computers){
-        Get-fnComputerDetails -computer $computer.ComputerName -vpnIp $vpnIp
-    }
+    $computer = "COMP1"
+    Get-fnComputerDetails -computer $computer -vpnIp $vpnIp
     
 
     
@@ -51,5 +47,5 @@ $today = Get-Date
 $mmddyyyy = Get-Date -Format "MM-dd-yyyy"
 
 Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$mmddyyyy.txt" -Append
-New-fnComputerDetails  -Verbose -InformationAction Continue
+Get-fnOneComputerDetail  -Verbose -InformationAction Continue
 Stop-Transcript

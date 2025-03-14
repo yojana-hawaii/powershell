@@ -1,7 +1,7 @@
 
 set-location "\\fileserver\it\apps\powershell"
 
-function New-fnActiveDirectoryDetails{
+function Get-fnActiveDirectoryDetails{
     [CmdletBinding()]
     param (
     )
@@ -62,5 +62,5 @@ $today = Get-Date
 $mmddyyyy = Get-Date -Format "MM-dd-yyyy"
 
 Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$mmddyyyy.txt" -Append
-New-fnActiveDirectoryDetails  -Verbose -InformationAction Continue
+Get-fnActiveDirectoryDetails  -Verbose -InformationAction Continue
 Stop-Transcript
