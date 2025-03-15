@@ -54,5 +54,5 @@ function Stop-fnService {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     }
 
-    return
+    return $final.Status
 }
