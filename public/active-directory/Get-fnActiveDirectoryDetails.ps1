@@ -32,6 +32,11 @@ function Get-fnActiveDirectoryDetails{
     $config = Get-fnConfig
     $dc = $config.domainController -replace '"', ""
 
+    $computers = Get-fnAdComputers -dc $dc
+    foreach($computer in $computers){
+        Invoke-spAdComputer -computer $computer
+    }
+
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){
         Invoke-spActiveDirectory -ActiveDirectory $data -Verbose
@@ -44,11 +49,6 @@ function Get-fnActiveDirectoryDetails{
         foreach($acl in $ou.ExtendedAcl){
             Invoke-spOrganizationalUnitAcl -acl $acl -guid $ou.ObjectGuid
         }
-    }
-
-    $computers = Get-fnAdComputers -dc $dc
-    foreach($computer in $computers){
-        Invoke-spAdComputer -computer $computer
     }
     
     $totalTime = Stop-Timer -Start $startTimer
