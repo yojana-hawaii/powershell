@@ -2,7 +2,9 @@ function Invoke-spGetComputersToScan {
     [CmdletBinding()]
     param (
         [parameter()]
-        [string]$count
+        [string]$count,
+        [parameter()]
+        [string]$scanAfterDays
     )
 
     
@@ -15,7 +17,10 @@ function Invoke-spGetComputersToScan {
         Write-Verbose -Message "Get Computers to scan."
 
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@count", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@scanAfterDays", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+
         $cmd.Parameters[0].Value = $count
+        $cmd.Parameters[1].Value = $scanAfterDays
 
 
         $result = $cmd.ExecuteReader()
