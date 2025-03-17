@@ -123,7 +123,7 @@ function Set-fnLocalUser {
         foreach($computer in $computers)
         {
             # $computer.ComputerName
-            $ping = Test-Connection $computerName -Quiet -Count 1
+            $ping = Test-Connection $computer.computerName -Quiet -Count 1
             if($ping){
                 fnLocal_CreateLapsUsers -computerName $computer.ComputerName -laps $laps
             }

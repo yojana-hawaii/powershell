@@ -32,10 +32,18 @@ function Get-fnComputerDetails {
     $config = Get-fnConfig 
     $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
 
-    $computers = Invoke-spGetComputersToScan -count 300 -scanAfterDays 6
-    foreach($computer in $computers){
-        Get-fnComputerDetails -computer $computer.ComputerName -vpnIp $vpnIp
+
+    $computer = "COMP1"
+
+    if($computer -ne "COMP1"){
+        Get-fnComputerDetails -computer $computer -vpnIp $vpnIp
+    } else {
+        $computers = Invoke-spGetComputersToScan -count 300 -scanAfterDays 3
+        foreach($computer in $computers){
+            Get-fnComputerDetails -computer $computer.ComputerName -vpnIp $vpnIp
+        }
     }
+
     
 
     
