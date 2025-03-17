@@ -20,16 +20,16 @@ begin
 
 	select  top (@cnt) ad.ComputerName
 	from DaHubInventory.dbo.AdComputers ad
-		inner join DaHubInventory.dbo.WorkstationSpecs ws on ws.ComputerName = ad.ComputerName and ws.IsDesktop = 1
+		inner join DaHubInventory.dbo.WorkstationSpecs ws on ws.ComputerName = ad.ComputerName
 	where ad.Enabled = 1
 		and ws.IsThinClient = 0 
-		and ws.IsServer = 0
+		--and ws.IsServer = 0
 		and ad.ComputerName not in (select ComputerName from #lapsCompleted)
 		
 
 end
 
 go
-exec dbo.spGetComputersWithoutUser @count = 10, @username = 'admin'
+exec dbo.spGetComputersWithoutUser @count = 500, @username = 'admin'
 
 go
