@@ -21,7 +21,6 @@ function Get-fnAdComputers {
     Write-Information "$($MyInvocation.MyCommand.Name)"
     try {
         Get-ADComputer -Filter * -Server $dc -Properties * | 
-                    Where-Object {$_.CanonicalName -like "*bitlocker*"} |
                     Select-Object @{
                             label="ComputerName"
                             expression={$_.Name}   

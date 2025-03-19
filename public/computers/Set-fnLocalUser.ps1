@@ -118,7 +118,7 @@ function Set-fnLocalUser {
     
     if($comp -eq "comp1")
     {
-        $computers = Invoke-spGetComputersWithoutUser -Count 5 -username $laps.Username
+        $computers = Invoke-spGetComputersWithoutUser -Count 100 -username $laps.Username
     
         foreach($computer in $computers)
         {
