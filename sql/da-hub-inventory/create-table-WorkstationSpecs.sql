@@ -6,7 +6,7 @@ go
 create table dbo.WorkstationSpecs
 (
 	ComputerName			varchar(50),
-	SerialNumber			varchar(50), 
+	SerialNumber			varchar(100), 
 	IsLaptop				bit,
 	IsVpn					bit,
 	IsThinClient			bit,
@@ -24,9 +24,9 @@ create table dbo.WorkstationSpecs
 	RamSlotTotal			int,
 	RamSlotUsed				int,
 	Processor				varchar(500), 
-	NumberOfCores			varchar(20),
-	NumberOfEnabledCore		varchar(20),
-	CurrentClockSpeed		varchar(20),
+	NumberOfCores			varchar(50),
+	NumberOfEnabledCore		varchar(50),
+	CurrentClockSpeed		varchar(50),
 	DiskModel				varchar(1000), 
 	DiskSizeGb				varchar(500),
 	DiskType				varchar(500), 

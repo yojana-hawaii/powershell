@@ -41,7 +41,7 @@ function fnLocal_isVpn(){
         [string]$vpnIp
     )
     try{
-        Write-Verbose "$($MyInvocation.MyCommand.Name): VPN check for $($computerName) with IP $($vpnIp)"
+        Write-Information "$($MyInvocation.MyCommand.Name): VPN check for $($computerName) with IP $($vpnIp)"
         $dns = Resolve-DnsName -Name $computerName
         $isVpn = if($dns.IPAddress -like "$vpnIp*" ){1}else{0}
         return $isVpn

@@ -36,11 +36,11 @@ function Get-fnComputerDetails {
     $computer = "COMP1"
 
     if($computer -ne "COMP1"){
-        Get-fnComputerDetails -computer $computer -vpnIp $vpnIp
+        Get-fnWorkstationDetails -computer $computer -vpnIp $vpnIp
     } else {
-        $computers = Invoke-spGetComputersToScan -count 300 -scanAfterDays 3
+        $computers = Invoke-spGetComputersToScan -count 50 -scanAfterDays 3
         foreach($computer in $computers){
-            Get-fnComputerDetails -computer $computer.ComputerName -vpnIp $vpnIp
+            Get-fnWorkstationDetails -computer $computer.ComputerName -vpnIp $vpnIp
         }
     }
 

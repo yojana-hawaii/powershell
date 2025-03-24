@@ -1,4 +1,4 @@
-function Get-fnComputerDetails {
+function Get-fnWorkstationDetails {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
@@ -17,9 +17,12 @@ function Get-fnComputerDetails {
             Invoke-fnSpWorkstationSoftware -software $software -Verbose
         }
 
-        $monitors = Get-fnWorkstationMonitor -computerName $computer
-        foreach($monitor in $monitors){
-            Invoke-fnSpWorkstationMonitors -monitor $monitor
+        if($workstation.IsVm -ne 1)
+        {
+            $monitors = Get-fnWorkstationMonitor -computerName $computer
+            foreach($monitor in $monitors){
+                Invoke-fnSpWorkstationMonitors -monitor $monitor
+            }
         }
         
         $printers = Get-fnWorkstationPrinter -computerName $computer
