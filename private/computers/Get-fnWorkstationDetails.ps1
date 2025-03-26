@@ -49,7 +49,10 @@ function Get-fnWorkstationDetails {
                     }
                 }
                 
-                
+                $partitions = Get-fnWorkstationPartition -computerName $computer
+                foreach($partition in $partitions){
+                    Invoke-fnSpWorkstationPartition -parition $partition
+                }
 
                 $users = Get-fnWorkstationUserLoggedIn -computerName $computer
                 foreach($user in $users){
