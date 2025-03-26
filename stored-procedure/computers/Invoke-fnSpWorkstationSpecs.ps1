@@ -83,7 +83,7 @@ function Invoke-fnSpWorkstationSpecs {
         $cmd.Parameters[23].Value = $workstation.DiskSizeGb
         $cmd.Parameters[24].Value = $workstation.DiskType
         $cmd.Parameters[25].Value = $workstation.TpmEnabled
-        $cmd.Parameters[25].Value = $workstation.TpmVersion
+        $cmd.Parameters[26].Value = $workstation.TpmVersion
         $cmd.Parameters[27].Value = $workstation.MacAddresses
         $cmd.Parameters[28].Value = $workstation.LastRebootDate
         $cmd.Parameters[29].Value = $workstation.EncryptionLevel
