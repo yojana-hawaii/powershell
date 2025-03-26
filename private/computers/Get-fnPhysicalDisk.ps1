@@ -16,7 +16,7 @@ function Get-fnPhysicalDisk {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $disk = Get-WmiObject -Class MSFT_PhysicalDisk -ComputerName $computerName -Namespace root\Microsoft\Windows\Storage | 
+        $disk = Get-CimInstance -Class MSFT_PhysicalDisk -ComputerName $computerName -Namespace root\Microsoft\Windows\Storage | 
                     Select-Object @{
                         label = "DiskType"
                         expression = {fnLocal_DiskTyp($_.MediaType)}

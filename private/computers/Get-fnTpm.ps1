@@ -7,7 +7,7 @@ function Get-fnTpm {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $tpm = Get-WmiObject -Class Win32_Tpm -Namespace root\CIMV2\Security\MicrosoftTpm -ComputerName $computerName -Authentication PacketPrivacy |
+        $tpm = Get-CimInstance -Class Win32_Tpm -Namespace root\CIMV2\Security\MicrosoftTpm -ComputerName $computerName  |
                     Select-Object  @{
                         label = "TpmEnabled"
                         expression = {$_.IsEnabled_InitialValue}

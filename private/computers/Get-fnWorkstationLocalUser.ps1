@@ -19,7 +19,7 @@ function Get-fnWorkstationLocalUser {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        Get-WmiObject -ComputerName $computerName -Class Win32_UserAccount |
+        Get-CimInstance -ComputerName $computerName -Class Win32_UserAccount |
                 Select-Object Name, Status, PasswordExpires, 
                         Description, Disabled, FullName, InstallDate, LocalAccount, Lockout,
                         PasswordChangeable, PasswordRequired,

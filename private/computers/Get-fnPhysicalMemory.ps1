@@ -6,7 +6,7 @@ function Get-fnPhysicalMemory {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $mem = Get-WmiObject -Class Win32_PhysicalMemory -ComputerName $computerName | 
+        $mem = Get-CimInstance -Class Win32_PhysicalMemory -ComputerName $computerName | 
                     Select-Object *
         $cnt = [PSCustomObject]@{
             RamSlotUsed = if($null -eq $mem.Count){1} else {$mem.Count}

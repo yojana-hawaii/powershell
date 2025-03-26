@@ -6,7 +6,7 @@ function Get-fnProcessor {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $processor = Get-WmiObject -Class Win32_Processor -ComputerName $computerName | Select-Object Name, NumberOfCores, NumberOfEnabledCore, CurrentClockSpeed
+        $processor = Get-CimInstance -Class Win32_Processor -ComputerName $computerName | Select-Object Name, NumberOfCores, NumberOfEnabledCore, CurrentClockSpeed
         $processorObject  = [PSCustomObject]@{
             Name = $processor.Name -join ", "
             NumberOfCores = $processor.NumberOfCores -join ", "

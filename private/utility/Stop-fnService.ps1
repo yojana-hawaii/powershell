@@ -15,7 +15,7 @@ function Stop-fnService {
 
     try{
         $initial = Get-Service -ComputerName $computerName -Name $serviceName | Select-Object Name, ServiceName, StartType, Status
-        Write-Verbose "$($MyInvocation.MyCommand.Name): $serviceName initial status was $($initial.Status)."
+        Write-Information "$($MyInvocation.MyCommand.Name): $serviceName initial status was $($initial.Status)."
         $service = Get-Service -ComputerName $computerName -Name $serviceName
 
     
@@ -48,7 +48,7 @@ function Stop-fnService {
         }
     
         $final = Get-Service -ComputerName $computerName -Name $serviceName | Select-Object Name, ServiceName, StartType, Status
-        Write-Verbose "$($MyInvocation.MyCommand.Name): $serviceName has been changed to $($final.Status)."
+        Write-Information "$($MyInvocation.MyCommand.Name): $serviceName has been changed to $($final.Status)."
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"

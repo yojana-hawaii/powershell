@@ -33,7 +33,7 @@ function Get-fnComputerDetails {
     $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
 
 
-    $computer = "COMP1"
+    $computer = "comp1"
 
     if($computer -ne "COMP1"){
         Get-fnWorkstationDetails -computer $computer -vpnIp $vpnIp
@@ -54,8 +54,8 @@ function Get-fnComputerDetails {
 
 $Global:today = $null
 $today = Get-Date
-$mmddyyyy = Get-Date -Format "MM-dd-yyyy"
+$filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$mmddyyyy.txt" -Append
-Get-fnComputerDetails  -Verbose -InformationAction Continue
+Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
+Get-fnComputerDetails -InformationAction Continue
 Stop-Transcript

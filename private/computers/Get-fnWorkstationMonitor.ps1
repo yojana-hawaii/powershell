@@ -15,8 +15,8 @@ function Get-fnWorkstationMonitor {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $monitorIds = Get-WmiObject WmiMonitorId -namespace root\wmi -ComputerName $computerName | Select-Object ManufacturerName,UserFriendlyName,SerialNumberID, YearOfManufacture
-        $videos = Get-WmiObject -Class Win32_VideoController -ComputerName $computerName | Select-Object deviceid, caption, VideoModeDescription
+        $monitorIds = Get-CimInstance WmiMonitorId -namespace root\wmi -ComputerName $computerName | Select-Object ManufacturerName,UserFriendlyName,SerialNumberID, YearOfManufacture
+        $videos = Get-CimInstance -Class Win32_VideoController -ComputerName $computerName | Select-Object deviceid, caption, VideoModeDescription
         $localMonitor = @() 
         $localVideo = @()
         $monitors = @()

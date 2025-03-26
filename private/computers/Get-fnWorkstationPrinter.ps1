@@ -17,7 +17,7 @@ function Get-fnWorkstationPrinter {
                                 $major = ($ver -shr 48) -band 0xffff
                                 "$major.$minor.$build.$rev"
                             };}
-        Get-WmiObject -Class win32_Printer -ComputerName $computerName| ForEach-Object {
+        Get-CimInstance -Class win32_Printer -ComputerName $computerName| ForEach-Object {
             $ThisPrintDriverName = $_.DriverName
             $ThisDriver = $drivers | Where-Object {  $_.Name -eq $ThisPrintDriverName }
 

@@ -6,7 +6,7 @@ function Get-fnDisk {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $disk = Get-WmiObject -Class Win32_DiskDrive -ComputerName $computerName | 
+        $disk = Get-CimInstance -Class Win32_DiskDrive -ComputerName $computerName | 
                     Select-Object Model,
                     @{
                         label = "DiskSizeGb"

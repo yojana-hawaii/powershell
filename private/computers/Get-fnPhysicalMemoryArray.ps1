@@ -6,7 +6,7 @@ function Get-fnPhysicalMemoryArray {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $mem = Get-WmiObject -Class win32_physicalMemoryArray -ComputerName $computerName |
+        $mem = Get-CimInstance -Class win32_physicalMemoryArray -ComputerName $computerName |
                 Select-Object @{
                     label = "RamSlotTotal"
                     expression = {$_.MemoryDevices}

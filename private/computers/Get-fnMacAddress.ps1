@@ -6,7 +6,7 @@ function Get-fnMacAddress {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $mac = Get-WmiObject -Class Win32_NetworkAdapter -ComputerName $computerName |
+        $mac = Get-CimInstance -Class Win32_NetworkAdapter -ComputerName $computerName |
                     Where-Object {($null -ne $_.macaddress) -and ($null -ne $_.Speed) } |
                     Select-Object macaddress
         $macAddresses = [PSCustomObject]@{

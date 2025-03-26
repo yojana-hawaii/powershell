@@ -6,11 +6,11 @@ function Get-fnOperatingSystem {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $os = Get-WmiObject -Class Win32_OperatingSystem -ComputerName $computerName | 
+        $os = Get-CimInstance -Class Win32_OperatingSystem -ComputerName $computerName | 
                 Select-Object EncryptionLevel,NumberOfUsers, OsArchitecture, BuildNumber, BuildType, Version, Caption,
                 @{
                     label = "LastReboot"
-                    expression = {$_.ConvertToDateTime($_.LastBootUpTime)}
+                    expression = {$_.LastBootUpTime}
                     
                 },
                 @{
@@ -19,7 +19,7 @@ function Get-fnOperatingSystem {
                 },
                 @{
                     label = "OsInstallDate"
-                    expression = {$_.ConvertToDateTime($_.InstallDate)}
+                    expression = {$_.InstallDate}
                 },
                 @{
                     label = "OsLanguage"

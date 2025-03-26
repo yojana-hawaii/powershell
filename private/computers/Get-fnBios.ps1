@@ -6,14 +6,14 @@ function Get-fnBios {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $bios = Get-WmiObject -Class Win32_Bios -ComputerName $computerName | 
-                    Select-Object SerialNumber, 
+        $bios = Get-CimInstance -Class Win32_Bios -ComputerName $computerName | 
+                    Select-Object SerialNumber,
                     @{
                         label = "BiosVersion"
                         expression = {$_.SMBIOSBIOSVersion}
                     }, @{
                         label="BiosReleaseDate"
-                        expression={$_.ConvertToDateTime($_.ReleaseDate)}
+                        expression={$_.ReleaseDate}
                     }
     }
     catch {

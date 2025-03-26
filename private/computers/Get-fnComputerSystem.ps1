@@ -17,8 +17,8 @@ function fnLocal_WakeupType($pWakeUpType){
 function fnLocal_isLaptop($ComputerName){
 
     $isLaptop = 0
-    $chasis_type = Get-WmiObject -class win32_systemenclosure -computerName $ComputerName | select-object chassistypes
-    $battery = Get-WmiObject -class win32_battery -ComputerName $ComputerName 
+    $chasis_type = Get-CimInstance -class win32_systemenclosure -computerName $ComputerName | select-object chassistypes
+    $battery = Get-CimInstance -class win32_battery -ComputerName $ComputerName 
 
     # $battery + chassis
     $isLaptop = if ($chasis_type.chassistypes -eq 9 -or $chasis_type.chassistypes -eq 10 -or $chasis_type.chassistypes -eq 14 -or $battery )
@@ -28,7 +28,7 @@ function fnLocal_isLaptop($ComputerName){
     return $isLaptop
 }
 function fnLocal_isDesktop($computername){
-    $chasis_type = Get-WmiObject -class win32_systemenclosure -computerName $ComputerName | select-object chassistypes
+    $chasis_type = Get-CimInstance -class win32_systemenclosure -computerName $ComputerName | select-object chassistypes
     $isDesktop = if ($chasis_type.chassistypes -eq 3) {1} else {0}
     return $isDesktop
 }
@@ -60,7 +60,7 @@ function Get-fnComputerSystem {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $computerSystem = Get-WmiObject -Class win32_computersystem -ComputerName $computerName | 
+        $computerSystem = Get-CimInstance -Class win32_computersystem -ComputerName $computerName | 
                              Select-Object Manufacturer, Model, 
                              @{label = "WakeUpType"
                                 expression = {fnLocal_WakeupType($_.WakeUpType)}
