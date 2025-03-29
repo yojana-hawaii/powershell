@@ -18,12 +18,11 @@ begin
 	from DaHubInventory.dbo.WorkstationLocalUsers lu 
 	where LocalUserName = @username;
 
-	select  top (@cnt) ad.ComputerName, ws.Offline
-	from DaHubInventory.dbo.AdComputers ad
-		left join DaHubInventory.dbo.WorkstationSpecs ws on ws.ComputerName = ad.ComputerName and ws.IsThinClient = 0 
-	where ad.Enabled = 1
-		and ad.ComputerName not in (select ComputerName from #lapsCompleted)
-	order by ws.Offline
+	select  top (@cnt)   vw.ComputerName, vw.Offline
+	from DaHubInventory.dbo.vwWorkstationScanOrder vw 
+	where vw.ComputerName not in (select ComputerName from #lapsCompleted)
+		and vw.IsThinClient = 0
+	order by vw.Offline
 		
 
 end

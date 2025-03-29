@@ -9,12 +9,16 @@ as
 	with u as (
 		select 
 			ad.ComputerName,
+			ad.Enabled,
 			ad.IPV4Address,
 			ad.HasBitlocker, ad.Haslaps, 
 			ad.OperatingSystem, 
 			
 			case when ws.scanattemptdate is null then null else datediff(hour, ws.scanattemptdate, getdate()) end LastScanAttemptHours,
-			case when ws.ScanSuccessDate is null then null else datediff(day,  ws.ScanSuccessDate ,getdate()) end LastSuccessfulScanDays,
+			case when ws.scanattemptdate is null then null else datediff(day, ws.scanattemptdate, getdate()) end LastScanAttemptDays,
+			case when ws.ScanSuccessDate is null then null else datediff(hour,  ws.ScanSuccessDate ,getdate()) end LastSuccessfulScanHours,
+			case when ws.ScanSuccessDate is null then null else datediff(DAY,  ws.ScanSuccessDate ,getdate()) end LastSuccessfulScanDays,
+
 			case when ws.ScanSuccessDate is null then 1 else 0 end IsNeverScanned,
 			case when ad.LastLogonDate is null then null else datediff(day,  ad.LastLogonDate ,getdate()) end LastLogonDays,
 			case when ws.LastSecurityUpdateDate is null then null else datediff(day,  ws.LastSecurityUpdateDate ,getdate()) end LastSecurityPatchDays,
@@ -85,10 +89,11 @@ as
 		else LastScanAttemptHours/10 end
 		+ 
 		case 
-			when IPV4Address like '192%' then -10 -- dmz not accessible
-			when OperatingSystem in ('Windows Server 2003','Windows Server 2012 R2 Standard') then -8  -- should be off most of the time
-			when IPV4Address is null then -7 -- possibility of connection
-			when IPV4Address like '10.10.%' then 1 -- VPN focus
+			when IPV4Address like '192%' then -10 -- unaccessible
+			when OperatingSystem in ('Windows Server 2003','Windows Server 2012 R2 Standard') then -8  -- unaccessible
+			when IPV4Address is null then -7 -- unaccessible
+			when IsThinClient = 1 then -6
+			when IPV4Address like '10.10.%' then 1 -- maybe accessible
 		else 0 end
 		+ IsNeverScanned
 		--isnull(lastlogondays,4) 
@@ -100,5 +105,5 @@ as
 go
 select * from DaHubInventory.dbo.vwWorkstationScanOrder
 --where NextScanOrder >=3
-order by NextScanOrder desc, LastSuccessfulScanDays
+order by NextScanOrder desc, LastSuccessfulScanHours
 go

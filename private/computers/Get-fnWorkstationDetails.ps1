@@ -35,10 +35,11 @@ function Get-fnWorkstationDetails {
                 }
 
 
-
-                $softwares = Get-fnWorkstationSoftware -computerName $computer
-                foreach($software in $softwares){
-                    Invoke-fnSpWorkstationSoftware -software $software -Verbose
+                if($workstation.IsThinClient -eq 0){
+                    $softwares = Get-fnWorkstationSoftware -computerName $computer
+                    foreach($software in $softwares){
+                        Invoke-fnSpWorkstationSoftware -software $software -Verbose
+                    }
                 }
 
                 if($workstation.IsVm -ne 1)
@@ -48,19 +49,22 @@ function Get-fnWorkstationDetails {
                         Invoke-fnSpWorkstationMonitors -monitor $monitor
                     }
                 }
-                
-                $partitions = Get-fnWorkstationPartition -computerName $computer
-                foreach($partition in $partitions){
-                    Invoke-fnSpWorkstationPartition -parition $partition
+                if($workstation.IsThinClient -eq 0){
+                    $partitions = Get-fnWorkstationPartition -computerName $computer
+                    foreach($partition in $partitions){
+                        Invoke-fnSpWorkstationPartition -parition $partition
+                    }
                 }
+                if($workstation.IsThinClient -eq 0){
 
                 $users = Get-fnWorkstationUserLoggedIn -computerName $computer
                 foreach($user in $users){
                     Invoke-fnSpWorkstationUserLoggedIn -loggedInUser $user
                 }
                 $services = Get-fnWorkstationServices -computerName $computer
-                foreach($service in $services){
-                    Invoke-fnSpWorkstationServices -service $service -Verbose
+                    foreach($service in $services){
+                        Invoke-fnSpWorkstationServices -service $service -Verbose
+                    }
                 }
             }
             

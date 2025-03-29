@@ -105,7 +105,7 @@ function Invoke-fnSpWorkstationSpecs {
         if($return -eq 1){
             Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
         } else {
-            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
+            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed ($return was the numbered retured):: $($_.Exception.Message) "
         }
 
     } catch {

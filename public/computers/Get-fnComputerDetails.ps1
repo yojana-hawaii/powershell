@@ -33,14 +33,19 @@ function Get-fnComputerDetails {
     $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
 
 
-    $computer = "comp1"
+    $computer = "COMP1"
 
     if($computer -ne "COMP1"){
+        Write-Information "Working on single machine... $computer "
         Get-fnWorkstationDetails -computer $computer -vpnIp $vpnIp
     } else {
-        $computers = Invoke-spGetComputersToScan -count 50 -scanAfterDays 3
-        foreach($computer in $computers){
-            Get-fnWorkstationDetails -computer $computer.ComputerName -vpnIp $vpnIp
+        $computers = Invoke-spGetComputersToScan -count 25 -scanAfterHours 24
+        $total = $computer.count
+        $cnt = 1
+        foreach($comp in $computers){
+            Write-Information "Working on $cnt of $total... $($comp.ComputerName) "
+            Get-fnWorkstationDetails -computer $comp.ComputerName -vpnIp $vpnIp
+            $cnt++
         }
     }
 
@@ -57,5 +62,5 @@ $today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
-Get-fnComputerDetails -InformationAction Continue
+Get-fnComputerDetails -InformationAction Continue -verbose
 Stop-Transcript
