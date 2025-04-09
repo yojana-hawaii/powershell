@@ -9,10 +9,9 @@ function Get-fnWorkstationSoftware {
     $softwareObject = @()
     $serviceName = "RemoteRegistry"
     try {
-        Start-fnService -ComputerName $computerName -serviceName $serviceName
+        $service = Start-fnService -ComputerName $computerName -serviceName $serviceName
 
-        $currentServiceStatus = (Get-Service -ComputerName $computerName -Name $serviceName).Status
-        if($currentServiceStatus -eq "Running"){
+        if($null -ne $service -and $service.State -eq 'Running'){
 
             $regLocation = "Software\Microsoft\Windows\CurrentVersion\Uninstall\", 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\'
 

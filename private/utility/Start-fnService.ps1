@@ -9,22 +9,20 @@ function Start-fnService {
     Write-Information "$($MyInvocation.MyCommand.Name) starting  $serviceName : $($computerName)"
     
     try {
-        $initial = Get-Service -ComputerName $computerName -Name $serviceName | Select-Object Name, ServiceName, StartType, Status
-        Write-Information "$($MyInvocation.MyCommand.Name): $serviceName initial status was $($initial.Status)."
-
-        $service = Get-Service -ComputerName $computerName -Name $serviceName
+        $service = Get-CimInstance -ClassName win32_Service -ComputerName $computerName -Filter "name='$serviceName'"
+        Write-Information "$($MyInvocation.MyCommand.Name): $serviceName initial status was $($service.Status) and state $($service.State)."
     
-        if($initial.StartType -ne 'Manual'){
-            Set-Service -Name $initial.Name -StartupType Manual -ComputerName $computerName
+
+        if($service.State -ne 'Running'){
+            $initial = Get-Service -Name $serviceName -ComputerName $computerName
+            start-service -InputObject ($initial)
+            
+            $final = Get-CimInstance -ClassName win32_Service -ComputerName $computerName -Filter "name='$serviceName'"
+            Write-Information "$($MyInvocation.MyCommand.Name): $serviceName has been changed to $($final.StartMode) and state $($final.State)."
         }
-        if($initial.Status -ne 'Running'){
-            start-service -InputObject ($service)
-        }
-        $final = Get-Service -ComputerName $computerName -Name $serviceName | Select-Object Name, ServiceName, StartType, Status
-        Write-Information "$($MyInvocation.MyCommand.Name): $serviceName has been changed to $($final.Status)."
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     }
-    return $initial
+    return $service
 }

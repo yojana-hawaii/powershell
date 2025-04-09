@@ -29,11 +29,11 @@ function fnLocal_CreateLapsUsers{
         [System.Object]$laps
     )
 
-    $serviceName = "winrm"
+    $serviceName = "WinRm"
     
     try{
         $service = Start-fnService -ComputerName $computerName -serviceName $serviceName
-        if($null -ne $service)
+        if($null -ne $service -and $service.State -eq 'Running')
         {
             $getScriptBlock = { Get-LocalUser }
             $existingusers = Invoke-Command -ComputerName $computerName -ScriptBlock $getScriptBlock

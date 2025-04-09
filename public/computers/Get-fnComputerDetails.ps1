@@ -40,7 +40,7 @@ function Get-fnComputerDetails {
         Get-fnWorkstationDetails -computer $computer -vpnIp $vpnIp
     } else {
         $computers = Invoke-spGetComputersToScan -count 25 -scanAfterHours 24
-        $total = $computer.count
+        $total = $computers.count
         $cnt = 1
         foreach($comp in $computers){
             Write-Information "Working on $cnt of $total... $($comp.ComputerName) "

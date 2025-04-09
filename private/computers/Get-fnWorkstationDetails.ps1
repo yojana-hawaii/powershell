@@ -7,13 +7,13 @@ function Get-fnWorkstationDetails {
         [string]$vpnIp
     )
     
-    $serviceName = "winrm"
+    $serviceName = "WinRM"
     
     $ping = Test-Connection $computer -Quiet -Count 1
     if($ping){
         try {
             $service = Start-fnService -ComputerName $computer -serviceName $serviceName
-            if($null -ne $service){
+            if($null -ne $service -and $service.State -eq 'Running'){
 
                 $workstation =  Get-fnWorkstationSpecs -computerName $computer -vpnIp $vpnIp
                 $workstation
@@ -73,6 +73,7 @@ function Get-fnWorkstationDetails {
             Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computer): $($_.Exception.Message)"
         }
         finally {
+            Invoke-fnSpWorkstationSpecWinRm -computerName $computer
             Stop-fnService -computerName $computer -serviceName $serviceName -returnToOriginalStatus $true -original $service
         }
         
