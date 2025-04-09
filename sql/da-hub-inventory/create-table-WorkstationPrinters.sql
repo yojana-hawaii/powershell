@@ -1,6 +1,6 @@
 use DaHubInventory
 go
-drop table if exists dbo.WorkstationPrinters
+--drop table if exists dbo.WorkstationPrinters
 go
 create table dbo.WorkstationPrinters
 (

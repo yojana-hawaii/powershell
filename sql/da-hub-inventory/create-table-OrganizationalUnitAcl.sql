@@ -6,7 +6,7 @@ set ansi_nulls on
 go
 set quoted_identifier on
 go
-drop table if exists dbo.OrganizationalUnitAcl;
+--drop table if exists dbo.OrganizationalUnitAcl;
 go
 create table dbo.OrganizationalUnitAcl
 (

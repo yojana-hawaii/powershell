@@ -8,12 +8,10 @@ as
 
 	with u as (
 		select 
-			ad.ComputerName,
+			ad.ComputerName, 
 			ad.Enabled,
-			ad.IPV4Address,
-			ad.HasBitlocker, ad.Haslaps, 
-			ad.OperatingSystem, 
-			
+			ws.Offline,
+			ws.winRmGood,
 			case when ws.scanattemptdate is null then null else datediff(hour, ws.scanattemptdate, getdate()) end LastScanAttemptHours,
 			case when ws.scanattemptdate is null then null else datediff(day, ws.scanattemptdate, getdate()) end LastScanAttemptDays,
 			case when ws.ScanSuccessDate is null then null else datediff(hour,  ws.ScanSuccessDate ,getdate()) end LastSuccessfulScanHours,
@@ -24,8 +22,12 @@ as
 			case when ws.LastSecurityUpdateDate is null then null else datediff(day,  ws.LastSecurityUpdateDate ,getdate()) end LastSecurityPatchDays,
 			case when ws.LastSecurityUpdateDate is null then null else datediff(day,  ws.LastSecurityUpdateDate ,getdate()) end LastPatchDays,
 			
+			ws.IsServer, ws.IsDesktop, ws.IsLaptop, ws.IsThinClient, ws.IsVm, ws.IsVpn, 
+			ad.HasBitlocker, ad.Haslaps, 
+			ad.IPV4Address,
+			ad.OperatingSystem, 
+			ad.OU,
 
-			ws.IsServer, ws.IsDesktop, ws.IsLaptop, ws.IsThinClient, ws.IsVm, ws.IsVpn, ws.Offline,
 			case when sen.ServiceStatus = 'Running' then 1 when sen.ServiceStatus is null then null else 0 end  SentinelOneService,
 			case when kac.ServiceStatus = 'Running' then 1 when kac.ServiceStatus is null then null else 0 end  KaceService,
 			case when aid.ServiceStatus = 'Running' then 1 when aid.ServiceStatus is null then null else 0 end  SysaidService,
@@ -63,7 +65,6 @@ as
 			ad.Enabled = 1 
 			and ad.OperatingSystem is not null --2 nas & a nimble
 			and ad.OperatingSystem != 'unknown' -- 5 vCenter & vSphere
-			and ad.ComputerName not in ('kphc-srvfeder01')
 	)
 		select 
 		case

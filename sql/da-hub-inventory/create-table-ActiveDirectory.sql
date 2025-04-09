@@ -6,7 +6,7 @@ set quoted_identifier on
 go
 
 
-drop table if exists dbo.ActiveDirectory;
+--drop table if exists dbo.ActiveDirectory;
 go
 create table dbo.ActiveDirectory 
 (

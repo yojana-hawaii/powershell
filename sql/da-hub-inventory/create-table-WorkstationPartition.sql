@@ -1,7 +1,7 @@
 
 use DaHubInventory
 go
-drop table if exists dbo.WorkstationPartition
+--drop table if exists dbo.WorkstationPartition
 go
 create table dbo.WorkstationPartition
 (

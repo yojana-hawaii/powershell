@@ -1,7 +1,7 @@
 
 use DaHubInventory
 go
-drop table if exists dbo.WorkstationUserLoggedIn
+--drop table if exists dbo.WorkstationUserLoggedIn
 go
 create table dbo.WorkstationUserLoggedIn
 (

@@ -1,10 +1,10 @@
 use DaHubInventory
 go
 
-drop proc if exists dbo.spWorkstationSpecsOffline;
+drop proc if exists dbo.spWorkstationSpecsWinRm;
 go
 
-create proc dbo.spWorkstationSpecsOffline
+create proc dbo.spWorkstationSpecsWinRm
 (
 	@ComputerName	varchar(50)
 )
@@ -15,13 +15,13 @@ begin
 	update dbo.WorkstationSpecs
 	set
 		ScanAttemptDate = @now,
-		[Offline] = 1
+		winRmGood = 0
 	where ComputerName = @ComputerName
 
 	if @@ROWCOUNT = 0
 	begin
-		insert into dbo.WorkstationSpecs (ComputerName, ScanAttemptDate, Offline)
-		select @ComputerName, @now,	1
+		insert into dbo.WorkstationSpecs (ComputerName, ScanAttemptDate, winRmGood)
+		select @ComputerName, @now,	0
 	end
 
 end

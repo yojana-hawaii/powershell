@@ -1,7 +1,7 @@
 use DaHubInventory
 go
 
-drop table if exists dbo.WorkstationSpecs;
+--drop table if exists dbo.WorkstationSpecs;
 go
 create table dbo.WorkstationSpecs
 (

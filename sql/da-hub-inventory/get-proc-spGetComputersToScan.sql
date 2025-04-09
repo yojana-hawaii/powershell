@@ -7,7 +7,7 @@ go
 create proc dbo.spGetComputersToScan(
 	@count varchar(3) = 500,
 	@scanAfterHours varchar(4) = 24,
-	@scanAttemptHours varchar(4) = 1
+	@scanAttemptHours varchar(4) = 5
 )
 as 
 begin

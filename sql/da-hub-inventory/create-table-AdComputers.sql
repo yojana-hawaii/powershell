@@ -2,7 +2,7 @@
 use DaHubInventory
 go
 
-drop table if exists dbo.AdComputers;
+--drop table if exists dbo.AdComputers;
 go 
 
 create table dbo.AdComputers

@@ -1,7 +1,7 @@
 use DaHubInventory
 go
 
-drop table if exists dbo.WorkstationMonitors;
+--drop table if exists dbo.WorkstationMonitors;
 go 
 
 create table dbo.WorkstationMonitors
