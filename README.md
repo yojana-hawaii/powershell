@@ -16,14 +16,27 @@
    * Check if the local user exists again.
    * **Stop-fnService** > Stop WinRm
 
-  
+# Active Directory
+## Get-fnActiveDirectoryDetails
+* set pwd
+* imports
+* reach config and set variables
+* **Get-fnAdComputers** > get computer details including name, enabled, bitlocker, laps, OU, IP, OS etc
+* **Invoke-spAdComputer** > stored proc to save computer details to sql
+* **Get-fnActiveDirectory** > get AD  config including DCs, Schema Master, Dhcp Server, Default containers, etc
+* **Invoke-spActiveDirectory**  > stored proc to save AD details to sql
+* **Get-fnAdOrganizationalUnit** > All OU and Acl of each OU
+* **Invoke-spOrganizationalUnit** > stored proc to save OU details to sql
+* **Invoke-spOrganizationalUnitAcl** > stored proc to save OU Acl to sql
+
+
 # Powershell
 learning GPO & powershell from https://github.com/EotecIT/ 
 
 to do
-* AD computer
-   * LAPS
-   * bitlocker
+* <del> AD computer
+   * <del> LAPS
+   * <del> bitlocker
 * password policy
 * gpo
 * computer details
@@ -36,11 +49,14 @@ to do
    * <del> Model, Ram, Disk, Tpm, Processor, Bios, OS, Last Patch
    * <del> laptop vs desktop vs VM vs server vs thin client vs vpn
   
- * Get-Process of cmputer
-* OU
-* groups
+* Get-Process of cmputer
+* <del> OU
+* Ad groups
+* Ad Users
+* All users in groups
 * domain admin, enterprise admin
 * adfs
+
 
 
 
@@ -55,14 +71,6 @@ login
 * which user has logged into which computer. last 365 days??
 
 
-Datawarehouse
-user
-* get all users and approprite details
-* get changes in the user to update warehouse
-
-group
-* get all groups
-* get all users in a group
 
 # Order Report
 
