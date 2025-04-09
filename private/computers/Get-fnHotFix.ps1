@@ -6,21 +6,21 @@ function Get-fnHotFix {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try {
-        $sec = Get-HotFix -ComputerName $computerName | 
-                Where-Object {$_.Description -eq "Security Update"} | 
-                Sort-Object InstalledOn -Descending | 
-                Select-Object -First 1
+        $hotfix = Get-CimInstance -ClassName Win32_QuickFixEngineering -ComputerName $computerName | Select-Object Description, InstalledOn, HotFixID
 
-        $update = Get-HotFix -ComputerName $computerName | 
-                    Where-Object {$_.Description -eq "Update"} | 
-                    Sort-Object InstalledOn -Descending | 
-                    Select-Object -First 1
-        
+        $security = $hotfix | Where-Object {$_.Description -eq "Security Update"} |
+                        Sort-Object InstalledOn -Descending |
+                        Select-Object -First 1
+
+        $regular = $hotfix | Where-Object {$_.Description -eq "Update"} |
+                        Sort-Object InstalledOn -Descending | 
+                        Select-Object -First 1
+
         $patches = [PSCustomObject]@{
-            LastSecurityUpdate = $sec.HotFixID
-            LastSecurityUpdateDate = $sec.InstalledOn
-            LastPatch = $update.HotFixID
-            LastPatchDate = $update.InstalledOn
+            LastSecurityUpdate = $security.HotFixID
+            LastSecurityUpdateDate = $security.InstalledOn
+            LastPatch = $regular.HotFixID
+            LastPatchDate = $regular.InstalledOn
         }
 
     }
