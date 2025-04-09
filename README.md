@@ -1,4 +1,22 @@
+# Local Computer
 
+## Set Local User
+**Set-fnLocalUser**
+* set pwd
+* imports
+* read config file and set variables
+* **Invoke-spGetComputersWithoutUser** > call stored proc to get computers without user
+* Foreach computer > check if it is online
+* **fnLocal_CreateLapsUsers**
+   * **Start-fnService** > Start WinRm Service if not running
+   * Create a ScriptBlock to Get-LocalUser
+   * Invoke-Command to run ScriptBlock get all local users
+   * **fnLocal_LapsUserExists** > check if any of them is local user > verify again before attempting to create
+   * if user does not exist Invoke-Command with scriptblock to create new-localUser
+   * Check if the local user exists again.
+   * **Stop-fnService** > Stop WinRm
+
+  
 # Powershell
 learning GPO & powershell from https://github.com/EotecIT/ 
 
