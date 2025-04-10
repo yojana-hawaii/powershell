@@ -35,35 +35,31 @@ function Get-fnWorkstationDetails {
                 }
 
 
+                # WinRm not working right for thin client for software, partition, logged in user, services
                 if($workstation.IsThinClient -eq 0){
                     $softwares = Get-fnWorkstationSoftware -computerName $computer
                     foreach($software in $softwares){
                         Invoke-fnSpWorkstationSoftware -software $software -Verbose
                     }
-                }
-
-                if($workstation.IsVm -ne 1)
-                {
-                    $monitors = Get-fnWorkstationMonitor -computerName $computer
-                    foreach($monitor in $monitors){
-                        Invoke-fnSpWorkstationMonitors -monitor $monitor
-                    }
-                }
-                if($workstation.IsThinClient -eq 0){
                     $partitions = Get-fnWorkstationPartition -computerName $computer
                     foreach($partition in $partitions){
                         Invoke-fnSpWorkstationPartition -parition $partition
                     }
-                }
-                if($workstation.IsThinClient -eq 0){
-
-                $users = Get-fnWorkstationUserLoggedIn -computerName $computer
-                foreach($user in $users){
-                    Invoke-fnSpWorkstationUserLoggedIn -loggedInUser $user
-                }
-                $services = Get-fnWorkstationServices -computerName $computer
+                    $users = Get-fnWorkstationUserLoggedIn -computerName $computer
+                    foreach($user in $users){
+                        Invoke-fnSpWorkstationUserLoggedIn -loggedInUser $user
+                    }
+                    $services = Get-fnWorkstationServices -computerName $computer
                     foreach($service in $services){
                         Invoke-fnSpWorkstationServices -service $service -Verbose
+                    }
+                }
+
+                # VM does not have monitor
+                if($workstation.IsVm -ne 1){
+                    $monitors = Get-fnWorkstationMonitor -computerName $computer
+                    foreach($monitor in $monitors){
+                        Invoke-fnSpWorkstationMonitors -monitor $monitor
                     }
                 }
             }

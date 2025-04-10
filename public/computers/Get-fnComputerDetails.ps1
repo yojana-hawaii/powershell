@@ -32,25 +32,14 @@ function Get-fnComputerDetails {
     $config = Get-fnConfig 
     $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
 
-
-    $computer = "COMP1"
-
-    if($computer -ne "COMP1"){
-        Write-Information "Working on single machine... $computer "
-        Get-fnWorkstationDetails -computer $computer -vpnIp $vpnIp
-    } else {
-        $computers = Invoke-spGetComputersToScan -count 25 -scanAfterHours 24
-        $total = $computers.count
-        $cnt = 1
-        foreach($comp in $computers){
-            Write-Information "Working on $cnt of $total... $($comp.ComputerName) "
-            Get-fnWorkstationDetails -computer $comp.ComputerName -vpnIp $vpnIp
-            $cnt++
-        }
+    $computers = Invoke-spGetComputersToScan -count 25 -scanAfterHours 24
+    $total = $computers.count
+    $cnt = 1
+    foreach($comp in $computers){
+        Write-Information "Working on $cnt of $total... $($comp.ComputerName) "
+        Get-fnWorkstationDetails -computer $comp.ComputerName -vpnIp $vpnIp
+        $cnt++
     }
-
-    
-
     
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime" 

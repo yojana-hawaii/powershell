@@ -32,10 +32,24 @@ function Get-fnActiveDirectoryDetails{
     $config = Get-fnConfig
     $dc = $config.domainController -replace '"', ""
 
-    $computers = Get-fnAdComputers -dc $dc
-    foreach($computer in $computers){
+    $activeComputers = Get-fnAdComputers -dc $dc -enabled $true
+    $total = $activeComputers.count 
+    $cnt = 1
+    foreach($computer in $activeComputers){
+        Write-Information "Inserting $cnt of $total computers"
         Invoke-spAdComputer -computer $computer
+        $cnt++
     }
+
+    $inactiveComputers = Get-fnAdComputers -dc $dc -enabled $false
+    $total = $inactiveComputers.count 
+    $cnt = 1
+    foreach($computer in $inactiveComputers){
+        Write-Information "Inserting $cnt of $total computers"
+        Invoke-spAdComputer -computer $computer
+        $cnt++
+    }
+
 
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){

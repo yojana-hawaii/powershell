@@ -42,6 +42,7 @@ as
 			else 0 end IsSdd,
 			ws.TpmEnabled,
 			ws.TpmVersion,
+			ws.CurrentUser,
 
 			--ws.DiskType,
 			--cyl.ServiceStatus Cylance,
@@ -93,7 +94,7 @@ as
 			when IPV4Address like '192%' then -10 -- unaccessible
 			when OperatingSystem in ('Windows Server 2003','Windows Server 2012 R2 Standard') then -8  -- unaccessible
 			when IPV4Address is null then -7 -- unaccessible
-			when IsThinClient = 1 then -6
+			when IsThinClient = 1 then -150
 			when IPV4Address like '10.10.%' then 1 -- maybe accessible
 		else 0 end
 		+ IsNeverScanned
