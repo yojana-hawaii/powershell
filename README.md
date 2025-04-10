@@ -1,3 +1,6 @@
+# Powershell
+learning GPO & powershell from https://github.com/EvotecIT/ 
+
 # Local Computer
 ## Computer Details
 **Get-fnComputerDetails**
@@ -58,53 +61,6 @@ Get-fnActiveDirectoryDetails
 * **Get-fnAdOrganizationalUnit** > All OU and Acl of each OU
 * **Invoke-spOrganizationalUnit** > stored proc to save OU details to sql
 * **Invoke-spOrganizationalUnitAcl** > stored proc to save OU Acl to sql
-
-
-# Powershell
-learning GPO & powershell from https://github.com/EotecIT/ 
-
-to do
-* <del> AD computer
-   * <del> LAPS
-   * <del> bitlocker
-* password policy
-* gpo
-* computer details
-   * <del> Monitors
-   * <del> Printers
-   * <del> Users Logged In
-   * <del> Local Users
-   * <del> Services
-   * <del> Software
-   * <del> Model, Ram, Disk, Tpm, Processor, Bios, OS, Last Patch
-   * <del> laptop vs desktop vs VM vs server vs thin client vs vpn
-   * Get-Process of cmputer
-   * Get EventLogs
-   * Set scan driver config
-* <del> OU
-* Ad groups
-* Ad Users
-* All users in groups
-* Ad User Security
-* domain admin, enterprise admin
-* adfs
-* Productivity
-* Missing Slip
-* reboot workstations
-* zip logs by month
-
-
-
-App 
-login
-* display indivdual user details
-* get all direct reports given manager
-* deactivate users without activity in 2 weeks
-* add users to group depending on job title
-* logon script by job title
-* OU by job title
-* which user has logged into which computer. last 365 days??
-
 
 
 # Order Report
