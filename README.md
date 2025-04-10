@@ -1,5 +1,31 @@
 # Local Computer
-
+## Computer Details
+**Get-fnComputerDetails**
+* set pwd
+* logs
+* Imports
+* config and variables
+* **Invoke-spGetComputersToScan** > get computers that need to be scanned. View to organize what needs to be scanned & stored proc to pull computer names to scan
+* Foreach computer **Get-fnWorkstationDetails**
+   * **Get-fnWorkstationSpecs** > Get workstation specds like serial, bios, manufacturer, model, ram, laptop vs desktop vs vm vs server, procesors, desk, OS, last patch, tpm etc
+   * **Invoke-fnSpWorkstationSpecs**  > stored proc to save computer details to sql
+   * **Get-fnWorkstationPrinter** > all printers installed in the computer
+   * **Invoke-fnSpWorkstationPrinters**  > stored proc to save installed printer details to sql
+   * **Get-fnWorkstationLocalUser** > all local user and associated details
+   * **Invoke-fnSpWorkstationLocalUser**  > stored proc to save local users details to sql
+   * if not thin client
+      * **Get-fnWorkstationSoftware** > all the software installed in the computers
+      * **Invoke-fnSpWorkstationSoftware**  > stored proc to save installed software details to sql
+      * **Get-fnWorkstationPartition** > disk partition and size
+      * **Invoke-fnSpWorkstationPartition**  > stored proc to save disk partition details to sql
+      * **Get-fnWorkstationUserLoggedIn** > all the user that ever logged in and last date they logged in
+      * **Invoke-fnSpWorkstationUserLoggedIn**  > stored proc to save logged in user details to sql
+      * **Get-fnWorkstationServices** > get all services and status 
+      * **Invoke-fnWorkstationServices**  > stored proc to save services details to sql
+   * if not VM
+      * **Get-fnWorkstationMonitor**
+         * WimRM to get monitor count, models, resolution, serial etc 
+      * **Invoke-fnWorkstationMonitor**   > stored proc to save connected monitors details to sql
 ## Set Local User
 **Set-fnLocalUser**
 * set pwd
@@ -17,7 +43,11 @@
    * **Stop-fnService** > Stop WinRm
 
 # Active Directory
-## Get-fnActiveDirectoryDetails
+## Disabled Inactive Computers
+## Disable Inactive Users
+## Remove Users from Groups
+## Get Active Diretory Details
+Get-fnActiveDirectoryDetails
 * set pwd
 * imports
 * reach config and set variables
@@ -48,15 +78,20 @@ to do
    * <del> Software
    * <del> Model, Ram, Disk, Tpm, Processor, Bios, OS, Last Patch
    * <del> laptop vs desktop vs VM vs server vs thin client vs vpn
-  
-* Get-Process of cmputer
+   * Get-Process of cmputer
+   * Get EventLogs
+   * Set scan driver config
 * <del> OU
 * Ad groups
 * Ad Users
 * All users in groups
+* Ad User Security
 * domain admin, enterprise admin
 * adfs
-
+* Productivity
+* Missing Slip
+* reboot workstations
+* zip logs by month
 
 
 
