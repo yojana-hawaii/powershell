@@ -151,7 +151,7 @@ login
       * Read csv file with assigned support staff
       * match files in destination with support staff in csv
       * **Set-fnEmailBodySupportStaff**
-         * **Set-fnEmailBodyNull > entire body to null
+         * **Set-fnEmailBodyNull** > entire body to null
          * Initialize email settings. Null to avoid accidental email with wrong confic
       * **Set-fnEmailHtmlCombine** > combine email body
 
