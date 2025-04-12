@@ -53,6 +53,9 @@ begin
 
 	-- If current VPN then update else keep old. Once VPN always VPN
 	update dbo.WorkstationSpecs
+	set IsVpn = 0
+	where IsVpn is null and ComputerName = @ComputerName;
+	update dbo.WorkstationSpecs
 	set IsVpn = 1
 	where @IsVpn = 1 and ComputerName = @ComputerName;
 	
