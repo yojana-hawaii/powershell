@@ -32,7 +32,7 @@ function Get-fnComputerDetails {
     $config = Get-fnConfig 
     $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
 
-    $computers = Invoke-spGetComputersToScan -count 25 -scanAfterHours 24
+    $computers = Invoke-spGetComputersToScan -count 50 -scanAfterHours 24
     $total = $computers.count
     $cnt = 1
     foreach($comp in $computers){

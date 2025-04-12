@@ -20,9 +20,10 @@ function Start-fnService {
             $final = Get-CimInstance -ClassName win32_Service -ComputerName $computerName -Filter "name='$serviceName'"
             Write-Information "$($MyInvocation.MyCommand.Name): $serviceName has been changed to $($final.StartMode) and state $($final.State)."
         }
+        return $service
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
+        Invoke-fnSpWorkstationSpecWinRm -computerName $computer
     }
-    return $service
 }
