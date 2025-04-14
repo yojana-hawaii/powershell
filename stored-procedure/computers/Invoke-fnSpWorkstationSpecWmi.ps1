@@ -1,4 +1,4 @@
-function Invoke-fnSpWorkstationSpecWinRm {
+function Invoke-fnSpWorkstationSpecWmi {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
@@ -8,7 +8,7 @@ function Invoke-fnSpWorkstationSpecWinRm {
     )
 
     
-    $StoredProcedure = 'dbo.spWorkstationSpecsWinRm'
+    $StoredProcedure = 'dbo.spWorkstationSpecsWmi'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]
@@ -16,7 +16,7 @@ function Invoke-fnSpWorkstationSpecWinRm {
      try{
         Write-Verbose -Message "Insert $($computerName)"
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ComputerName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
-        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@WinRmEnabled", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@WmiEnabled", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
 
         $cmd.Parameters[0].Value = $computerName
         $cmd.Parameters[1].Value = $enabled

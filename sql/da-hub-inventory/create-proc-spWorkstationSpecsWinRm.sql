@@ -6,7 +6,8 @@ go
 
 create proc dbo.spWorkstationSpecsWinRm
 (
-	@ComputerName	varchar(50)
+	@ComputerName	varchar(50),
+	@WinRmEnabled varchar(50)
 )
 as 
 begin
@@ -15,13 +16,13 @@ begin
 	update dbo.WorkstationSpecs
 	set
 		ScanAttemptDate = @now,
-		winRmGood = 0
+		WinRmEnabled = convert(bit,@WinRmEnabled)
 	where ComputerName = @ComputerName
 
 	if @@ROWCOUNT = 0
 	begin
-		insert into dbo.WorkstationSpecs (ComputerName, ScanAttemptDate, winRmGood)
-		select @ComputerName, @now,	0
+		insert into dbo.WorkstationSpecs (ComputerName, ScanAttemptDate, WinRmEnabled)
+		select @ComputerName, @now,	convert(bit,@WinRmEnabled)
 	end
 
 end

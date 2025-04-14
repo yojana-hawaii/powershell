@@ -102,8 +102,7 @@ begin
 		LastPatchDate = convert(date,@LastPatchDate),
 		ScanSuccessDate = @now,
 		ScanAttemptDate = @now,
-		[Offline] = 0,
-		winRmGood = 1
+		[Offline] = 0
 	where 
 		ComputerName = @ComputerName;
 
@@ -155,8 +154,7 @@ begin
 			LastPatchDate,
 			ScanSuccessDate,
 			ScanAttemptDate,
-			[Offline],
-			winRmGood
+			[Offline]
 		)
 		select
 			@ComputerName,
@@ -201,8 +199,7 @@ begin
 			convert(date,@LastPatchDate),
 			@now,
 			@now,
-			0,
-			1
+			0
 	 end
 
 end
