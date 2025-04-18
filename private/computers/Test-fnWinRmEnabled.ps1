@@ -5,17 +5,21 @@ function Test-fnWinRmEnabled {
         [string]$computerName
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
+
+    $status = $false
     try {
         $ErrorActionPreference = 'Stop'
-        Test-WSMan -ComputerName $computerName 
+        $winrm = Test-WSMan -ComputerName $computerName 
+        Write-Information "WinRm response: $winrm"
 
         Invoke-fnSpWorkstationSpecWinRm -computerName $computerName -enabled "1"
-        return $true
+        $status = $true
     }
     catch {
         Write-Information "WinRm failed"
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
         Invoke-fnSpWorkstationSpecWinRm -computerName $computerName -enabled "0"
-        return $false
     }
+
+    return $status
 }

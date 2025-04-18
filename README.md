@@ -3,13 +3,20 @@ learning GPO & powershell from https://github.com/EvotecIT/
 
 # Local Computer
 ## Computer Details
-**Get-fnComputerDetails**
+**Get-fnDomainInventory**
 * set pwd
 * logs
 * Imports
 * config and variables
 * **Invoke-spGetComputersToScan** > get computers that need to be scanned. View to organize what needs to be scanned & stored proc to pull computer names to scan
 * Foreach computer **Get-fnWorkstationDetails**
+   * **Get-fnReadyForScan** - Test ping, winrm and wmi
+      * if ping fails move on to next computer
+      * **Test-fnWinRmEnabled** - check if WinRm is available
+      * **Test-fnWmiEnabled** - check if Wmi is available
+      * if winRm and wmi unavailable, move to next computer.
+      * if wmi avaialable, try to enable winRm
+      * If winRm still not available move to next computer
    * **Get-fnWorkstationSpecs** > Get workstation specds like serial, bios, manufacturer, model, ram, laptop vs desktop vs vm vs server, procesors, desk, OS, last patch, tpm etc
    * **Invoke-fnSpWorkstationSpecs**  > stored proc to save computer details to sql
    * **Get-fnWorkstationPrinter** > all printers installed in the computer

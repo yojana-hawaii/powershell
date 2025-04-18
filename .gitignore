@@ -15,4 +15,4 @@ log/*
 sql/da-hub-inventory/da-hub-inventory.ssmssqlproj
 stored-procedure/sample-stored-procedure
 private/sample-private-function
-public/computers/Get-fnComputerDetails-manual.ps1
+public/computers/Get-fnDomainInventory-manual.ps1

@@ -1,5 +1,5 @@
 set-location "\\fileserver\it\apps\powershell"
-function Get-fnComputerDetails {
+function Get-fnDomainInventory {
     [CmdletBinding()]
     param (
     )
@@ -7,7 +7,7 @@ function Get-fnComputerDetails {
     #region - Import necessary configs and private functions #>
 
     Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
-    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnConfig.ps1"                          -ErrorAction SilentlyContinue -Recurse)
+    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $private            = @(Get-ChildItem -Path "$PWD\private\computers\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $storedProcedure    = @(Get-ChildItem -Path "$PWD\stored-procedure\computers\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
@@ -27,7 +27,7 @@ function Get-fnComputerDetails {
     #endregion
     
     $startTimer = Start-Timer
-    Write-Verbose "$($MyInvocation.MyCommand.Name): start."
+    Write-Verbose "Start $($MyInvocation.MyCommand.Name)."
     
     $config = Get-fnConfig 
     $vpnIp = "$($config.vpn_ip_suffix)"  -replace '"',""
@@ -42,7 +42,7 @@ function Get-fnComputerDetails {
     }
     
     $totalTime = Stop-Timer -Start $startTimer
-    Write-Information "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime" 
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime" 
 }
 
 
@@ -51,5 +51,5 @@ $today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
-Get-fnComputerDetails -InformationAction Continue -verbose
+Get-fnDomainInventory -InformationAction Continue -verbose
 Stop-Transcript
