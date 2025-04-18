@@ -25,9 +25,9 @@ function Get-fnReadyForScan {
         return
     }
 
-    # Start WinRm if Wmi is running
+    # Start WinRm and change it to start if Wmi is running
     $serviceName = "WinRM"
-    if(-not $winRm -and $wmi){
+    if($wmi){
         Start-fnService -computerName $computer -serviceName $serviceName -finalState "Auto"
     }
 
