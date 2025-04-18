@@ -10,7 +10,7 @@ as begin
 
 	if @frequency = 'daily'
 	begin
-		select ComputerName, IsThinClient, IsVm, IsServer
+		select ComputerName, IsThinClient, IsVm, IsServer, Offline
 		from dbo.vwWorkstationScanOrder
 		where IsNeverScanned = 0
 			and (IsThinClient = 1 
@@ -48,6 +48,6 @@ as begin
 end
 go
 
-exec dbo.spGetComputerReboot @frequency = 'weekly'
+exec dbo.spGetComputerReboot @frequency = 'daily'
 go
 
