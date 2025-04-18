@@ -2,7 +2,9 @@ function Invoke-fnSpWorkstationServices {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [PSCustomObject]$service
+        [PSCustomObject]$service,
+        [Parameter(Mandatory)]
+        [string]$computerName
     )
     
     $StoredProcedure = 'dbo.spWorkstationServices'
@@ -11,7 +13,7 @@ function Invoke-fnSpWorkstationServices {
     $cmd = $connection[1]
 
      try{
-        Write-Information -Message "Insert $($service.Name) to $($service.ComputerName)"
+        Write-Information -Message "Insert $($service.Name) to $($ComputerName)"
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ComputerName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ServiceName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ServiceDisplayName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
@@ -21,7 +23,7 @@ function Invoke-fnSpWorkstationServices {
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ServiceCanShutdown", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ServiceCanStop", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
   
-        $cmd.Parameters[0].Value = $service.ComputerName
+        $cmd.Parameters[0].Value = $ComputerName
         $cmd.Parameters[1].Value = $service.Name
         $cmd.Parameters[2].Value = $service.DisplayName
         $cmd.Parameters[3].Value = $service.Status

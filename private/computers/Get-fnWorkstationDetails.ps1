@@ -49,7 +49,7 @@ function Get-fnWorkstationDetails {
         
     $services = Get-fnWorkstationServices -computerName $computer
     foreach($service in $services){
-        Invoke-fnSpWorkstationServices -service $service -Verbose
+        Invoke-fnSpWorkstationServices -service $service -computerName $computer
     }
     
     # VM does not have monitor - wmi causing problem

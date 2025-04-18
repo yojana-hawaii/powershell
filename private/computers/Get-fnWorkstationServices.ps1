@@ -9,11 +9,7 @@ function Get-fnWorkstationServices {
         $services = Invoke-Command -ComputerName $computerName `
             -ScriptBlock { 
                 Get-Service | Select-Object Name, DisplayName, Status, 
-                    StartType, CanPauseAndContinue, CanShutdown, CanStop,
-                    @{
-                        label = "ComputerName"
-                        expression = {$computerName}
-                    }
+                    StartType, CanPauseAndContinue, CanShutdown, CanStop
             }
          
     } catch {
