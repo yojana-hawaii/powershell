@@ -14,7 +14,7 @@ function Get-fnWorkstationDetails {
 
     # Get computer specs
     $workstation =  Get-fnWorkstationSpecs -computerName $computer -vpnIp $vpnIp
-    Invoke-fnSpWorkstationSpecs -workstation $workstation -Verbose
+    Invoke-fnSpWorkstationSpecs -workstation $workstation
     $workstation
 
     # Get local users
@@ -41,12 +41,13 @@ function Get-fnWorkstationDetails {
         Invoke-fnSpWorkstationPartition -parition $partition
     }
 
+    # Get installed computers
     $softwares = Get-fnWorkstationSoftware -computerName $computer
     foreach($software in $softwares){
-        Invoke-fnSpWorkstationSoftware -software $software -Verbose
+        Invoke-fnSpWorkstationSoftware -software $software 
     }
         
-        
+    # Get services and status
     $services = Get-fnWorkstationServices -computerName $computer
     foreach($service in $services){
         Invoke-fnSpWorkstationServices -service $service -computerName $computer
