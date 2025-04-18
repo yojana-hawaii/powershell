@@ -12,11 +12,18 @@ function Start-fnService {
     
     try {
         $service = Get-Service -ComputerName $computerName -Name $serviceName
+
+        if($service.StartType -eq "disabled"){
+            Set-Service -ComputerName $computerName -Name $serviceName -StartupType "Manual"
+        }
+
         if($service.State -ne "Running"){
             Start-Service -InputObject ($service)
         }
-        
-        Set-Service -ComputerName $computerName -Name $serviceName -StartupType $finalState
+        if($finalState -eq "Auto"){
+            Set-Service -ComputerName $computerName -Name $serviceName -StartupType $finalState
+        }
+        Write-Information "$computerName service $ServiceName status $($service.Status) StartType $($service.StartType)"
         return $service
     }
     catch {
