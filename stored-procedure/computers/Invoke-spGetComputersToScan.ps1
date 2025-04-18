@@ -14,7 +14,7 @@ function Invoke-spGetComputersToScan {
     $cmd = $connection[1]
 
      try{
-        Write-Verbose -Message "Get Computers to scan."
+        Write-Information -Message "$($MyInvocation.MyCommand.Name): Get computers to scan."
 
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@count", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@scanAfterHours", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
@@ -32,7 +32,7 @@ function Invoke-spGetComputersToScan {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed : $($_.Exception.Message)"
         continue
     } finally {
-        Write-Verbose -Message "Closing Sql Connection"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name): Closing Sql Connection"
         Close-spSqlConnection -cmd $cmd -conn $conn
     }
 }

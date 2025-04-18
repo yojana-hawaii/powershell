@@ -12,7 +12,7 @@ function Invoke-fnSpWorkstationPrinters {
     $cmd = $connection[1]
 
     try{
-        Write-Verbose -Message "Insert $($printer.ComputerName)"
+        Write-Information -Message "Insert $($printer.ComputerName)"
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ComputerName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@PrinterName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@PrinterShared", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
@@ -31,7 +31,7 @@ function Invoke-fnSpWorkstationPrinters {
 
         $return = $cmd.ExecuteNonQuery()
         if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
+            Write-Information "$($MyInvocation.MyCommand.Name): Sql insert success."
         } else {
             Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
         }
@@ -40,7 +40,7 @@ function Invoke-fnSpWorkstationPrinters {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($printer.ComputerName): $($_.Exception.Message)"
         continue
     } finally {
-        Write-Verbose -Message "Closing Sql Connection"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
         Close-spSqlConnection -cmd $cmd -conn $conn
     }
 }

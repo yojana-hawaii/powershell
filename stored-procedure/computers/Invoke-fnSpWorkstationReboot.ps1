@@ -27,7 +27,7 @@ function Invoke-fnSpWorkstationReboot{
         Write-Warning "$($MyInvocation.MyCommand.Name) failed : $($_.Exception.Message)"
         continue
     } finally {
-        Write-Verbose -Message "Closing Sql Connection"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
         Close-spSqlConnection -cmd $cmd -conn $conn
     }
 }

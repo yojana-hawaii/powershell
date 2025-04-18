@@ -14,7 +14,7 @@ function Invoke-spGetComputersWithoutUser {
     $cmd = $connection[1]
 
      try{
-        Write-Verbose -Message "Get Computers without laps user."
+        Write-Information -Message "Get Computers without laps user."
 
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@count", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@username", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
@@ -33,7 +33,7 @@ function Invoke-spGetComputersWithoutUser {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed : $($_.Exception.Message)"
         continue
     } finally {
-        Write-Verbose -Message "Closing Sql Connection"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
         Close-spSqlConnection -cmd $cmd -conn $conn
     }
 }

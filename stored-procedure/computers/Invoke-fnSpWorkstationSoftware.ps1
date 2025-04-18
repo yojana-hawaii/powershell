@@ -31,7 +31,7 @@ function Invoke-fnSpWorkstationSoftware {
 
         $return = $cmd.ExecuteNonQuery()
         if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
+            Write-Information "$($MyInvocation.MyCommand.Name): Sql insert success."
         } else {
             Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
         }
@@ -40,7 +40,7 @@ function Invoke-fnSpWorkstationSoftware {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($software.ComputerName): $($_.Exception.Message)"
         continue
     } finally {
-        Write-Verbose -Message "Closing Sql Connection"
+       Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
         Close-spSqlConnection -cmd $cmd -conn $conn
     }
 }

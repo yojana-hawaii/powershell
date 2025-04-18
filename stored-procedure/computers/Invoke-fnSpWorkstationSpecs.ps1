@@ -11,7 +11,7 @@ function Invoke-fnSpWorkstationSpecs {
     $cmd = $connection[1]
 
      try{
-        Write-Verbose -Message "Insert $($workstation.ComputerName)"
+        Write-Information -Message "Insert $($workstation.ComputerName)"
 
         
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ComputerName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
@@ -103,7 +103,7 @@ function Invoke-fnSpWorkstationSpecs {
 
         $return = $cmd.ExecuteNonQuery()
         if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
+            Write-Information "$($MyInvocation.MyCommand.Name): Sql insert success."
         } else {
             Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed ($return was the numbered retured):: $($_.Exception.Message) "
         }
@@ -112,7 +112,7 @@ function Invoke-fnSpWorkstationSpecs {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
         continue
     } finally {
-        Write-Verbose -Message "Closing Sql Connection"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
         Close-spSqlConnection -cmd $cmd -conn $conn
     }
 }

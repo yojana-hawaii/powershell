@@ -12,7 +12,7 @@ function Invoke-fnSpWorkstationPartition {
     $cmd = $connection[1]
 
      try{
-        Write-Verbose -Message "Insert $($parition.ComputerName)"
+        write-information -Message "Insert $($parition.ComputerName)"
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ComputerName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@PartitionNumber", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@DiskNumber", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
@@ -39,7 +39,7 @@ function Invoke-fnSpWorkstationPartition {
 
         $return = $cmd.ExecuteNonQuery()
         if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
+            Write-Information "$($MyInvocation.MyCommand.Name): Sql insert success."
         } else {
             Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
         }
@@ -48,7 +48,7 @@ function Invoke-fnSpWorkstationPartition {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($parition.ComputerName): $($_.Exception.Message)"
         continue
     } finally {
-        Write-Verbose -Message "Closing Sql Connection"
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
         Close-spSqlConnection -cmd $cmd -conn $conn
     }
 }
