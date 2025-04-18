@@ -11,7 +11,7 @@ function Get-fnWorkstationSoftware {
     try {
         $service = Start-fnService -ComputerName $computerName -serviceName $serviceName -finalstate "Disabled"
 
-        if($null -ne $service -and $service.State -eq 'Running'){
+        if($null -ne $service -and $service.Status -eq 'Running'){
 
             $regLocation = "Software\Microsoft\Windows\CurrentVersion\Uninstall\", 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\'
 
@@ -54,7 +54,7 @@ function Get-fnWorkstationSoftware {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     } 
     finally {
-        # Stop-fnService -computerName $computerName -serviceName $serviceName -returnToOriginalStatus $false
+        Stop-fnService -computerName $computerName -serviceName $serviceName
         Write-Information "$($MyInvocation.MyCommand.Name): Final Remote Registry Status $($finalServiceStatus.Status)"
     }
     return $softwareObject
