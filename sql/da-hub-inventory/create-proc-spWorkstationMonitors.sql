@@ -1,9 +1,9 @@
 use DaHubInventory
 go
 
-drop proc if exists dbo.spWorkstationServices
+drop proc if exists dbo.spWorkstationMonitors
 go
-create proc dbo.spWorkstationServices
+create proc dbo.spWorkstationMonitors
 (
 	@ComputerName varchar(50),
     @MonitorManufacturer varchar(50) = null,
