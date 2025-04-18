@@ -8,7 +8,9 @@ function Get-fnWorkstationPrinter {
     )
     Write-Information "$($MyInvocation.MyCommand.Name) geting printer from: $($computerName)"
     try {
-        $drivers = Get-PrinterDriver -ComputerName $computerName -name * | Select-Object Name, Provider,IsPackageAware, `
+        $drivers = Invoke-Command -ComputerName $computerName `
+                    -ScriptBlock { 
+                        Get-PrinterDriver -name * | Select-Object Name, Provider,IsPackageAware, `
                             @{Name="DriverVersion"; Expression={
                                 $ver = $_.DriverVersion
                                 $rev = $ver -band 0xffff
@@ -17,6 +19,9 @@ function Get-fnWorkstationPrinter {
                                 $major = ($ver -shr 48) -band 0xffff
                                 "$major.$minor.$build.$rev"
                             };}
+                    }
+
+        
         Get-CimInstance -Class win32_Printer -ComputerName $computerName| ForEach-Object {
             $ThisPrintDriverName = $_.DriverName
             $ThisDriver = $drivers | Where-Object {  $_.Name -eq $ThisPrintDriverName }
@@ -37,4 +42,3 @@ function Get-fnWorkstationPrinter {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     }
 }
-
