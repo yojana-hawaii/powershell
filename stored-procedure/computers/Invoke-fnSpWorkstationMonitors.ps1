@@ -4,7 +4,7 @@ function Invoke-fnSpWorkstationMonitors {
         [Parameter(Mandatory)]
         [PSCustomObject]$monitor
     )
-    $StoredProcedure = 'dbo.spWorkstationServices'
+    $StoredProcedure = 'dbo.spWorkstationMonitors'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]
