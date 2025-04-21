@@ -38,16 +38,26 @@ function Set-fnWorkstationReboot {
         foreach($computer in $computers){
             $ping = Test-Connection -ComputerName $computer.ComputerName -BufferSize 4 -count 1 -Quiet
             if($ping){
-                Write-Information "rebooting $($computer.ComputerName)"
-                Restart-Computer -ComputerName $computer.ComputerName -force
+                write-verbose "rebooting $($computer.ComputerName)"
+
+                try{
+                    if($computer.ComputerName -eq "kphc-powershell"){
+                        $totalTime = Stop-Timer -Start $startTimer
+                        Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime"     
+                    }
+                    Restart-Computer -ComputerName $computer.ComputerName -force
+                } catch {
+                    write-verbose "try-catch fail $($computer.ComputerName)"
+                }
 
             } else {
-                Write-Information "cannot reboot $($computer.ComputerName). It is offline."
+                write-verbose "cannot reboot $($computer.ComputerName). It is offline."
             }
         }
 
         $totalTime = Stop-Timer -Start $startTimer
-        Write-Information "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime"     
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime"     
+                        
 
 }
 
@@ -56,5 +66,5 @@ $today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
-Set-fnWorkstationReboot -InformationAction Continue -verbose
+Set-fnWorkstationReboot -Verbose -InformationAction Continue 
 Stop-Transcript
