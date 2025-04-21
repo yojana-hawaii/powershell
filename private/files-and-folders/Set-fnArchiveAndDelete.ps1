@@ -39,7 +39,7 @@ function Set-fnArchiveAndDelete {
                     $month = ($_.Name.Split("."))[1]
                     write-host $_.Name $today_month $month
 
-                    if($month -as [int] -lt $today_month -as [int] ){
+                    if($month -as [int] -lt $today_month -as [int] -or $_.Name -as [int] -lt $today_year -as [int]){
                         Write-Information "Month ready for zip $($_.Name)"
                         fnLocal_ArchiveAndDelete -folder $_.FullName
                     }

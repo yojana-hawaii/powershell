@@ -1,3 +1,5 @@
+set-location "\\fileserver\it\apps\powershell"
+
 function Set-fnOrganizeLogFiles {
     [CmdletBinding()]
     param ()
