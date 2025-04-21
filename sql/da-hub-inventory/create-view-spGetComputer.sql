@@ -18,6 +18,9 @@ as
 			case when ws.ScanSuccessDate is null then null else datediff(hour,  ws.ScanSuccessDate ,getdate()) end LastSuccessfulScanHours,
 			case when ws.ScanSuccessDate is null then null else datediff(DAY,  ws.ScanSuccessDate ,getdate()) end LastSuccessfulScanDays,
 
+			case when ws.LastRebootDate is null then null else datediff(DAY,  ws.LastRebootDate ,getdate()) end LastRebootDays,
+
+
 			case when ws.ScanSuccessDate is null then 1 else 0 end IsNeverScanned,
 			case when ad.LastLogonDate is null then null else datediff(day,  ad.LastLogonDate ,getdate()) end LastLogonDays,
 			case when ws.LastSecurityUpdateDate is null then null else datediff(day,  ws.LastSecurityUpdateDate ,getdate()) end LastSecurityPatchDays,
