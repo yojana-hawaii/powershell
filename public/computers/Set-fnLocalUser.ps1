@@ -64,8 +64,8 @@ function fnLocal_CreateLapsUsers{
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
     } 
     finally {
-        Stop-fnService -computerName $computerName -serviceName $serviceName -returnToOriginalStatus $true -original $service
-        Write-Information "$($MyInvocation.MyCommand.Name): Final Remote Registry Status $($finalServiceStatus.Status)"
+        # Stop-fnService -computerName $computerName -serviceName $serviceName -returnToOriginalStatus $true -original $service
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Final Remote Registry Status $($finalServiceStatus.Status)"
     } 
 
 }
