@@ -40,7 +40,7 @@ function New-fnOrderReport {
 
     Write-Verbose "$($MyInvocation.MyCommand.Name): Looping through $($order.type)"
     for($i=0; $i -le ($order.Count - 1); $i++){
-        Write-Information "$($MyInvocation.MyCommand.Name): Current loop $($order[$i].type )"
+        Write-Verbose "$($MyInvocation.MyCommand.Name): Current loop $($order[$i].type )"
 
         if( -not (Test-fnSourceFile -sourceFile $order[$i].source -sourceFileValidDays 7) ){
             Update-fnInvalidSource -email $email -type $order[$i].type -sourceFile $order[$i].source 

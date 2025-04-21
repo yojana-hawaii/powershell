@@ -11,7 +11,7 @@ function Join-fnTwoOrderArray {
         [string]$array2_prefix    
     )
 
-    Write-Verbose "$($MyInvocation.MyCommand.Name): Combine 2 grouped order array"
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Combine 2 grouped order array - $type $array2_prefix"
     # $array1
     # $array2
     if($null -eq $array1){
