@@ -32,6 +32,19 @@ function Get-fnActiveDirectoryDetails{
     $config = Get-fnConfig
     $dc = $config.domainController -replace '"', ""
 
+
+    # First run or all groups deltaChangeHours = 0 (50 years)
+    # 50 after that -> changes in last 50 hours 
+    $groups = Get-fnAdGroups -deltaChangeHours 0
+    $totalGroups = $groups.count
+    $count = 1
+    foreach($group in $groups){
+        Write-Information "inserting $count of $totalGroups : $($group.sAMAccountName)"
+        Invoke-spAdGroup -group $group
+        $count++
+    }
+     
+    # inport in 2 groups. Active and Inactive - too many computers in AD
     $activeComputers = Get-fnAdComputers -dc $dc -enabled $true
     $total = $activeComputers.count 
     $cnt = 1
