@@ -15,14 +15,34 @@ function fnLocal_hasBitlocker($computerName){
 function Get-fnAdComputers {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory)]
-        [string]$dc,
         [parameter()]
-        [bool]$enabled = $true
+        [bool]$enabled = $true,
+        [parameter()]
+        [bool]$server = $false,
+        [parameter()]
+        [string]$identity = "all"
     )
     Write-Information "$($MyInvocation.MyCommand.Name)"
+
+    $filter = "Enabled -eq '$enabled' -and OperatingSystem -notlike '*server*' "
+
+    if($server){
+        Write-Information "Get servers"
+        $filter = "OperatingSystem -like '*server*'"
+    } 
+    
+    if($identity -ne 'all') {
+        Write-Information "get invidual machine"
+        $filter = "name -eq '$identity'"
+    }
+
+    write-host $filter
+
+    
+
+
     try {
-        $computers = Get-ADComputer -Filter {Enabled -eq $enabled} -Properties * | 
+        $computers = Get-ADComputer -Filter $filter -Properties *  | 
             Select-Object @{    
                     label="ComputerName"
                     expression={$_.Name}   
@@ -69,15 +89,16 @@ function Get-fnAdComputers {
                     label="lapsExpirationDate"
                     expression={fnLocal_lapsExpirationDate($_.Name)}
                 },
-                LastLogonDate, LogonCount, 
-                @{
-                    label="UserAccountControl"
-                    expression={Get-fnUserAccountControlValue -userAccountControlFlag $_.USerAccountControl}
-                }
-                                
-        return $computers
+                LastLogonDate, LogonCount, UserAccountControl
+                # @{
+                #     label="UserAccountControl"
+                #     expression={Get-fnUserAccountControlValue -userAccountControlFlag $_.UserAccountControl}
+                # }
+                   
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
-    }
+    }       
+    return $computers
+    
 }

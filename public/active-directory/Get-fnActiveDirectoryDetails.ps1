@@ -1,6 +1,15 @@
 
 set-location "\\fileserver\it\apps\powershell"
 
+function fnLocal_InsertListOfObject($computers){
+    $total = $computers.count 
+    $cnt = 1
+    foreach($computer in $computers){
+        Write-Information "Inserting $cnt of $total computers"
+        Invoke-spAdComputer -computer $computer
+        $cnt++
+    }
+}
 function Get-fnActiveDirectoryDetails{
     [CmdletBinding()]
     param (
@@ -29,13 +38,28 @@ function Get-fnActiveDirectoryDetails{
 
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
-    $config = Get-fnConfig
-    $dc = $config.domainController -replace '"', ""
 
+    $deltaChange = 48
+
+
+
+    #region Computers
+    ## Import in 3 groups. server, Active non servers and Inactive non server - too many computers in AD
+
+    # Servers
+    $servers = Get-fnAdComputers -enabled $false -server $true
+    fnLocal_InsertListOfObject -computers $servers
+    # Active
+    $activeComputers = Get-fnAdComputers -enabled $true
+    fnLocal_InsertListOfObject -computers $activeComputers
+    # Inactive
+    $inactiveComputers = Get-fnAdComputers -enabled $false
+    fnLocal_InsertListOfObject -computers $inactiveComputers
+    #endregion
 
     # First run or all groups deltaChangeHours = 0 (50 years)
     # 50 after that -> changes in last 50 hours 
-    $groups = Get-fnAdGroups -deltaChangeHours 0
+    $groups = Get-fnAdGroups -deltaChangeHours $deltaChange
     $totalGroups = $groups.count
     $count = 1
     foreach($group in $groups){
@@ -44,25 +68,6 @@ function Get-fnActiveDirectoryDetails{
         $count++
     }
      
-    # inport in 2 groups. Active and Inactive - too many computers in AD
-    $activeComputers = Get-fnAdComputers -dc $dc -enabled $true
-    $total = $activeComputers.count 
-    $cnt = 1
-    foreach($computer in $activeComputers){
-        Write-Information "Inserting $cnt of $total computers"
-        Invoke-spAdComputer -computer $computer
-        $cnt++
-    }
-
-    $inactiveComputers = Get-fnAdComputers -dc $dc -enabled $false
-    $total = $inactiveComputers.count 
-    $cnt = 1
-    foreach($computer in $inactiveComputers){
-        Write-Information "Inserting $cnt of $total computers"
-        Invoke-spAdComputer -computer $computer
-        $cnt++
-    }
-
 
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){

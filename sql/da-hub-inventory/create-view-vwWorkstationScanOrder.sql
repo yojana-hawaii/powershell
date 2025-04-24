@@ -19,7 +19,7 @@ as
 			case when ws.ScanSuccessDate is null then null else datediff(DAY,  ws.ScanSuccessDate ,getdate()) end LastSuccessfulScanDays,
 
 			case when ws.LastRebootDate is null then null else datediff(DAY,  ws.LastRebootDate ,getdate()) end LastRebootDays,
-
+			convert(date,ad.CreatedDate) AdCreatedDate,
 
 			case when ws.ScanSuccessDate is null then 1 else 0 end IsNeverScanned,
 			case when ad.LastLogonDate is null then null else datediff(day,  ad.LastLogonDate ,getdate()) end LastLogonDays,
@@ -31,7 +31,7 @@ as
 			ad.IPV4Address,
 			ad.OperatingSystem, 
 			ad.OU,
-
+			ws.SerialNumber,
 			case when sen.ServiceStatus = 'Running' then 1 when sen.ServiceStatus is null then null else 0 end  SentinelOneService,
 			case when kac.ServiceStatus = 'Running' then 1 when kac.ServiceStatus is null then null else 0 end  KaceService,
 			case when aid.ServiceStatus = 'Running' then 1 when aid.ServiceStatus is null then null else 0 end  SysaidService,
@@ -101,6 +101,7 @@ as
 			when IsThinClient = 1 then -150
 			when IPV4Address like '10.10.%' then 1 -- maybe accessible
 		else 0 end
+		+ case when IsVm = 1 and Offline = 1 then -5 else 0 end 
 		+ IsNeverScanned
 		--isnull(lastlogondays,4) 
 		--+ isnull(LastScanAttemptHours/5,3) 
