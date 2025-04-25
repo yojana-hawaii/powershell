@@ -1,12 +1,22 @@
 
 set-location "\\fileserver\it\apps\powershell"
 
-function fnLocal_InsertListOfObject($computers){
+function fnLocal_InsertListOfComputers($computers){
     $total = $computers.count 
     $cnt = 1
     foreach($computer in $computers){
-        Write-Information "Inserting $cnt of $total computers"
+        Write-Information "Inserting $cnt of $total computers, $($computer.sAMAccountName)"
         Invoke-spAdComputer -computer $computer
+        $cnt++
+    }
+}
+function fnLocal_InsertListOfUsers($users){
+    $total = $users.count
+    $cnt = 1
+    foreach($user in $users){
+        Write-Information "Inserting $cnt of $total users, $($user.sAMAccountName)"
+        # $user
+        Invoke-spAdUser -user $user
         $cnt++
     }
 }
@@ -39,26 +49,35 @@ function Get-fnActiveDirectoryDetails{
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
 
-    $deltaChange = 48
 
-
-
+    #region Users
+    # Active
+    $activeUsers = Get-fnAdUsers -enabled $true
+    fnLocal_InsertListOfUsers -users $activeUsers 
+    # Inactive 
+    $inactiveUsers = Get-fnAdUsers -enabled $false
+    fnLocal_InsertListOfUsers -users $inactiveUsers 
+    
+    #endregion
+    
     #region Computers
     ## Import in 3 groups. server, Active non servers and Inactive non server - too many computers in AD
 
     # Servers
     $servers = Get-fnAdComputers -enabled $false -server $true
-    fnLocal_InsertListOfObject -computers $servers
+    fnLocal_InsertListOfComputers -computers $servers
     # Active
     $activeComputers = Get-fnAdComputers -enabled $true
-    fnLocal_InsertListOfObject -computers $activeComputers
+    fnLocal_InsertListOfComputers -computers $activeComputers
     # Inactive
     $inactiveComputers = Get-fnAdComputers -enabled $false
-    fnLocal_InsertListOfObject -computers $inactiveComputers
+    fnLocal_InsertListOfComputers -computers $inactiveComputers
     #endregion
 
     # First run or all groups deltaChangeHours = 0 (50 years)
     # 50 after that -> changes in last 50 hours 
+    $deltaChange = 48
+
     $groups = Get-fnAdGroups -deltaChangeHours $deltaChange
     $totalGroups = $groups.count
     $count = 1
