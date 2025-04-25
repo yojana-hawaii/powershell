@@ -47,8 +47,7 @@ function Get-fnActiveDirectoryDetails{
     #endregion
 
     $startTimer = Start-Timer
-    Write-Verbose "$($MyInvocation.MyCommand.Name): start."
-
+    Write-Verbose "$($MyInvocation.MyCommand.Name): start."  
 
     #region Users
     # Active
@@ -74,6 +73,8 @@ function Get-fnActiveDirectoryDetails{
     fnLocal_InsertListOfComputers -computers $inactiveComputers
     #endregion
 
+
+    #region Groups
     # First run or all groups deltaChangeHours = 0 (50 years)
     # 50 after that -> changes in last 50 hours 
     $deltaChange = 48
@@ -86,6 +87,16 @@ function Get-fnActiveDirectoryDetails{
         Invoke-spAdGroup -group $group
         $count++
     }
+    $groupMembers = Get-fnAdGroupMembers -deltaChangeHours $deltaChange
+    $totalGm = $groupMembers.count
+    $countGm = 1
+    foreach($gm in $groupMembers){
+        Write-Information "Inserting $countGm of $totalGm users, $($gm.GroupsAMAccountName), $($gm.Username)"
+
+        Invoke-spAdGroupMembers -groupMember $gm
+        $countGm++
+    }
+    #endregion
      
 
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
@@ -93,6 +104,7 @@ function Get-fnActiveDirectoryDetails{
         Invoke-spActiveDirectory -ActiveDirectory $data -Verbose
     }
     
+    #region OU
     $organizationalUnits = Get-fnOrganizationalUnit -Verbose
     foreach($ou in $organizationalUnits)
     {
@@ -101,7 +113,8 @@ function Get-fnActiveDirectoryDetails{
             Invoke-spOrganizationalUnitAcl -acl $acl -guid $ou.ObjectGuid
         }
     }
-    
+    #endregion
+
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Active Diretory details complete. It took $totalTime" 
 
