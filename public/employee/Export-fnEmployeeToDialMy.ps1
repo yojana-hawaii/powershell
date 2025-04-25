@@ -23,7 +23,9 @@ function Export-fnEmployeeToDialMy {
     $import = $null
     #endregion
 
-    Write-Verbose "Initialize rave config from employee config file."
+    Write-Verbose "Initialize config from employee config file."
+
+    #region Initialize
     $config = Get-fnEmployeeConfig
 
     Write-Verbose "Strip `" (double quote). Pull path from config file adds double quotes everywhere"
@@ -35,7 +37,8 @@ function Export-fnEmployeeToDialMy {
     $validateCsv                    = (Join-Path -Path $config.employeeFilepath -ChildPath $config.validateCsv) -replace '"',""
     $org2                           = ($config.organization2) -replace '"',""
     $sourceFileHeader               = ($config.sourceFileHeader) -replace '"',""
-    
+    #endregion
+
     $employees = Convert-fnCsvToEmployee -sourceFile $sourceFile -org2 $org2 -sourceFileHeader $sourceFileHeader
     $employees = Add-fnMissingPhoneNumbers -employees $employees -additionalPhoneNumbersFile $additionalPhoneNumbersFile
 
@@ -48,7 +51,7 @@ function Export-fnEmployeeToDialMy {
 
 $Global:today = $null
 $today = Get-Date
-$mmddyyyy = Get-Date -Format "MM-dd-yyyy"
+$mmddyyyy = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\log\Export-fnEmployeeToDialM_$mmddyyyy.txt" -Append
 Export-fnEmployeeToDialMy  -Verbose -InformationAction Continue
