@@ -4,10 +4,17 @@ function New-spSqlConnection {
     [CmdletBinding()]
     param(
         [Parameter()]
-        [string]$StoredProcedureName
+        [string]$StoredProcedureName,
+        [Parameter()]
+        [string]$database="default",
+        [Parameter()]
+        [string]$sqlServer="default"
     )
     $config = Get-fnConfig
-    $connectionString="Server=$($config.sqlserver);Integrated Security=True;Initial Catalog=$($config.database);"
+    if($database -eq "default"){$database = $config.database}
+    if($sqlServer -eq "default"){$sqlServer = $config.sqlserver}
+
+    $connectionString="Server=$sqlServer;Integrated Security=True;Initial Catalog=$database;"
     # Write-Host $connectionString
 
     $conn = New-Object System.Data.SqlClient.SqlConnection
