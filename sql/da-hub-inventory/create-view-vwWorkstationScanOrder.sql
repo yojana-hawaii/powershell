@@ -26,7 +26,9 @@ as
 			case when ws.LastSecurityUpdateDate is null then null else datediff(day,  ws.LastSecurityUpdateDate ,getdate()) end LastSecurityPatchDays,
 			case when ws.LastSecurityUpdateDate is null then null else datediff(day,  ws.LastSecurityUpdateDate ,getdate()) end LastPatchDays,
 			
-			ws.IsServer, ws.IsDesktop, ws.IsLaptop, ws.IsThinClient, ws.IsVm, ws.IsVpn, 
+			case when ad.OperatingSystem like '%server%' then 1 else ws.IsServer end IsServer, 
+			
+			ws.IsDesktop, ws.IsLaptop, ws.IsThinClient, ws.IsVm, ws.IsVpn, 
 			ad.HasBitlocker, ad.Haslaps, 
 			ad.IPV4Address,
 			ad.OperatingSystem, 
