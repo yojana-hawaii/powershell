@@ -1,0 +1,38 @@
+function Invoke-spGetRelevantTicketSummary {
+    [CmdletBinding()]
+    param (
+        [parameter()]
+        [string]$days = -7,
+        [parameter()]
+        [string]$admin = 'all'
+    )
+
+    
+    $StoredProcedure = 'dbo.spGetRelevantTicketSumary'
+    $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure -database 'DaHubAide'
+    $conn = $connection[0]
+    $cmd = $connection[1]
+
+     try{
+        Write-Information -Message "Get ticket summary for $admin for past $days days"
+
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@days", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@admin", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        
+        $cmd.Parameters[0].Value = $days
+        $cmd.Parameters[1].Value = $admin
+
+
+        $result = $cmd.ExecuteReader()
+        $data = New-Object System.Data.DataTable
+        $data.Load($result)
+        return $data
+
+    } catch {
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed : $($_.Exception.Message)"
+        continue
+    } finally {
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
+        Close-spSqlConnection -cmd $cmd -conn $conn
+    }
+}

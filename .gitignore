@@ -17,3 +17,4 @@ stored-procedure/sample-stored-procedure
 private/sample-private-function
 public/computers/Get-fnDomainInventory-manual.ps1
 sql/da-hub-inventory/zz-random-query.sql
+sql/da-hub-sysaid/da-hub-sysaid.ssmssqlproj
