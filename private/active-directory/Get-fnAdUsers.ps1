@@ -14,13 +14,10 @@ function Get-fnAdUsers {
         $filter = "Name -eq $identity"
     }
 
-    Write-Information "$filter"
-
-
  
     try {
         $users = Get-ADUser  -Filter $filter -Properties * |
-                    Select-Object CanonicalName, sAMAccountName,userPrincipalName, 
+                    Select-Object CanonicalName, sAMAccountName,userPrincipalName,
                         @{
                             label = "FirstName"
                             expression = {$_.GivenName}
@@ -51,10 +48,12 @@ function Get-fnAdUsers {
                             expression = {_.PasswordLastSet}
 
                         },
-                        ScriptPath, LogonCount, EmployeeId, 
+                        ScriptPath, LogonCount, EmployeeId,
                         @{
                             label="Manager"
-                            expression={(Get-Aduser -Identity $_.Manager).sAMAccountName}
+                            expression={
+                                if($null -ne $_.Manager){ (Get-Aduser -Identity $_.Manager).sAMAccountName} else {"no manager"}
+                            }
                         }
     }
     catch {

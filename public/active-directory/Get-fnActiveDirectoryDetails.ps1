@@ -123,8 +123,8 @@ function Get-fnActiveDirectoryDetails{
 
 $Global:today = $null
 $today = Get-Date
-$mmddyyyy = Get-Date -Format "MM-dd-yyyy"
+$filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$mmddyyyy.txt" -Append
+Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
 Get-fnActiveDirectoryDetails  -Verbose -InformationAction Continue
 Stop-Transcript
