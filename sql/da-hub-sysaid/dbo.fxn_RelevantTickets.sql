@@ -11,14 +11,16 @@ returns @retTable table
 (
 	Ticketnumber int null,
 	TicketStatus varchar(50) null,
-	TicketStatusOrder int null, 
+	TicketPriority varchar(50) null,
 	Category varchar(100) null,
 	SubCategory varchar(100) null,
-	TicketTitle varchar(500) null,
+	TicketSubject varchar(500) null,
 	RequestTime datetime null,
 	LastUpdate datetime null,
 	ClosedTime datetime null,
-	AssignedTo varchar(50) null
+	AssignedTo varchar(50) null,
+	SubmitUser varchar(50) null,
+	RequestUser varchar(50) null
 )
 as
 begin
@@ -34,9 +36,9 @@ begin
 
 	insert into @retTable	
 	select
-		Ticketnumber,TicketStatus, TicketStatusOrder, 
-		Category, SubCategory, TicketTitle, 
-		RequestTime, LastUpdate, ClosedTime,AssignedTo
+		Ticketnumber,TicketStatus,TicketPriority, 
+		Category, SubCategory, TicketSubject, 
+		RequestTime, LastUpdate, ClosedTime,AssignedTo, SubmitUser, RequestUser
 	from dbo.view_sysaidTickets
 	where
 		RequestTime		>= @relevantDate 
@@ -51,5 +53,5 @@ end
 
 go
 
-select * from dbo.fxn_RelevantTickets(-30)
+select * from DaHubAide.dbo.fxn_RelevantTickets(-5)
 go

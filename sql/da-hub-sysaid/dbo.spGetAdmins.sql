@@ -15,6 +15,6 @@ end
 
 go
 
-exec dbo.spGetAdmins;
+exec DaHubAide.dbo.spGetAdmins;
 
 go

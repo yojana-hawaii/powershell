@@ -21,6 +21,6 @@ begin
 		)
 end
 go
-exec dbo.spGetRelevantTicketSumary
+exec DaHubAide.dbo.spGetRelevantTicketSumary
 
 go

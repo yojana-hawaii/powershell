@@ -8,14 +8,17 @@ as
 
 	select 
 		distinct 
-		v.value_caption TicketStatus, 
-		s.Status TicketStatusOrder,
+		case 
+			when v.value_caption = 'Closed' or v.value_caption like 'on hold%' then replace(v.value_caption,'on hold','on-hold')
+			else 'Open'
+		end TicketStatus, 
+		p.value_caption TicketPriority,
 		Computer_Id,
 		
 		s.id TicketNumber,
-		problem_type Category,  
+		replace(replace(replace(replace(replace(trim(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(problem_type,'01',''),'02',''),'03',''),'04',''),'05',''),'06',''),'07',''),'08',''),'09',''),'10',''),'11',''),'14',''),'15',''),'16',''),'19',''),'20 -','')),' use',''), ' issues',''),'Company ',''),' / ','/'),'/ ','/') Category,  
 		problem_sub_type SubCategory,
-		title TicketTitle,
+		title TicketSubject,
 		
 		case when responsibility = 'I.T.Admin' then 'unassigned' else lower(replace(responsibility,'kphc\','')) end AssignedTo, 
 		case when update_user = 'I.T.Admin' then 'unassigned' else lower(replace(update_user,'kphc\','')) end LastUpdateuser, 
@@ -31,16 +34,27 @@ as
 		description,
 		notes TicketNotes
 	from sysaid.ilient.dbo.service_req s
-		left join sysaid.[ilient].[dbo].[cust_values] v on s.status = v.value_key and v.list_name = 'status'
+		left join (
+					select distinct value_key, value_caption  
+					from sysaid.[ilient].[dbo].[cust_values] v 
+					where v.list_name = 'status' 
+				) v on s.status = v.value_key 
+		left join (
+					select distinct value_key, value_caption  
+					from sysaid.[ilient].[dbo].[cust_values] v 
+					where v.list_name = 'priority' 
+				) p on s.priority = p.value_key
 	where (
-			s.insert_time >= '2023-01-01' 
-				or (
-					s.insert_time > '2021-01-01' 
-						and v.value_caption not in ('Closed','Merge Closed','Deleted') 
-					) 
+			s.insert_time >= '2023-01-01' and v.value_caption not in ('Merge Closed','Deleted') 
+				--or (
+				--	s.insert_time > '2021-01-01' 
+				--		and v.value_caption not in ('Closed','Merge Closed','Deleted') 
+				--	) 
 			)
-			and v.value_caption not in ('Reopened by End User','Pending') -- pending seems to be duplicate with in progress. Reopen and reopened by user seem duplicate
+			--and v.value_caption not in ('Reopened by End User','Pending','Deleted','Merge Closed') -- pending seems to be duplicate with in progress. Reopen and reopened by user seem duplicate
 go
 
-select * from dbo.view_sysaidTickets
+select distinct Category  from DaHubAide.dbo.view_sysaidTickets --order by TicketStatus desc
+
+--select *  from DaHubAide.dbo.view_sysaidTickets where TicketStatus not in ('Closed')
 go
