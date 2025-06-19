@@ -6,7 +6,7 @@ function Get-fnAdUsers {
         [parameter()]
         [string]$identity = 'all'
     )
-    Write-Information "$($MyInvocation.MyCommand.Name)"
+    Write-Verbose "$($MyInvocation.MyCommand.Name) with enabled as $enabled and identity as $identity "
 
     $filter = "enabled -eq '$enabled' "
 

@@ -18,7 +18,7 @@ begin
 	declare @attemptAfter int = convert(int, @scanAttemptHours);
 	
 	select top (@cnt) 
-		* 
+		NextScanOrder, ComputerName, SerialNumber
 	from dbo.vwWorkstationScanOrder vw
 	where 
 		isnull(vw.LastSuccessfulScanHours,100) > @scanAfter

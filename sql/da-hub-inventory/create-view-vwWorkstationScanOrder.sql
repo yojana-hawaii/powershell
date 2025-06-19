@@ -9,8 +9,10 @@ as
 	with u as (
 		select 
 			ad.ComputerName, 
-			ad.Enabled,
-			ws.Offline,
+			ws.SerialNumber,
+			ad.Enabled ActiveInAD,
+			ws.Offline LastScanOffline,
+
 			ws.WinRmEnabled,
 			ws.WmiEnabled,
 			case when ws.scanattemptdate is null then null else datediff(hour, ws.scanattemptdate, getdate()) end LastScanAttemptHours,
@@ -33,12 +35,11 @@ as
 			ad.IPV4Address,
 			ad.OperatingSystem, 
 			ad.OU,
-			ws.SerialNumber,
-			case when sen.ServiceStatus = 'Running' then 1 when sen.ServiceStatus is null then null else 0 end  SentinelOneService,
-			case when kac.ServiceStatus = 'Running' then 1 when kac.ServiceStatus is null then null else 0 end  KaceService,
-			case when aid.ServiceStatus = 'Running' then 1 when aid.ServiceStatus is null then null else 0 end  SysaidService,
-			case when denc.ServiceStatus = 'Running' then 1 when denc.ServiceStatus is null then null else 0 end  DellEncryptionService,
-			case when cyl.ServiceStatus = 'Running' then 1 when cyl.ServiceStatus is null then null else 0 end  CylanceService,
+			case when sen.ServiceStatus = 'Running' or sen.ServiceStatus = '4' then 1 when sen.ServiceStatus is null then null else 0 end  SentinelOneService,
+			case when kac.ServiceStatus = 'Running' or kac.ServiceStatus = '4' then 1 when kac.ServiceStatus is null then null else 0 end  KaceService,
+			case when aid.ServiceStatus = 'Running' or aid.ServiceStatus = '4' then 1 when aid.ServiceStatus is null then null else 0 end  SysaidService,
+			case when denc.ServiceStatus = 'Running' or denc.ServiceStatus = '4' then 1 when denc.ServiceStatus is null then null else 0 end  DellEncryptionService,
+			case when cyl.ServiceStatus = 'Running' or cyl.ServiceStatus = '4' then 1 when cyl.ServiceStatus is null then null else 0 end  CylanceService,
 			case 
 				when ws.IsVm = 1 or ws.IsServer = 1 then null  
 				when ws.DiskType = 'SDD' then 1 
@@ -49,14 +50,9 @@ as
 			ws.TpmEnabled,
 			ws.TpmVersion,
 			ws.CurrentUser,
-
-			--ws.DiskType,
-			--cyl.ServiceStatus Cylance,
-			--denc.ServiceStatus DellEncryption,
-			--aid.ServiceStatus Sysaid,
-			--kac.ServiceStatus Kace,
-			--sen.ServiceStatus SentinelOne,
-			--ws.LastPatchDate, ws.LastSecurityUpdateDate, 
+			ws.DiskType, ws.DiskSizeGb, RamInstalledGb, RamUpgradableGb, RamSlotTotal, RamSlotUsed,
+			
+			replace(replace(replace([Processor],'Intel(R) Core(TM)',''),'Intel(R) Celeron(R) ',''),'Intel(R) Xeon(R) ','') Processor,
 			ws.ScanSuccessDate, ws.ScanAttemptDate
 
 			
@@ -103,16 +99,38 @@ as
 			when IsThinClient = 1 then -150
 			when IPV4Address like '10.10.%' then 1 -- maybe accessible
 		else 0 end
-		+ case when IsVm = 1 and Offline = 1 then -5 else 0 end 
+		+ case when IsVm = 1 and ActiveInAD = 1 then -5 else 0 end 
 		+ IsNeverScanned
 		--isnull(lastlogondays,4) 
 		--+ isnull(LastScanAttemptHours/5,3) 
 		NextScanOrder,
-			* 
+
+		case 
+			when  IsVm = 1 or IsServer = 1 then 'server-vm'
+			when IsNeverScanned = 1 then 'scanned-never'
+			when LastSuccessfulScanDays > 60 then 'scanned-more-than-60-days'
+			else 
+			(
+				case when LastRebootDays > 7 and LastSuccessfulScanDays < 7 then 'reboot, ' else '' end +
+				case when HasBitlocker = 0 then 'bitlocker, ' else '' end + 
+				--case when Haslaps = 0 then 'laps, ' else '' end +
+				case when SentinelOneService = 0 then 'sentinel-one, ' else '' end +
+				case when KaceService = 0 then 'kace, ' else '' end +
+				case when SysaidService = 0 then 'sysaid, ' else '' end +
+				case when DellEncryptionService = 0 then 'dell-encryption, ' else '' end + 
+				case when (TpmVersion = '1.2' ) then 'tpm1.2, ' else '' end +
+				case when not(TpmVersion = '1.2' or TpmVersion = '2.0') then 'no-tpm, ' else '' end +
+				case when DiskType != 'sdd' then 'not-ssd, ' else '' end 
+				
+			) 
+		end WorkNeeded,
+		
+		*
+		
 		from u
 
 go
 select * from DaHubInventory.dbo.vwWorkstationScanOrder
---where NextScanOrder >=3
+
 order by NextScanOrder desc, LastSuccessfulScanHours
 go
