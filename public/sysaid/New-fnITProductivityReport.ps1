@@ -103,7 +103,7 @@ function New-fnITProductivityReport {
     $smtp            = ($emailConfig.smtp) -replace '"',""
     $to              = ""
     $me              = ($emailConfig.myEmail) -replace '"',""
-    $helpdesk        = ($emailConfig.helpdesk) -replace '"',""
+    $helpdesk        = (($emailConfig.helpdesk) -replace '"',"") -replace "'", ""
     $domain        = ($emailConfig.domain) -replace '"',""
     $sig        = ($emailConfig.mySig) -replace '"',""
     $ceo       = ($emailConfig.ceo) -replace '"',""
@@ -114,6 +114,7 @@ function New-fnITProductivityReport {
     $admins = (Invoke-spGetAdmins -days $days).AssignedTo
     foreach($admin in $admins){
         $to = if($admin -eq "unassigned"){$helpdesk}else{"$admin@$domain"}
+        $to = if($to -eq $me){$helpdesk}else{$to}
         $cc = $me
         $from = $me
 
