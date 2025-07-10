@@ -52,7 +52,7 @@ function Get-fnAdUsers {
                         @{
                             label="Manager"
                             expression={
-                                if($null -ne $_.Manager){ (Get-Aduser -Identity $_.Manager).sAMAccountName} else {"no manager"}
+                                if($null -ne $_.Manager){ (Get-Aduser -Identity $_.Manager).sAMAccountName} else {""}
                             }
                         }
     }
