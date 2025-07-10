@@ -1,7 +1,7 @@
 
 function Get-fnOuConfig {
 
-    $global = Get-Content "$PWD\config\ou.conf"
+    $global = Get-Content "$PWD\config\ou-config.conf"
     
     $conf = @()
     
