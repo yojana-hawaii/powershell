@@ -14,14 +14,15 @@ function fnLocal_FindInactiveUsers{
     $neverLoggedInDateToKeepActive = (get-date).AddDays(-30)
 
     $inactiveUsers = Get-ADUser -Filter * -Properties * -SearchBase $ou | 
-                        Where-Object {$_.LastLogonDate -le  $lastLoginDateToKeepActive -and
-                                        $_.enabled -and #only active accounts
-                                        (
-                                           $_.modified -le $lastModifiedDateToKeep -or #modified. Actived maybe returning soom from vacation. keep for 2 days
-                                            ($null -eq $_.LastLogonDate -and 
-                                                $_.Created -le $neverLoggedInDateToKeepActive) #never logged in - new hire. keep for 30 days
-                                        )
-                                    } |
+                        Where-Object {
+                                $_.enabled -and # look at only active accounts
+                                $_.modified -le $lastModifiedDateToKeep -and # if account modifed in last 2 days -> do not disable 
+                                ( # last-logon 14 login or never login but created within 30 days (new hire account creation)
+                                    $_.LastLogonDate -le  $lastLoginDateToKeepActive -or
+                                    ($null -eq $_.LastLogonDate -and 
+                                        $_.Created -le $neverLoggedInDateToKeepActive)
+                                )
+                            } |
                         Select-Object Name, sAMAccountName, LastLogonDate, Created, Modified, Description , EmailAddress,
                         @{
                             label = "Manager"
@@ -49,8 +50,7 @@ function fnLocal_CreateUserHtmlTable {
                     expression = {if($_.LastLogonDate -eq "" -or $null -eq $_.LastLogonDate) {"Never"} else {($_.LastLogonDate).ToString("MM-dd-yyyy")}}
                 }
 
-    $HtmlTable = "
-    <table border='1' aligh='Left' cellpadding='2' cellspacing='0' style='color:black;font-family:arial,calibri,helvetica,sans-serif;text-align:left;'> 
+    $HtmlTable = "<table border='1' aligh='Left' cellpadding='2' cellspacing='0' style='color:black;font-family:arial,calibri,helvetica,sans-serif;text-align:left;'> 
         <tr style='font-size:13px;font-weight=normal;background:#FFFFFF'>
             <th align=left><b>Name</b></th>
             <th align=left><b>Last Login</b></th>
@@ -59,10 +59,12 @@ function fnLocal_CreateUserHtmlTable {
     "
 
     foreach($row in $users){
+        $email = if ($row.EmailAddress -eq "" -or $null -eq $row.EmailAddress) {$row.EmailAddress} else {$row.Type}
+
         $HtmlTable += "<tr style='font-size:12px;font-weight=normal;background:#FFFFFF'>
-            <td>" + $row."Name" + "</td>
-            <td>" + $row."LastLogin" + "</td>
-            <td>" + $row."Type" + "</td>
+            <td> $($row.Name) </td>
+            <td> $($row.LastLogin) </td>
+            <td> $email </td>
         </tr>
         "
     }
