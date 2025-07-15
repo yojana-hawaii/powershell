@@ -2,15 +2,18 @@ function Export-fnEmployeeToDialMy {
     [CmdletBinding()]
     param()
 
+
+
     #region - Import necessary configs and private functions #>
 
     Write-Verbose "Initialize private functions & config helpers in Export-fnEmployeeToDialMy.ps1"
     $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmployeeConfig.ps1"              -ErrorAction SilentlyContinue -Recurse)
+    $emailConfig        = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
     $private            = @(Get-ChildItem -Path "$PWD\private\employee\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
     $org                = @(Get-ChildItem -Path "$PWD\private\organization-specific\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
     $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
 
-    foreach ($import in @($configHelper + $private + $org + $utility)){
+    foreach ($import in @($configHelper + $private + $emailConfig + $org + $utility)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -23,9 +26,11 @@ function Export-fnEmployeeToDialMy {
     $import = $null
     #endregion
 
-    Write-Verbose "Initialize config from employee config file."
-
+    $startTimer = Start-Timer
+    Write-Verbose "$($MyInvocation.MyCommand.Name): start." 
+    
     #region Initialize
+    Write-Verbose "Initialize config from employee config file."
     $config = Get-fnEmployeeConfig
 
     Write-Verbose "Strip `" (double quote). Pull path from config file adds double quotes everywhere"
@@ -37,6 +42,17 @@ function Export-fnEmployeeToDialMy {
     $validateCsv                    = (Join-Path -Path $config.employeeFilepath -ChildPath $config.validateCsv) -replace '"',""
     $org2                           = ($config.organization2) -replace '"',""
     $sourceFileHeader               = ($config.sourceFileHeader) -replace '"',""
+
+    $emailConfig =  Get-fnEmailConfig
+
+    $email = @{
+        Smtp            = ($emailConfig.smtp) -replace '"',""
+        To              = ($emailConfig.helpdesk) -replace '"',""
+        From            = ($emailConfig.myEmail) -replace '"',""
+        Sig             = ($emailConfig.mySig) -replace '"',""
+        Subject         = "Proservice phone to Dial My Calls / manager to AD "
+        Body            = ""
+    }
     #endregion
 
     $employees = Convert-fnCsvToEmployee -sourceFile $sourceFile -org2 $org2 -sourceFileHeader $sourceFileHeader
@@ -47,6 +63,28 @@ function Export-fnEmployeeToDialMy {
     $employees | Where-Object {$_.department -ne $org2} | Select-Object Last,First,staffEmail,manager,managerEmail,location,department,jobtitle | Export-csv -Path $activeDirectoryCsv -NoTypeInformation
     $employees | Where-Object {$_.department -eq $org2} | Select-Object Last,First,staffEmail,manager,managerEmail,location,department,jobtitle | Export-csv -Path $azureDirectoryCsv -NoTypeInformation
         
+    
+
+    $failedUsers = Set-fnActiveDirectoryManager -CsvPath $activeDirectoryCsv
+
+    $userStr = ""
+    foreach($user in $failedUsers){
+        $userStr += "$($user.First) $($user.Last) ($($user.Email)) - $($user.manager) <br>"
+    }
+
+
+    $email.body = "Hello all, This is an automated email." + 
+            "<br><br>Proservice cell phone number to files ready to be uploaded in Dial My Calls. Issue with SFTP server in DMZ has wrong Gateway. 
+            <br><br>Proservice manager to Active Directory. Following users cannot be updated automatically.  Known issues - 1. username does follow convention, 2. email does not follow convention, 3. proservice has terminated employee as manager. 
+            <br><br>
+            Users: $userStr
+            <br><br>Thank you.<br>$($email.Sig)"
+
+    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.To -subject $email.subject -body $email.body -bodyashtml
+
+    $totalTime = Stop-Timer -Start $startTimer
+    Write-Information "$($MyInvocation.MyCommand.Name): Proservice employee data to Dial My Call & Actice Directory. It took $totalTime" 
+
 }
 
 $Global:today = $null

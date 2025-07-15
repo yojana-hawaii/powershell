@@ -33,6 +33,10 @@ function Convert-fnLastnameCommaFirstnameToEmailMapping{
     try {
         $user = Get-ADUser -Filter '(GivenName -eq $first -and sn -eq $last) -or samAccountName -eq $username'  -Properties mail
         $email = $user.mail
+        if($email.count -gt 1){
+            $user = Get-ADUser -Filter '(GivenName -eq $first -and sn -eq $last) '  -Properties mail
+            $email = $user.mail
+        }
     } catch {
         Write-Warning "Name to active directory $lastCommaFirstName failed"
         $email = "Not-Found"
