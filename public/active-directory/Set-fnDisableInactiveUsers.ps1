@@ -13,17 +13,14 @@ function fnLocal_FindInactiveUsers{
     $lastModifiedDateToKeep = (get-date).AddDays(-2)
     $neverLoggedInDateToKeepActive = (get-date).AddDays(-30)
 
+    Write-Verbose "Cutoff dates - Login Date: $lastLoginDateToKeepActive, Modified Date: $lastModifiedDateToKeep, Never Logged in: $neverLoggedInDateToKeepActive"
     $inactiveUsers = Get-ADUser -Filter * -Properties * -SearchBase $ou | 
                         Where-Object {
                                 $_.enabled -and # look at only active accounts
-                                $_.modified -le $lastModifiedDateToKeep -and # if account modifed in last 2 days -> do not disable 
-                                ( # last-logon 14 login or never login but created within 30 days (new hire account creation)
-                                    $_.LastLogonDate -le  $lastLoginDateToKeepActive -or
-                                    ($null -eq $_.LastLogonDate -and 
-                                        $_.Created -le $neverLoggedInDateToKeepActive)
-                                )
+                                $_.modified -le $lastModifiedDateToKeep -and # if account modifed in last 2 days -> do not disable
+                                $_.LastLogonDate -le  $lastLoginDateToKeepActive  #last-logon 14 login
                             } |
-                        Select-Object Name, sAMAccountName, LastLogonDate, Created, Modified, Description , EmailAddress,
+                        Select-Object Name, sAMAccountName, Enabled, LastLogonDate, Created, Modified, Description , EmailAddress,
                         @{
                             label = "Manager"
                             expression = {
@@ -32,9 +29,14 @@ function fnLocal_FindInactiveUsers{
                         },
                         @{
                             label = "Type"
-                            expression = {$type}
+                            expression = {if($_.EmailAddress -eq "" -or $null -eq $_.EmailAddress) {$type} else {$_.EmailAddress} }
                         }
-    
+    $inactiveUsers = $inactiveUsers | Where-Object {
+                                            # never login but created within 30 days (new hire account creation)
+                                            (  $null -eq $_.LastLogonDate -or $_.LastLogonDate -eq "" ) -and 
+                                                $_.Created -le $neverLoggedInDateToKeepActive
+                                            } |
+                                    Select-Object Name, sAMAccountName, Enabled, LastLogonDate, Created, Modified, Description , EmailAddress,Manager,Type
     return $inactiveUsers
 }
 function fnLocal_CreateUserHtmlTable {
@@ -155,14 +157,13 @@ function Set-fnDisableInactiveUsers {
 
     Write-Verbose "DISABLE USERS"
     foreach($user in $inactiveUsers){
-        Write-Verbose "Disable $($user.SamAccountName) last login $($user.LastLogonDate)"
+        Write-Verbose "Disable $($user.SamAccountName) - last login: $($user.LastLogonDate), last modified: $($user.Modified), created: $($user.Created)"
         Disable-AdAccount -Identity $user.SamAccountName
     }
     write-verbose "GROUP USERS BY MANAGER AND SEND EMAIL"
     $grps = $inactiveUsers | Group-Object Manager
     foreach($grp in $grps){
-        fnLocal_BuildEmailBody -groupedUsers $grp -days $inactiveDays
-        Write-Verbose "Emailed: $($email.to)"
+        fnLocal_BuildEmailBody -groupedUsers $grp -days $inactiveDays     
         Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -cc $email.cc -subject $email.subject -body $email.body -bodyashtml
     }
 
