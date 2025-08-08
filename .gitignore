@@ -21,3 +21,5 @@ sql/da-hub-sysaid/da-hub-sysaid.ssmssqlproj
 sql/da-hub-inventory/create-view-vwUserGroupPivot.sql
 user-input/disable-user-5pm.csv
 user-input/enable-user-5am.csv
+user-input/2024-performance-eval-folder.xlsx
+user-input/2025-performance-eval-folder.csv

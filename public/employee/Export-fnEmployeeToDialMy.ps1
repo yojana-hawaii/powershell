@@ -50,7 +50,7 @@ function Export-fnEmployeeToDialMy {
         To              = ($emailConfig.helpdesk) -replace '"',""
         From            = ($emailConfig.myEmail) -replace '"',""
         Sig             = ($emailConfig.mySig) -replace '"',""
-        Subject         = "Proservice phone to Dial My Calls / manager to AD "
+        Subject         = ($emailConfig.proserviceSubject) -replace '"',""
         Body            = ""
     }
     #endregion
@@ -65,7 +65,7 @@ function Export-fnEmployeeToDialMy {
         
     
 
-    $failedUsers = Set-fnActiveDirectoryManager -CsvPath $activeDirectoryCsv
+    $failedUsers = Set-fnActiveDirectoryUpdate -CsvPath $activeDirectoryCsv
 
     $userStr = ""
     foreach($user in $failedUsers){
@@ -74,13 +74,20 @@ function Export-fnEmployeeToDialMy {
 
 
     $email.body = "Hello all, This is an automated email." + 
-            "<br><br>Proservice cell phone number to files ready to be uploaded in Dial My Calls. Issue with SFTP server in DMZ has wrong Gateway. 
-            <br><br>Proservice manager to Active Directory. Following users cannot be updated automatically.  Known issues - 1. username does follow convention, 2. email does not follow convention, 3. proservice has terminated employee as manager. 
-            <br><br>
-            Users: $userStr
+            "<p>Proservice cell phone number to files ready to be uploaded in Dial My Calls. Issue with SFTP server in DMZ has wrong Gateway.</p>
+            <p>Proservice manager, job title, department & location uploaded to Active Directory with minor clean up. Following users cannot be updated automatically.  </p>
+            <p>Possible issues
+            <ul>
+            <li>Username in AD does follow convention</li>
+            <li>Email in AD does not follow convention</li> 
+            <li>Proservice has terminated employee as manager</li> 
+            </ul>
+            </p>
+            if($userStr) {Users with issue: <br>$userStr}
+            
             <br><br>Thank you.<br>$($email.Sig)"
 
-    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.To -subject $email.subject -body $email.body -bodyashtml
+    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
 
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Proservice employee data to Dial My Call & Actice Directory. It took $totalTime" 

@@ -18,21 +18,26 @@ function Convert-fnCsvToEmployee{
     $employees = Read-fnCsvAddCustomHeader -csvFile $sourceFile -csvHeader $csvHeader
 
     foreach($employee in $employees){
-        Write-Verbose "Name $($employee.first) $($employee.last)"
+        Write-Verbose "Name $($employee.first) $($employee.last) $org2"
+
+        <# is then employee part of org2 or not #>
+        $isOrg2 = $employee.department -eq $org2
+
+
+        <# Separate first name & last name. compare it to active directory and get email / username. If it not found, name in AD & CSV does not match #>
+        $userEmail          = Convert-fnLastnameCommaFirstnameToEmailMapping -lastCommaFirstName "$($employee.last), $($employee.first)" -isOrg2 $isOrg2
+        $managerEmail       = Convert-fnLastnameCommaFirstnameToEmailMapping -lastCommaFirstName $employee.manager -isOrg2 $isOrg2
 
         <# simple hash table for location and department. Parameter long name of the location or department. Returns short name  #>
         $newLocation      = Convert-fnLocationMapping -location $employee.location
-        $newDepartment    = Convert-fnDepartmentMapping -department $employee.department
+        $newDepartment    = Convert-fnDepartmentMapping -department $employee.department -manager $managerEmail
+        $newJobTitle      = Convert-fnJobTitleMapping -jobtile $employee.jobtitle
         <# organization can be differentiated using department #>
         $organizationGroup  = Convert-fnOrganizationMapping -departmentGroup $newDepartment
         <# staff from all orgnizations #>
         $allGroup           = Convert-fnAllOrgGroup
 
 
-        $isOrg2 = $newDepartment -eq $org2
-        <# Separate first name & last name. compare it to active directory and get email / username. If it not found, name in AD & CSV does not match #>
-        $userEmail          = Convert-fnLastnameCommaFirstnameToEmailMapping -lastCommaFirstName "$($employee.last), $($employee.first)" -isOrg2 $isOrg2
-        $managerEmail       = Convert-fnLastnameCommaFirstnameToEmailMapping -lastCommaFirstName $employee.manager -isOrg2 $isOrg2
         
 
 
@@ -45,6 +50,7 @@ function Convert-fnCsvToEmployee{
         $employee.managerEmail  = $managerEmail
         $employee.orgGroup      = $orgGroup
         $employee.dialGroup     = $dialGroup
+        $employee.jobtitle      = $newJobTitle
     }
     return $employees
 }
