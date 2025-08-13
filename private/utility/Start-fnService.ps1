@@ -23,7 +23,7 @@ function Start-fnService {
         if($finalState -eq "Auto"){
             Set-Service -ComputerName $computerName -Name $serviceName -StartupType $finalState
         }
-        Write-Information "$computerName service $ServiceName status $($service.Status) StartType $($service.StartType)"
+        Write-Information "$($MyInvocation.MyCommand.Name): $computerName service $ServiceName status $($service.Status) StartType $($service.StartType)"
         return $service
     }
     catch {

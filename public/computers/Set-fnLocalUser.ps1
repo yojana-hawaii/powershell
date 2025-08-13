@@ -32,8 +32,8 @@ function fnLocal_CreateLapsUsers{
     $serviceName = "WinRm"
     
     try{
-        $service = Start-fnService -ComputerName $computerName -serviceName $serviceName
-        if($null -ne $service -and $service.State -eq 'Running')
+        $service = Start-fnService -ComputerName $computerName -serviceName $serviceName -finalState "Auto"
+        if($null -ne $service -and $service.Status -eq 'Running')
         {
             $getScriptBlock = { Get-LocalUser }
             $existingusers = Invoke-Command -ComputerName $computerName -ScriptBlock $getScriptBlock
@@ -112,20 +112,22 @@ function Set-fnLocalUser {
     }
 
     $startTimer = Start-Timer
-    Write-Verbose "$($MyInvocation.MyCommand.Name): Adding $($laps.Username)."
-
+    
     $comp = "comp1"
     
     if($comp -eq "comp1")
     {
         $computers = Invoke-spGetComputersWithoutUser -Count 100 -username $laps.Username
-    
+        
         foreach($computer in $computers)
         {
+            Write-Verbose "$($MyInvocation.MyCommand.Name): Create $($laps.Username) in $($computer.ComputerName)"
             # $computer.ComputerName
             $ping = Test-Connection $computer.computerName -Quiet -Count 1
             if($ping){
                 fnLocal_CreateLapsUsers -computerName $computer.ComputerName -laps $laps
+            } else {
+                Write-Warning "$($computer.ComputerName) offline"
             }
         }
     } else {
