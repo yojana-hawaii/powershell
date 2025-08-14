@@ -72,6 +72,7 @@ function Export-fnEmployeeToDialMy {
         $userStr += "$($user.First) $($user.Last) ($($user.Email)) - $($user.manager) <br>"
     }
 
+    $issue = if($userStr) {"Users with impport issue: <br> $userStr"} else {"No issues importing"}
 
     $email.body = "Hello all, This is an automated email." + 
             "<p>Proservice cell phone number to files ready to be uploaded in Dial My Calls. Issue with SFTP server in DMZ has wrong Gateway.</p>
@@ -83,8 +84,7 @@ function Export-fnEmployeeToDialMy {
             <li>Proservice has terminated employee as manager</li> 
             </ul>
             </p>
-            if($userStr) {Users with issue: <br>$userStr}
-            
+            $issue
             <br><br>Thank you.<br>$($email.Sig)"
 
     Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
