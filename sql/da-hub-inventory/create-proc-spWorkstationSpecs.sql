@@ -73,7 +73,7 @@ begin
 		Manufacturer = @Manufacturer, 
 		Model = @Model, 
 		WakeUpType = @WakeUpType, 
-		CurrentUser = @CurrentUser, 
+		CurrentUser = case when @CurrentUser is not null then @CurrentUser else CurrentUser end, 
 		RamInstalledGb = @RamInstalledGb, 
 		RamUpgradableGb = @RamUpgradableGb, 
 		RamSlotTotal = convert(int,@RamSlotTotal), 

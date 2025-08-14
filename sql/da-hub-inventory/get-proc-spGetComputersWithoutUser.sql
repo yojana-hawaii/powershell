@@ -18,11 +18,11 @@ begin
 	from DaHubInventory.dbo.WorkstationLocalUsers lu 
 	where LocalUserName = @username;
 
-	select  top (@cnt)   vw.ComputerName, vw.Offline
+	select  top (@cnt)   vw.ComputerName, vw.LastScanOffline
 	from DaHubInventory.dbo.vwWorkstationScanOrder vw 
 	where vw.ComputerName not in (select ComputerName from #lapsCompleted)
 		and vw.IsThinClient = 0
-	order by vw.Offline
+	order by vw.LastScanOffline
 		
 
 end

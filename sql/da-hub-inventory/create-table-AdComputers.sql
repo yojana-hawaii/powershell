@@ -35,5 +35,10 @@ create table dbo.AdComputers
 
 go
 
-select * from dbo.AdComputers;
+alter table dbo.adcomputers
+add [Location] varchar(max);
+
+go
+
+select * from DaHubInventory.dbo.AdComputers;
 go
