@@ -6,7 +6,6 @@ function Set-fnDisableTerminatedUser {
         
     )
     #region - Import necessary configs and private functions #>
-    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnOuConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
     $emailConfig        = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
     $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
