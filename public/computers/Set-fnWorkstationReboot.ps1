@@ -7,7 +7,7 @@ function Set-fnWorkstationReboot {
 
         Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
         $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
-        $storedProcedure    = @(Get-ChildItem -Path "$PWD\stored-procedure\computers\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
+        $storedProcedure    = @(Get-ChildItem -Path "$PWD\stored-procedure\computers\Invoke-fnSpWorkstationReboot.ps1"      -ErrorAction SilentlyContinue -Recurse)
         $sqlConection       = @(Get-ChildItem -Path "$PWD\stored-procedure\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
         $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnConfig.ps1"                          -ErrorAction SilentlyContinue -Recurse)
     
@@ -30,6 +30,7 @@ function Set-fnWorkstationReboot {
         $weekday = ($today).DayOfWeek
         
         $frequency =  if($weekday -eq "sunday")  {'weekly'} else {'daily'}
+        $initiater = "powershell"
         
         Write-Information "$weekday reboot $frequency"
         
@@ -41,9 +42,8 @@ function Set-fnWorkstationReboot {
                 write-verbose "rebooting $($computer.ComputerName)"
 
                 try{
-                    if($computer.ComputerName -eq "kphc-powershell"){
-                        $totalTime = Stop-Timer -Start $startTimer
-                        Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime"     
+                    if($computer.ComputerName -eq $initiater){
+                        continue
                     }
                     Restart-Computer -ComputerName $computer.ComputerName -force
                 } catch {
@@ -57,6 +57,11 @@ function Set-fnWorkstationReboot {
 
         $totalTime = Stop-Timer -Start $startTimer
         Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime"     
+        
+        if($frequency -eq "weekly"){
+            Restart-Computer -ComputerName $initiater -force
+
+        }
                         
 
 }
