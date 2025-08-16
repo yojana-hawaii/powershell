@@ -10,7 +10,7 @@ function Set-fnDisableTerminatedUser {
     $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
     #import all function
-    foreach ($import in @($configHelper + $utility + $emailConfig)){
+    foreach ($import in @($utility + $emailConfig)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
