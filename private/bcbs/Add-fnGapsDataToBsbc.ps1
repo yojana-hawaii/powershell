@@ -12,7 +12,7 @@ function Add-fnGapsDataToBsbc {
         $bcbsSheet = $sheet.Name
         $isGapsFileReady = $gapsHashtable.Keys -contains $bcbsSheet
 
-        Write-Verbose "$($bcbsSheet) gaps file ready - $isGapsFileReady)"
+        Write-Verbose "$($bcbsSheet) --> $isGapsFileReady)"
 
         if($isGapsFileReady){
             $bcbsData   = Import-Excel -Path $FilePath -WorksheetName $bcbsSheet

@@ -24,7 +24,7 @@ function Get-fnBcbsHga1cData {
         }
 
         # set gaps dates & values  
-        $bcbs.'Date of Service' = if($emr.'A1c Date Dt') {($emr.'A1c Date Dt').ToString("MM/dd/yyyy")}
+        $bcbs.'Date of Service' = if($emr.'A1c or GMI Date') {($emr.'A1c or GMI Date').ToString("MM/dd/yyyy")}
         $a1c = if($emr.'A1c or GMI Result') {($emr.'A1c or GMI Result')}
         $bcbs.'HbA1c or GMI Value' = $a1c
     }
