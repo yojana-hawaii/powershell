@@ -4,10 +4,10 @@ function New-fnBcbsGapsInCare {
     #region - Import necessary configs and private functions #>
 
     Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
-    $private    = @(Get-ChildItem -Path "$PWD\private\bcbs\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
-    $utility    = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
-    $sqlConn    = @(Get-ChildItem -Path "$PWD\stored-procedure\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
-    $config     = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
+    $private    = @(Get-ChildItem -Path "$PWD\app\bcbs\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
+    $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
     
     foreach ($import in @($utility + $private + $sqlConn + $config)){
         try{
