@@ -1,7 +1,7 @@
 
 function Get-fnEmailConfig {
 
-    $emailConfig = Get-Content "$PWD\config\email-config.conf"
+    $emailConfig = Get-Content "$PWD\shared-ignore\config\email-config.conf"
     
     $email = @()
     

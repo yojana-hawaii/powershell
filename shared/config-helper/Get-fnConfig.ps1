@@ -1,7 +1,7 @@
 
 function Get-fnConfig {
 
-    $global = Get-Content "$PWD\config\config.conf"
+    $global = Get-Content "$PWD\shared-ignore\config\config.conf"
     
     $conf = @()
     

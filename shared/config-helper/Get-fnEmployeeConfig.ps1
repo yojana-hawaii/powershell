@@ -1,8 +1,8 @@
-function Get-fnOrderConfig {
+function Get-fnEmployeeConfig {
     [CmdletBinding()]
     param()
 
-    $global = Get-Content "$PWD\config\order.conf"
+    $global = Get-Content "$PWD\shared-ignore\config\employee.conf"
     $conf = @()
 
     $global | ForEach-Object {

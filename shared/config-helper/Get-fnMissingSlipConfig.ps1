@@ -1,8 +1,7 @@
-function Get-fnBcbsConfig {
-    [CmdletBinding()]
-    param ()
-    
-    $global = Get-Content "$PWD\shared-ignore\config\bcbs.conf"
+
+function Get-fnMissingSlipConfig {
+
+    $global = Get-Content "$PWD\shared-ignore\config\missingslip.conf"
     
     $conf = @()
     
@@ -12,3 +11,5 @@ function Get-fnBcbsConfig {
     }
     return $conf
 }
+
+

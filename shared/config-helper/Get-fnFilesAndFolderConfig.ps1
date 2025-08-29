@@ -1,10 +1,11 @@
-function Get-fnEmployeeConfig {
+function Get-fnFilesAndFolderConfig {
     [CmdletBinding()]
-    param()
-
-    $global = Get-Content "$PWD\config\employee.conf"
+    param ()
+    
+    $global = Get-Content "$PWD\shared-ignore\config\files-and-folders.conf"
+    
     $conf = @()
-
+    
     $global | ForEach-Object {
         $keys = $_ -split "="
         $conf += @{$keys[0]=$keys[1]}
