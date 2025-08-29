@@ -10,12 +10,12 @@ create proc dbo.spImportBcbsDemographics (
 	@HmsaDoB varchar(100),
 	@HmsaSubscriberId varchar(100),
 	@HmsaGender varchar(100),
-	@HmsaAddr1 varchar(100),
-	@HmsaAddr2 varchar(100),
-	@HmsaCity varchar(100),
-	@HmsaState varchar(100),
-	@HmsaZip varchar(100),
-	@HmsaPhone varchar(100)
+	@HmsaAddr1 varchar(100) = null,
+	@HmsaAddr2 varchar(100) = null,
+	@HmsaCity varchar(100) = null,
+	@HmsaState varchar(100) = null,
+	@HmsaZip varchar(100) = null,
+	@HmsaPhone varchar(100) = null
 ) 
 as
 begin
