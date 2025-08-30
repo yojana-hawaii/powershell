@@ -1,13 +1,13 @@
 set-location "\\fileserver\it\apps\powershell"
 
-function Set-fnDisableTerminatedUser {
+function Set-fnEnableReturningUsers {
     [CmdletBinding()]
     param (
         
     )
     #region - Import necessary configs and private functions #>
-    $emailConfig        = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
-    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
+    $emailConfig        = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
+    $utility            = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
     #import all function
     foreach ($import in @($utility + $emailConfig)){
@@ -35,8 +35,8 @@ function Set-fnDisableTerminatedUser {
         Subject         = "Users enabled from return list"
         Body            = ""
     }
-
-    $path =  "$pwd\user-input\enable-user-5am.csv"
+    
+    $path =  "$pwd\shared-ignore\user-input\enable-user-5am.csv"
     $file = import-csv -Path $path 
 
     $enabledList = ""
@@ -66,7 +66,7 @@ function Set-fnDisableTerminatedUser {
         $email.body = "Hello all, This is an automated email." + 
             "<br><br>The following users from return list have been actived. 
             <br><br>You can add return user and return date in 
-            <br> \\fileserver\it\apps\powershell\user-input\enable-user-5am.csv <br><br> 
+            <br> \\fileserver\it\apps\powershell\shared-ignore\user-input\enable-user-5am.csv<br><br> 
             Usernames: $($enabledList.Substring(1))
             <br><br>Thank you.<br>$($email.sig)"
 
@@ -78,12 +78,10 @@ function Set-fnDisableTerminatedUser {
     Write-Information "$($MyInvocation.MyCommand.Name): Enable inactive users complete. It took $totalTime" 
 
 }
-
-$Global:today = $null
-$today = Get-Date
+$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
+Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
 $verbosePreference = "continue"
-Set-fnDisableTerminatedUser -Verbose -InformationAction continue
+Set-fnEnableReturningUsers -Verbose -InformationAction continue
 Stop-Transcript

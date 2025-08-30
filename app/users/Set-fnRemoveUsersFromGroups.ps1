@@ -2,9 +2,9 @@ set-location "\\fileserver\it\apps\powershell"
 
 function Set-fnRemoveUsersFromGroups {
     #region - Import necessary configs and private functions #>
-    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
-    $emailConfig        = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
-    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
+    $configHelper       = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
+    $emailConfig        = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
+    $utility            = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
     #import all function
     foreach ($import in @($configHelper + $utility + $emailConfig)){
@@ -40,12 +40,10 @@ function Set-fnRemoveUsersFromGroups {
     Write-Information "$($MyInvocation.MyCommand.Name): Disable inactive users complete. It took $totalTime" 
 
 }
-
-$Global:today = $null
-$today = Get-Date
+$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
+Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
 $verbosePreference = "continue"
 Set-fnRemoveUsersFromGroups -Verbose -InformationAction continue
 Stop-Transcript

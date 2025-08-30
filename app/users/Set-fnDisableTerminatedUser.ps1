@@ -6,8 +6,8 @@ function Set-fnDisableTerminatedUser {
         
     )
     #region - Import necessary configs and private functions #>
-    $emailConfig        = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
-    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
+    $emailConfig        = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
+    $utility            = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
     #import all function
     foreach ($import in @($utility + $emailConfig)){
@@ -36,7 +36,7 @@ function Set-fnDisableTerminatedUser {
         Body            = ""
     }
 
-    $path =  "$pwd\user-input\disable-user-5pm.csv"
+    $path =  "$pwd\shared-ignore\user-input\disable-user-5pm.csv"
     $file = import-csv -Path $path 
 
     $disabledList = ""
@@ -66,7 +66,7 @@ function Set-fnDisableTerminatedUser {
         $email.body = "Hello all, This is an automated email." + 
             "<br><br>The following users from termination list have been disabled. 
             <br><br>You can add terminated user and termination date in 
-            <br> \\fileserver\it\apps\powershell\user-input\disable-user-5pm.csv <br><br>
+            <br> \\fileserver\it\apps\powershell\shared-ignore\user-input\disable-user-5pm.csv <br><br>
             Usernames: $($disabledList.Substring(1))
             <br><br>Thank you.<br>$($email.Sig)"
 
@@ -79,12 +79,10 @@ function Set-fnDisableTerminatedUser {
     Write-Information "$($MyInvocation.MyCommand.Name): Disable inactive users complete. It took $totalTime" 
 
 }
-
-$Global:today = $null
-$today = Get-Date
+$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
+Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
 $verbosePreference = "continue"
 Set-fnDisableTerminatedUser -Verbose -InformationAction continue
 Stop-Transcript
