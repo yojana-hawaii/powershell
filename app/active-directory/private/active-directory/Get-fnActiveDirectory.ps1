@@ -1,7 +1,4 @@
 function Get-fnActiveDirectory {
-    [CmdletBinding()]
-    param()
-
     $forest  = Get-fnForest
     $domain  = Get-fnDomain
     $rootDse = Get-fnRootDse
@@ -41,7 +38,7 @@ function Get-fnActiveDirectory {
     $data.configurationNamingContext            = $rootDse.configurationNamingContext
     $data.DsServiceName                         = $rootDse.dsServiceName
     $data.OptionalFeatures                      = (Get-fnOptionalFeatures) -join ","
-    $data.SpnSuffixes               = Get-fnSpnSuffixes -Forest $forest
+    $data.SpnSuffixes                           = Get-fnSpnSuffixes -Forest $forest
 
     $data.DomainCount                           = ($forest.Domains).Count
     $data.SiteCount                             = ($forest.Sites).Count

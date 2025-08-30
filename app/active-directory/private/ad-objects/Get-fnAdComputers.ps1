@@ -22,23 +22,27 @@ function Get-fnAdComputers {
         [parameter()]
         [string]$identity = "all"
     )
-    Write-Information "$($MyInvocation.MyCommand.Name)"
 
     $filter = "Enabled -eq '$enabled' -and OperatingSystem -notlike '*server*' "
 
     if($server){
-        Write-Information "Get servers"
+        Write-Information "Get Servers"
         $filter = "OperatingSystem -like '*server*'"
     } 
     
     if($identity -ne 'all') {
-        Write-Information "get invidual machine"
+        Write-Information "Get Individual Machine"
         $filter = "name -eq '$identity'"
     }
+    if($identity -eq 'hourly'){
+        $hours = 5
+        $date = (get-date).AddHours(-$hours)
+        Write-Information "Get AD computer changes in last $hours hours since $date."
+        $filter = "Modified -gt `$date "
+    }
+    Write-Verbose "$($MyInvocation.MyCommand.Name) with filter: $filter"
 
-    write-host $filter
-
-    
+   
 
 
     try {
@@ -98,7 +102,7 @@ function Get-fnAdComputers {
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
-    }       
+    }      
     return $computers
     
 }

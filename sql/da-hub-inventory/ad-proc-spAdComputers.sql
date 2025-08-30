@@ -34,6 +34,8 @@ as
 begin
 	declare @now datetime2 = getdate();
 
+
+
 	--update existing Computers
 	update dbo.AdComputers
 	set
@@ -57,7 +59,7 @@ begin
 		LastLogonDate = convert(datetime, @LastLogonDate),
 
 		LogonCount = convert(int,@LogonCount),
-
+		[Location] = case when @location is null then [Location] else @location end, 
 		AdComputerScanSuccessDate	= @now
 	where ComputerName = @ComputerName;
 
