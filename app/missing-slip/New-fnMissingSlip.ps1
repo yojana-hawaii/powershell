@@ -141,7 +141,7 @@ function New-fnMissingSlip {
             
             Write-Information "Subject: $SUBJECT"
             Write-Information "BODY: $BODY"
-            # Send-MailMessage -smtpserver $SMTP -from $FROM -to $to -cc $cc -subject $SUBJECT -body $BODY -bodyashtml
+            Send-MailMessage -smtpserver $SMTP -from $FROM -to $to -cc $cc -subject $SUBJECT -body $BODY -bodyashtml
         }
     } else {
         Write-Warning "Missing slip file too old"
