@@ -2,15 +2,8 @@ sql/da-hub-inventory/da-hub-inventory.ssmssqlproj
 sql/da-hub-sysaid/da-hub-sysaid.ssmssqlproj
 
 shared-ignore/*
+app/comp/Get-fnDomainInventory-Manual.ps1
 
 private/organization-specific/*
-
-public/computers/Get-fnDomainInventory-manual.ps1
-
 sql/da-hub-inventory/zz-random-query.sql
 sql/da-hub-inventory/create-view-vwUserGroupPivot.sql
-
-stored-procedure/sample-stored-procedure
-private/sample-private-function
-
-
