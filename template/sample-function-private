@@ -1,0 +1,18 @@
+
+
+function private {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]$param1,
+        [string]$param2
+    )
+    Write-Information "$($MyInvocation.MyCommand.Name): $($param1)"
+
+    #try cath when there is possibility of exception
+    try { }
+    catch {
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed $(): $($_.Exception.Message)"
+    }
+    return $return
+}

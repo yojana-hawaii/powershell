@@ -1,0 +1,26 @@
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [PSCustomObject]$object
+    )
+    $StoredProcedure = 'dbo.storedproc...'
+    $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
+    $conn = $connection[0]
+    $cmd = $connection[1]
+
+     try{
+        Write-Information -Message "Insert $($something)"
+        
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@param1", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters[0].Value = $object.param1
+
+        $return = $cmd.ExecuteNonQuery()
+        Write-Information "Import to sql affected $return row(s)"
+
+    } catch {
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($workstation.ComputerName): $($_.Exception.Message)"
+        continue
+    } finally {
+        Write-Verbose -Message "Closing Sql Connection"
+        Close-spSqlConnection -cmd $cmd -conn $conn
+    }
