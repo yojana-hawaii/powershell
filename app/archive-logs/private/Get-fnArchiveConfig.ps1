@@ -1,8 +1,8 @@
-function Get-fnFilesAndFolderConfig {
+function Get-fnArchiveConfig {
     [CmdletBinding()]
     param ()
     
-    $global = Get-Content "$PWD\shared-ignore\config\files-and-folders.conf"
+    $global = Get-Content "$PWD\shared-ignore\config\archive.conf"
     
     $conf = @()
     
