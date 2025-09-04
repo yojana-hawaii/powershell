@@ -40,7 +40,6 @@ function Get-fnComputerInventory {
         Invoke-spAdComputer -computer $computer
         $cnt++
     }
-    break
 
     $computers = Invoke-spGetComputersToScan -count 50 -scanAfterHours 24
     $total = $computers.count
