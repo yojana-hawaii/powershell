@@ -35,12 +35,8 @@ function Invoke-spAdGroup {
         $cmd.Parameters[8].Value = $group.GroupCategory
         $cmd.Parameters[9].Value = $group.GroupScope
 
-        $return = $cmd.ExecuteNonQuery()
-        if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
-        } else {
-            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
-        }
+       $return = $cmd.ExecuteNonQuery()
+        Write-Information "Import to sql affected $return row(s)"
 
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($workstation.ComputerName): $($_.Exception.Message)"

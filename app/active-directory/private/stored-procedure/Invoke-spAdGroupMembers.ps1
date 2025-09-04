@@ -21,12 +21,8 @@ function Invoke-spAdGroupMembers {
         $cmd.Parameters[1].Value = $groupMember.Username
         $cmd.Parameters[2].Value = $groupMember.ObjectClass
 
-        $return = $cmd.ExecuteNonQuery()
-        if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
-        } else {
-            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
-        }
+       $return = $cmd.ExecuteNonQuery()
+        Write-Information "Import to sql affected $return row(s)"
 
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($groupMember.GroupsAMAccountName): $($_.Exception.Message)"

@@ -30,11 +30,7 @@ function Invoke-fnSpWorkstationPrinters {
         $cmd.Parameters[6].Value = $printer.PrinterIP
 
         $return = $cmd.ExecuteNonQuery()
-        if($return -eq 1){
-            Write-Information "$($MyInvocation.MyCommand.Name): Sql insert success."
-        } else {
-            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
-        }
+        Write-Information "Import to sql affected $return row(s)"
 
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($printer.ComputerName): $($_.Exception.Message)"

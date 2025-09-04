@@ -76,12 +76,8 @@ function Invoke-spAdUser {
         $cmd.Parameters[28].Value = $user.Manager
 
 
-        $return = $cmd.ExecuteNonQuery()
-        if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
-        } else {
-            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
-        }
+       $return = $cmd.ExecuteNonQuery()
+        Write-Information "Import to sql affected $return row(s)"
 
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($user.sAMAccountName): $($_.Exception.Message)"

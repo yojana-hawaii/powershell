@@ -50,11 +50,7 @@ function Invoke-spOrganizationalUnit {
         $cmd.Parameters[15].Value = $ou.AreAuditRulesCanonical
         
         $return = $cmd.ExecuteNonQuery()
-        if($return -eq 1){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Sql insert success."
-        } else {
-            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed: $($_.Exception.Message) "
-        }
+        Write-Information "Import to sql affected $return row(s)"
 
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "

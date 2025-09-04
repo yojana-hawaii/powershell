@@ -33,11 +33,7 @@ function Invoke-fnSpWorkstationServices {
         $cmd.Parameters[7].Value = $service.CanStop
 
         $return = $cmd.ExecuteNonQuery()
-        if($return -eq 1){
-            Write-Information "$($MyInvocation.MyCommand.Name): Sql insert success."
-        } else {
-            Write-Warning "$($MyInvocation.MyCommand.Name): Sql insert failed with return $($return): $($_.Exception.Message) "
-        }
+        Write-Information "Import to sql affected $return row(s)"
 
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($service.ComputerName): $($_.Exception.Message)"
