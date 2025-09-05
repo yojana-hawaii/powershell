@@ -1,13 +1,11 @@
 function Export-fnEmployeeToRave {
-    [CmdletBinding()]
-    param()
-
+    Write-Information "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
     #region - Import necessary configs & utility functions #>
     Write-Verbose "Initialize private functions & config helpers in Export-fnEmployeeToRave.ps1"
-    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmployeeConfig.ps1"              -ErrorAction SilentlyContinue -Recurse)
-    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
+    $private    = @(Get-ChildItem -Path "$PWD\app\mass-notification\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
 
-    foreach ($import in @($configHelper + $utility)){
+    foreach ($import in @($private + $utility)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -20,8 +18,7 @@ function Export-fnEmployeeToRave {
     $import = $null
     #endregion
 
-    Write-Verbose "Initialize rave config from employee config file."
-    $rave = Get-fnEmployeeConfig
+    $rave = Get-fnMassNotificationConfig
 
     Write-Verbose "Strip `" (double quote). Pull path from config file adds double quotes everywhere"
     $username = ($rave.rave_username) -replace '"', ""
@@ -49,12 +46,10 @@ function Export-fnEmployeeToRave {
         Write-Warning "Source file cannot be found: $($_.Exception.Message)"
     }
 }
+$Global:today = Get-Date
+$filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-
-$Global:today = $null
-$today = Get-Date
-$mmddyyyy = Get-Date -Format "MM-dd-yyyy"
-
-Start-Transcript -Path "$pwd\log\Export-fnEmployeeToRave_$mmddyyyy.txt" -Append
-Export-fnEmployeeToRave  -Verbose -InformationAction Continue
+Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
+$verbosePreference = "continue"
+Export-fnEmployeeToRave -Verbose -InformationAction continue
 Stop-Transcript

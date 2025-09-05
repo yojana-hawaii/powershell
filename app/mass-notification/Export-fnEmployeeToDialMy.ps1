@@ -1,19 +1,14 @@
 function Export-fnEmployeeToDialMy {
-    [CmdletBinding()]
-    param()
-
-
-
+    
+    Write-Information "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
     #region - Import necessary configs and private functions #>
+   
+    $private    = @(Get-ChildItem -Path "$PWD\app\mass-notification\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1"  -ErrorAction SilentlyContinue -Recurse)
+    $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
+    $org        = @(Get-ChildItem -Path "$PWD\shared-ignore\organization-specific\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
 
-    Write-Verbose "Initialize private functions & config helpers in Export-fnEmployeeToDialMy.ps1"
-    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmployeeConfig.ps1"              -ErrorAction SilentlyContinue -Recurse)
-    $emailConfig        = @(Get-ChildItem -Path "$PWD\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
-    $private            = @(Get-ChildItem -Path "$PWD\private\employee\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
-    $org                = @(Get-ChildItem -Path "$PWD\private\organization-specific\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
-    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
-
-    foreach ($import in @($configHelper + $private + $emailConfig + $org + $utility)){
+    foreach ($import in @($private + $emailConf + $org + $utility)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -30,27 +25,27 @@ function Export-fnEmployeeToDialMy {
     Write-Verbose "$($MyInvocation.MyCommand.Name): start." 
     
     #region Initialize
-    Write-Verbose "Initialize config from employee config file."
-    $config = Get-fnEmployeeConfig
+    Write-Information "Initialize config from employee config file."
+    $dialMy = Get-fnMassNotificationConfig
 
-    Write-Verbose "Strip `" (double quote). Pull path from config file adds double quotes everywhere"
-    $sourceFile                     = (Join-Path -Path $config.employeeFilepath -ChildPath $config.employeeSourceFilename) -replace '"',""
-    $additionalPhoneNumbersFile     = (Join-Path -Path $config.employeeFilepath -ChildPath $config.additionalPhoneNumbers) -replace '"',""
-    $dialMyCsv                      = (Join-Path -Path $config.employeeFilepath -ChildPath $config.dialMyCsv) -replace '"',""
-    $activeDirectoryCsv             = (Join-Path -Path $config.employeeFilepath -ChildPath $config.activeDirectoryCsv) -replace '"',""
-    $azureDirectoryCsv              = (Join-Path -Path $config.employeeFilepath -ChildPath $config.azureDirectoryCsv) -replace '"',""
-    $validateCsv                    = (Join-Path -Path $config.employeeFilepath -ChildPath $config.validateCsv) -replace '"',""
-    $org2                           = ($config.organization2) -replace '"',""
-    $sourceFileHeader               = ($config.sourceFileHeader) -replace '"',""
+    Write-Information "Strip `" (double quote). Pull path from config file adds double quotes everywhere"
+    $sourceFile                     = (Join-Path -Path $dialMy.employeeFilepath -ChildPath $dialMy.employeeSourceFilename) -replace '"',""
+    $additionalPhoneNumbersFile     = (Join-Path -Path $dialMy.employeeFilepath -ChildPath $dialMy.additionalPhoneNumbers) -replace '"',""
+    $dialMyCsv                      = (Join-Path -Path $dialMy.employeeFilepath -ChildPath $dialMy.dialMyCsv) -replace '"',""
+    $activeDirectoryCsv             = (Join-Path -Path $dialMy.employeeFilepath -ChildPath $dialMy.activeDirectoryCsv) -replace '"',""
+    $azureDirectoryCsv              = (Join-Path -Path $dialMy.employeeFilepath -ChildPath $dialMy.azureDirectoryCsv) -replace '"',""
+    $validateCsv                    = (Join-Path -Path $dialMy.employeeFilepath -ChildPath $dialMy.validateCsv) -replace '"',""
+    $org2                           = ($dialMy.organization2) -replace '"',""
+    $sourceFileHeader               = ($dialMy.sourceFileHeader) -replace '"',""
 
-    $emailConfig =  Get-fnEmailConfig
+    $emailConf =  Get-fnEmailConfig
 
     $email = @{
-        Smtp            = ($emailConfig.smtp) -replace '"',""
-        To              = ($emailConfig.helpdesk) -replace '"',""
-        From            = ($emailConfig.myEmail) -replace '"',""
-        Sig             = ($emailConfig.mySig) -replace '"',""
-        Subject         = ($emailConfig.proserviceSubject) -replace '"',""
+        Smtp            = ($emailConf.smtp) -replace '"',""
+        To              = ($emailConf.helpdesk) -replace '"',""
+        From            = ($emailConf.myEmail) -replace '"',""
+        Sig             = ($emailConf.mySig) -replace '"',""
+        Subject         = ($emailConf.proserviceSubject) -replace '"',""
         Body            = ""
     }
     #endregion
@@ -87,17 +82,16 @@ function Export-fnEmployeeToDialMy {
             $issue
             <br><br>Thank you.<br>$($email.Sig)"
 
-    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
+    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.from -subject $email.subject -body $email.body -bodyashtml
 
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Proservice employee data to Dial My Call & Actice Directory. It took $totalTime" 
 
 }
+$Global:today = Get-Date
+$filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-$Global:today = $null
-$today = Get-Date
-$mmddyyyy = Get-Date -Format "yyyMMddHHmm"
-
-Start-Transcript -Path "$pwd\log\Export-fnEmployeeToDialM_$mmddyyyy.txt" -Append
-Export-fnEmployeeToDialMy  -Verbose -InformationAction Continue
+Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
+$verbosePreference = "continue"
+Export-fnEmployeeToDialMy -Verbose -InformationAction continue
 Stop-Transcript

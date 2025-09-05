@@ -1,8 +1,8 @@
-function Get-fnEmployeeConfig {
+function Get-fnMassNotificationConfig {
     [CmdletBinding()]
     param()
 
-    $global = Get-Content "$PWD\shared-ignore\config\employee.conf"
+    $global = Get-Content "$PWD\shared-ignore\config\mass-notification.conf"
     $conf = @()
 
     $global | ForEach-Object {
