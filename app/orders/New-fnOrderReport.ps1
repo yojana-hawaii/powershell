@@ -8,8 +8,9 @@ function New-fnOrderReport {
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $emailConf  = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1" -ErrorAction SilentlyContinue -Recurse)
+    $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
     
-    foreach ($import in @($utility + $private + $sqlConn + $emailConf)){
+    foreach ($import in @($utility + $private + $sqlConn + $emailConf + $config)){
         try{
             . $import.Fullname
             Write-Information "$($MyInvocation.MyCommand.Name): Importing $($import.Fullname)"
