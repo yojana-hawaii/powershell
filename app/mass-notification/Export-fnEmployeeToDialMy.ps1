@@ -82,7 +82,7 @@ function Export-fnEmployeeToDialMy {
             $issue
             <br><br>Thank you.<br>$($email.Sig)"
 
-    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.from -subject $email.subject -body $email.body -bodyashtml
+    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
 
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Proservice employee data to Dial My Call & Actice Directory. It took $totalTime" 

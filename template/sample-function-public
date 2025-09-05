@@ -3,7 +3,7 @@ set-location "\\fileserver\it\apps\powershell"
 function public-function{
     #region - Import necessary configs and private functions #>
 
-    Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
+    Write-Information "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
     $private    = @(Get-ChildItem -Path "$PWD\app\...\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
@@ -23,6 +23,7 @@ function public-function{
     $startTimer     = Start-Timer
     $config = Get-fnConfig
     $what   = "$($config.what)"  -replace '"',""
+    $what
 
 
 
