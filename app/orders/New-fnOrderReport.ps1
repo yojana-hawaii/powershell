@@ -1,28 +1,26 @@
 set-location "\\fileserver\it\apps\powershell"
 
 function New-fnOrderReport {
-    [CmdletBinding()]
-    param()
-
     #region - Import necessary configs and private functions #>
 
-    Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
-    $configHelper       = @(Get-ChildItem -Path "$PWD\config-helper\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
-    $private            = @(Get-ChildItem -Path "$PWD\private\order\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
-    $utility            = @(Get-ChildItem -Path "$PWD\private\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
-
-    foreach ($import in @($configHelper + $private + $utility)){
+    Write-Information "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
+    $private    = @(Get-ChildItem -Path "$PWD\app\orders\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1" -ErrorAction SilentlyContinue -Recurse)
+    
+    foreach ($import in @($utility + $private + $sqlConn + $emailConf)){
         try{
             . $import.Fullname
             Write-Information "$($MyInvocation.MyCommand.Name): Importing $($import.Fullname)"
         } catch {
             Write-Error -Message "$($MyInvocation.MyCommand.Name): Failed to import functions from $($import.Fullname): $_"
             $true
-        }
-        
+        }  
     }
     $import = $null
     #endregion
+
     
     $startTimer = Start-Timer
 
@@ -77,14 +75,10 @@ function New-fnOrderReport {
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Order summary export and email complete. It took $totalTime"    
 }
+$Global:today = Get-Date
+$filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
-
-
-$Global:today = $null
-$today = Get-Date
-$mmddyyyy = Get-Date -Format "MM-dd-yyyy"
-
-Start-Transcript -Path "$pwd\log\$($MyInvocation.MyCommand.Name)_$mmddyyyy.txt" -Append
-New-fnOrderReport  -Verbose -InformationAction Continue
+Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
+$verbosePreference = "continue"
+New-fnOrderReport -Verbose -InformationAction continue
 Stop-Transcript
-
