@@ -47,9 +47,9 @@ function fnLocal_SetEmailBody{
     $email = [PSCustomObject]@{
         Subject = "Weekly sysaid summary for $($ticketHashArray[0].Name)"
 
-        Body0 = "<p>Confirming before sending to $ceo. Recommended changes implemented. Start with old summary table.</p>"
+        Body0 = "<p>$ceo, This is an automated email with sysaid ticket summary for $($ticketHashArray[0].Name)</p>"
 
-        Body1 = "<p>This is an automated email blah blah.</p>"
+        Body1 = ""
 
         Body2 = ""
 
@@ -92,6 +92,8 @@ function New-fnITProductivityReport {
 
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
+    $sysaidConf = Get-fnSysaidConfig
+    $readyForCeo = ($sysaidConf.readyForCeo) -replace '"', ""
 
     $emailConfig =  Get-fnEmailConfig
     $smtp            = ($emailConfig.smtp) -replace '"',""
@@ -101,6 +103,7 @@ function New-fnITProductivityReport {
     $domain        = ($emailConfig.domain) -replace '"',""
     $sig        = ($emailConfig.mySig) -replace '"',""
     $ceo       = ($emailConfig.ceo) -replace '"',""
+    $ceoEmail       = ($emailConfig.ceoEmail) -replace '"',""
  
     Write-Information $sig $ceo
 
@@ -109,13 +112,16 @@ function New-fnITProductivityReport {
     foreach($admin in $admins){
         $to = if($admin -eq "unassigned"){$helpdesk}else{"$admin@$domain"}
         $to = if($to -eq $me){$helpdesk}else{$to}
+        $to = if($admin -eq $readyForCeo){"$to;$ceoEmail"}else{$to}
         $cc = $me
         $from = $me
+        $to = $to -split ";"
 
         $adminTickets = Get-fnOrganizeTickets -days $days -admin $admin
         $email = fnLocal_SetEmailBody -ticketHashArray $adminTickets
 
-        Send-MailMessage -From $from -To $to -Cc $cc -Subject $email.Subject -Body $email.Body -SmtpServer $smtp -BodyAsHtml
+        # write-host $from $to $cc $email.Subject 
+        Send-MailMessage -From $from -To $me -Cc $cc -Subject $email.Subject -Body $email.Body -SmtpServer $smtp -BodyAsHtml
     }
     
     $totalTime = Stop-Timer -Start $startTimer
