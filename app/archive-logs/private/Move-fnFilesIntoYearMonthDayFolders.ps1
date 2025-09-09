@@ -3,12 +3,14 @@ function Move-fnFilesIntoYearMonthDayFolders {
     param (
         [parameter()]
         [string]$source,
-        [parameter()]
-        [string]$extension
+        [string]$extension,
+        [string]$filePrefix = 'all'
     )
     Write-Verbose "$($MyInvocation.MyCommand.Name): move file to yyyy\yyyy.mm\yyyy.mm.dd\ folder structure"
 
-    $fileType = $source + "*" + $extension
+    $filename  = "*"
+    if($filename -ne "all") {$filename = $filePrefix + "*"}
+    $fileType = $source + $filename + $extension
     write-host $fileType
     
     Get-ChildItem $fileType | Foreach-Object {

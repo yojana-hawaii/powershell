@@ -28,16 +28,18 @@ function Set-fnOrganizeZipDelete{
     $dc1 = "$($achiveConfig.dc1Event)"  -replace '"',""
     $dc2 = "$($achiveConfig.dc2Event)"  -replace '"',""
     $dc3 = "$($achiveConfig.dc3Event)"  -replace '"',""
+    
+    $eventFilePrefixToArchive = "$($achiveConfig.eventFilePrefixToArchive)"  -replace '"',""
     $eventExtension = "$($achiveConfig.eventExtension)"  -replace '"',""
 
-    Move-fnFilesIntoYearMonthDayFolders -source $psLog -extension $psLogExt
+    Move-fnFilesIntoYearMonthDayFolders -source $psLog -extension $psLogExt -filePrefix 'all'
     Start-fnZipAndDelete -path $psLog -daysToWait 14
 
-    Move-fnFilesIntoYearMonthDayFolders -source $dc1 -extension $eventExtension
+    Move-fnFilesIntoYearMonthDayFolders -source $dc1 -extension $eventExtension -filePrefix $eventFilePrefixToArchive
     Start-fnZipAndDelete -path $dc1 -daysToWait 3
-    Move-fnFilesIntoYearMonthDayFolders -source $dc2 -extension $eventExtension
+    Move-fnFilesIntoYearMonthDayFolders -source $dc2 -extension $eventExtension -filePrefix $eventFilePrefixToArchive
     Start-fnZipAndDelete -path $dc2 -daysToWait 3
-    Move-fnFilesIntoYearMonthDayFolders -source $dc3 -extension $eventExtension
+    Move-fnFilesIntoYearMonthDayFolders -source $dc3 -extension $eventExtension -filePrefix $eventFilePrefixToArchive
     Start-fnZipAndDelete -path $dc3 -daysToWait 3
 
 
