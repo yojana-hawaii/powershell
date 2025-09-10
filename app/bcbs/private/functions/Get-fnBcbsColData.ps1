@@ -30,19 +30,27 @@ function Get-fnBcbsColData {
         } 
         if($emr.'CT Colonography Date'){
             $bcbs.'CT Colonography' = 'X'
-            $dos = $emr.'CT Colonography Date'
+            if($dos -lt $emr.'CT Colonography Date'){
+                $dos = $emr.'CT Colonography Date'
+            }
         } 
         if($emr.'sDNA FIT-DNA Test Date'){
             $bcbs.'FIT-DNA' =  'X'
-            $dos = $emr.'sDNA FIT-DNA Test Date'
+            if($dos -lt $emr.'sDNA FIT-DNA Test Date'){
+                $dos = $emr.'sDNA FIT-DNA Test Date'
+            }
         }
         if ($emr.'Colonoscopy Date') {
-            $dos = $emr.'Colonoscopy Date'
             $bcbs.'Colonoscopy' = 'X'
+            if($dos -lt $emr.'Colonoscopy Date'){
+                $dos = $emr.'Colonoscopy Date'
+            }
         } 
         if($emr.'FIT-FOBT Date') {
             $bcbs.'FOBT ' = 'X'
-            $dos = $emr.'FIT-FOBT Date'
+            if($dos -lt $emr.'FIT-FOBT Date'){
+                $dos = $emr.'FIT-FOBT Date'
+            }
         } 
 
         if($dos){
