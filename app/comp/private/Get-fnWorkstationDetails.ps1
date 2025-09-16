@@ -44,6 +44,11 @@ function Get-fnWorkstationDetails {
     # Get installed computers
     $softwares = Get-fnWorkstationSoftware -computerName $computer
     foreach($software in $softwares){
+        # some returns had stopped and not array of software details
+        if( $software -isnot [array]){
+            Write-Warning "$software is not array. Skip."
+            break
+        }
         Invoke-fnSpWorkstationSoftware -software $software 
     }
         
