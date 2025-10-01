@@ -9,7 +9,7 @@ function Move-fnFilesIntoYearMonthDayFolders {
     Write-Verbose "$($MyInvocation.MyCommand.Name): move file to yyyy\yyyy.mm\yyyy.mm.dd\ folder structure"
 
     $filename  = "*"
-    if($filename -ne "all") {$filename = $filePrefix + "*"}
+    if($filePrefix -ne "all") {$filename = $filePrefix + "*"}
     $fileType = $source + $filename + $extension
     write-host $fileType
     
