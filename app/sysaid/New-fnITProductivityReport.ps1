@@ -14,6 +14,7 @@ function fnLocal_ConvertToHashTable{
             <th align=left><b>Subject</b></th>
             <th align=left><b>Request User</b></th>
             <th align=left><b>Request Date</b></th>
+            <th align=left><b>Updates Last Week</b></th>
             <th align=left><b>Total Updates</b></th>
             <th align=left><b>Last Update</b></th>
         </tr>
@@ -26,6 +27,7 @@ function fnLocal_ConvertToHashTable{
             <td>" + $($row.Subject) + "</td>
             <td>" + $($row.RequestUser) + "</td>
             <td>" + $($row.Date) + "</td>
+            <td>" + $($row."updates-last-week") + "</td>
             <td>" + $($row."total-updates") + "</td>
             <td>" + $($row."last-update") + "</td>
         </tr>
@@ -120,8 +122,8 @@ function New-fnITProductivityReport {
         $adminTickets = Get-fnOrganizeTickets -days $days -admin $admin
         $email = fnLocal_SetEmailBody -ticketHashArray $adminTickets
 
-        # write-host $from $to $cc $email.Subject 
-        Send-MailMessage -From $from -To $me -Cc $cc -Subject $email.Subject -Body $email.Body -SmtpServer $smtp -BodyAsHtml
+        # write-host "from: $from TO: $to CC: $cc Subject:$($email.Subject) "
+        Send-MailMessage -From $from -To $to -Cc $cc -Subject $email.Subject -Body $email.Body -SmtpServer $smtp -BodyAsHtml
     }
     
     $totalTime = Stop-Timer -Start $startTimer

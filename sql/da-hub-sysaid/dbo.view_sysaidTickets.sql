@@ -18,7 +18,7 @@ as
 		s.id TicketNumber,
 		replace(replace(replace(replace(replace(trim(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(problem_type,'01',''),'02',''),'03',''),'04',''),'05',''),'06',''),'07',''),'08',''),'09',''),'10',''),'11',''),'14',''),'15',''),'16',''),'19',''),'20 -','')),' use',''), ' issues',''),'Company ',''),' / ','/'),'/ ','/') Category,  
 		problem_sub_type SubCategory,
-		title TicketSubject,
+		trim(replace(replace(replace(title,'RE:',''),'FW:',''),'[EXTERNAL SENDER]',''))  TicketSubject,
 		
 		case when responsibility = 'I.T.Admin' then 'unassigned' else lower(replace(responsibility,'kphc\','')) end AssignedTo, 
 		case when update_user = 'I.T.Admin' then 'unassigned' else lower(replace(update_user,'kphc\','')) end LastUpdateuser, 
