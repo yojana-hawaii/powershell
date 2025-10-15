@@ -1,9 +1,9 @@
 use DaHubAide
 go
 
-drop proc if exists dbo.spGetRelevantTickets;
+drop proc if exists dbo.spGetTicketPerAdmin;
 go
-create proc dbo.spGetRelevantTickets
+create proc dbo.spGetTicketPerAdmin
 (
 	@days varchar(5) = -7,
 	@admin varchar(50) = 'all'
@@ -24,5 +24,5 @@ end
 
 go
 
-exec DaHubAide.dbo.spGetRelevantTickets @days = -7, @admin = 'all'
+exec DaHubAide.dbo.spGetTicketPerAdmin @days = -7, @admin = 'all'
 go

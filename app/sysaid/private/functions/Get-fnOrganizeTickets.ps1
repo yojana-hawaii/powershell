@@ -7,7 +7,9 @@ function Get-fnOrganizeTickets {
         [string]$admin
     )
     
-    $tickets = Invoke-spGetRelevantTickets -days $days -admin $admin
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Group sysaid tickets by status"
+
+    $tickets = Invoke-spGetTicketPerAdmin -days $days -admin $admin
     $ticketByStatus = $tickets | Group-Object -Property TicketStatus | Sort-Object -Property Name -Descending      
     
     $organizedTickets = @()

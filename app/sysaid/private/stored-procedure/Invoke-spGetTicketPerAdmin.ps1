@@ -1,4 +1,4 @@
-function Invoke-spGetRelevantTickets {
+function Invoke-spGetTicketPerAdmin {
     [CmdletBinding()]
     param (
         [parameter()]
@@ -8,13 +8,13 @@ function Invoke-spGetRelevantTickets {
     )
 
     
-    $StoredProcedure = 'dbo.spGetRelevantTickets'
+    $StoredProcedure = 'dbo.spGetTicketPerAdmin'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure -database 'DaHubAide'
     $conn = $connection[0]
     $cmd = $connection[1]
 
      try{
-        Write-Information -Message "Get ticket for $admin for past $days days."
+        Write-Verbose -Message "Get ticket for $admin for past $days days."
 
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@days", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@admin", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null

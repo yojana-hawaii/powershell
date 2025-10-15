@@ -12,7 +12,7 @@ function Invoke-spGetAdmins {
     $cmd = $connection[1]
 
      try{
-        Write-Information -Message "Get sysaid admins."
+        Write-Verbose -Message "Get sysaid admins."
 
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@days", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         

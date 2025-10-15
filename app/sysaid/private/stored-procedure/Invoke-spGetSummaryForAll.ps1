@@ -1,27 +1,22 @@
-function Invoke-spGetRelevantTicketSummary {
-    [CmdletBinding()]
+function Invoke-spGetSummaryForAll {
+        [CmdletBinding()]
     param (
         [parameter()]
-        [string]$days = -7,
-        [parameter()]
-        [string]$admin = 'all'
+        [string]$days = -7
     )
 
     
-    $StoredProcedure = 'dbo.spGetRelevantTicketSumary'
+    $StoredProcedure = 'dbo.spGetSummaryForAll'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure -database 'DaHubAide'
     $conn = $connection[0]
     $cmd = $connection[1]
 
      try{
-        Write-Information -Message "Get ticket summary for $admin for past $days days"
+        Write-Verbose -Message "Get ticket summary for past $days days."
 
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@days", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
-        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@admin", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
         
         $cmd.Parameters[0].Value = $days
-        $cmd.Parameters[1].Value = $admin
-
 
         $result = $cmd.ExecuteReader()
         $data = New-Object System.Data.DataTable
