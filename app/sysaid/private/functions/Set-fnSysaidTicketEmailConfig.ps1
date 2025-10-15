@@ -15,26 +15,14 @@ function Set-fnSysaidTicketEmailConfig {
     $email.cc = $email.me
 
     $email.subject = "$($email.sysaid2subject) $str"
-    $email.sysaid2body1 = "$($email.sysaid2body1) $str</p>"
+    $tempbody = "$($email.sysaid2body1) $str</p>"
 
     foreach($ticketStatus in $groupedTicket){
         $htmltable = Get-fnSysaidTicketHtmlTable -hash $ticketStatus.group
         $email.bodyhtml += "<p><h3><u>$($ticketStatus.count) $($ticketStatus.status.ToUpper()) tickets</h3></u></p> $htmltable "
     }
 
-    $email.body = $email.bodyintro + $email.sysaid2body1 + $email.bodyhtml + $email.bodysig
+    $email.body = $email.bodyintro + $tempbody + $email.bodyhtml + $email.bodysig
     write-host "From: $($email.from) To: $($email.to) Cc: $($email.cc) Subject:$($email.Subject) "
 
 }
-
-function fnLocal_SetEmailBody{
-    param(
-        [Parameter()]
-        [array]$ticketHashArray
-    )
-
-    
-
-    $email.Body = $email.Body0 + $email.Body1 + $email.Body2 + $email.Body3 + $email.Body4
-    return $email
-} 
