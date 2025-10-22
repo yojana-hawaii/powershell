@@ -4,9 +4,9 @@ function Export-fnEmployeeToDialMy {
     #region - Import necessary configs and private functions #>
    
     $private    = @(Get-ChildItem -Path "$PWD\app\mass-notification\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
-    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1"  -ErrorAction SilentlyContinue -Recurse)
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
     $org        = @(Get-ChildItem -Path "$PWD\shared-ignore\organization-specific\*.ps1"  -ErrorAction SilentlyContinue -Recurse)
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)
 
     foreach ($import in @($private + $emailConf + $org + $utility)){
         try{
@@ -18,7 +18,7 @@ function Export-fnEmployeeToDialMy {
         }
         
     }
-    $import = $null
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
     #endregion
 
     $startTimer = Start-Timer

@@ -3,11 +3,11 @@ set-location "\\fileserver\it\apps\powershell"
 function Set-fnRemoveUsersFromGroups {
     #region - Import necessary configs and private functions #>
     $configHelper       = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
-    $emailConfig        = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)    
     $utility            = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
     #import all function
-    foreach ($import in @($configHelper + $utility + $emailConfig)){
+    foreach ($import in @($configHelper + $utility + $emailConf)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -16,6 +16,7 @@ function Set-fnRemoveUsersFromGroups {
             $true
         }  
     }
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
 
     #endregion
 

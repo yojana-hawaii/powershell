@@ -90,7 +90,7 @@ function Set-fnLocalUser {
         }
         
     }
-    $import = $null
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
     #endregion
     
     $config             = Get-fnConfig 

@@ -15,7 +15,7 @@ function Export-fnEmployeeToRave {
         }
         
     }
-    $import = $null
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
     #endregion
 
     $rave = Get-fnMassNotificationConfig

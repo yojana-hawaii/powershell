@@ -7,8 +7,8 @@ function New-fnOrderReport {
     $private    = @(Get-ChildItem -Path "$PWD\app\orders\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
-    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1" -ErrorAction SilentlyContinue -Recurse)
     $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)
     
     foreach ($import in @($utility + $private + $sqlConn + $emailConf + $config)){
         try{
@@ -19,7 +19,8 @@ function New-fnOrderReport {
             $true
         }  
     }
-    $import = $null
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
+
     #endregion
 
     

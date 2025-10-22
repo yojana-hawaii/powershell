@@ -75,7 +75,7 @@ function New-fnMissingSlip {
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
-    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1" -ErrorAction SilentlyContinue -Recurse)
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)
     
     foreach ($import in @($utility + $private + $sqlConn + $config + $emailConf)){
         try{
@@ -87,7 +87,8 @@ function New-fnMissingSlip {
         }
         
     }
-    $import = $null
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
+
     #endregion
     
     $startTimer = Start-Timer

@@ -6,11 +6,12 @@ function Set-fnDisableTerminatedUser {
         
     )
     #region - Import necessary configs and private functions #>
-    $emailConfig        = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnEmailConfig.ps1"               -ErrorAction SilentlyContinue -Recurse)
     $utility            = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)
+
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
     #import all function
-    foreach ($import in @($utility + $emailConfig)){
+    foreach ($import in @($utility + $emailConf)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -19,6 +20,7 @@ function Set-fnDisableTerminatedUser {
             $true
         }  
     }
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
 
     #endregion
 
