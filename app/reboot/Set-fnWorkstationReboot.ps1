@@ -18,7 +18,7 @@ function Set-fnWorkstationReboot {
         }
         
     }
-    $import = $null
+    Remove-Variable import, utility, private, sqlConn, config, emailConf
     #endregion
         
         $startTimer = Start-Timer
