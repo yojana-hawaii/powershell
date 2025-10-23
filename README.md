@@ -5,7 +5,9 @@ learning GPO & powershell from https://github.com/EvotecIT/
 # app
 ## active-directory
 > Get object details (user, computer, & group) from active directory
+>
 > Get Active Directory Configurations
+>
 > Get Organizational Unit details
 
 ## archive-logs
