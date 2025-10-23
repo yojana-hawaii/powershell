@@ -3,7 +3,9 @@ learning GPO & powershell from https://github.com/EvotecIT/
 
 
 # app
+
 ## active-directory
+
 > Get object details (user, computer, & group) from active directory
 >
 > Get Active Directory Configurations
@@ -11,17 +13,84 @@ learning GPO & powershell from https://github.com/EvotecIT/
 > Get Organizational Unit details
 
 ## archive-logs
+> Organize log files into ..\yyyy\MM\dd folder structure
+>
+> Compress the folder and delete the original after x number of days
+
 ## bcbs
+
+> Get demographic data from EMR and Payer. Upload them to SQL database. Initiate patient matching algorithm
+>
+> Pass it along to Human AI for validation
+>
+> Get gaps from payer. Get services provided from EMR or Population health application
+>
+> Using the matching algorithm & pop health data, fill gaps from payer.
+
 ## comp
+
+> Get Computer details from active directory
+>
+> Get workstation details using WimRm or WMI, including computer specs, logged in user, local users, installed printers, installed software, available partitions, service status & connected monitors
+
 ## computer-disable
+
+>
+>
+> need to figure out the logic
+
 ## computer-export
+
+> Get details of computer status. Status to focus can change depending on needs. Upgrade to windows 11 and bitwarden encryption is focus for 2025 
+> 
+> Split servers, & thin client. separate machines on windows 10, windows 11 with necessary app not installed
+>
+> Export them into easily accesible file format & email appropriate team
+
 ## laps
+
+> Add local user to be used for LAPS
+> 
+> need refactor
+
 ## mass-notification
+
+> Get incomplete encounters. Group by providers.
+> 
+> need refactor
+
 ## missing-slip
+
+> 
+> 
+> need refactor
+
 ## orders
+
+> V1: 
+> 
+> V2: in progress
+
+
 ## reboot
+
+> Get computer list to reboot. Entire list for Sunday but a smaller list of rest of the week
+> 
+> Reboot the computers
+
 ## sysaid
+
+> Get tickets for the past 7 days
+> 
+> Send team summary email
+>
+> Get details of each member of the team and send their summary 
+
 ## users
+
+> 
+> 
+> need to email correct people
 
 # shared
 ## config-helper
