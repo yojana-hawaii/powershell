@@ -21,52 +21,54 @@ function Set-fnWorkstationReboot {
     Remove-Variable import, utility, private, sqlConn, config, emailConf
     #endregion
         
-        $startTimer = Start-Timer
-        Write-Verbose "$($MyInvocation.MyCommand.Name): start."
+    
+    $startTimer = Start-Timer
+    Write-Verbose "$($MyInvocation.MyCommand.Name): start."
+    
+    $rebootConf = Get-fnRebootConfig
+    $initiater = ($rebootConf.initiator) -replace '"', ""
 
-        $weekday = ($today).DayOfWeek
-        
-        $frequency =  if($weekday -eq "sunday")  {'weekly'} else {'daily'}
-        $initiater = "kphc-powershell"
-        
-        Write-Information "$weekday reboot $frequency"
-        
-        # $frequency = "weekly"
-        $computers = Invoke-fnSpWorkstationReboot -frequency $frequency
-        $total = $computers.count
-        $cnt = 1
+    $weekday = ($today).DayOfWeek    
+    $frequency =  if($weekday -eq "sunday")  {'weekly'} else {'daily'}
+    
+    Write-Information "$weekday reboot $frequency"
+    
+    # $frequency = "weekly"
+    $computers = Invoke-fnSpWorkstationReboot -frequency $frequency
+    $total = $computers.count
+    $cnt = 1
 
 
-        foreach($computer in $computers){
-            $ping = Test-Connection -ComputerName $computer.ComputerName -BufferSize 4 -count 1 -Quiet
-            write-verbose "Working on $($computer.ComputerName) ... $cnt of $total"
-            if($ping){
-                Write-Information  "Online & rebooting $($computer.ComputerName)"
+    foreach($computer in $computers){
+        $ping = Test-Connection -ComputerName $computer.ComputerName -BufferSize 4 -count 1 -Quiet
+        write-verbose "Working on $($computer.ComputerName) ... $cnt of $total"
+        if($ping){
+            Write-Information  "Online & rebooting $($computer.ComputerName)"
 
-                try{
-                    if($computer.ComputerName -eq $initiater){
-                        Write-Verbose "Skip $initiator for now."
-                        continue
-                    }
-                    Restart-Computer -ComputerName $computer.ComputerName -force
-                } catch {
-                    write-verbose "try-catch fail $($computer.ComputerName)"
+            try{
+                if($computer.ComputerName -eq $initiater){
+                    Write-Verbose "Skip $initiator for now."
+                    continue
                 }
-
-            } else {
-                write-verbose "cannot reboot $($computer.ComputerName). It is offline."
+                Restart-Computer -ComputerName $computer.ComputerName -force
+            } catch {
+                write-verbose "try-catch fail $($computer.ComputerName)"
             }
-            $cnt++
-        }
 
-        $totalTime = Stop-Timer -Start $startTimer
-        Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime"     
-        
-        if($frequency -eq "weekly"){
-            write-verbose "finally restart $initiater"
-            Restart-Computer -ComputerName $initiater -force
-
+        } else {
+            write-verbose "cannot reboot $($computer.ComputerName). It is offline."
         }
+        $cnt++
+    }
+
+    $totalTime = Stop-Timer -Start $startTimer
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime"     
+    
+    if($frequency -eq "weekly"){
+        write-verbose "finally restart $initiater"
+        Restart-Computer -ComputerName $initiater -force
+
+    }
                         
 
 }
