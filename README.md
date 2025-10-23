@@ -1,6 +1,39 @@
 # Powershell
 learning GPO & powershell from https://github.com/EvotecIT/ 
 
+
+## app
+### active-directory
+### archive-logs
+### bcbs
+### comp
+### computer-disable
+### computer-export
+### laps
+### mass-notification
+### missing-slip
+### orders
+### reboot
+### sysaid
+### users
+
+## shared
+### config-helper
+### email
+### SqlConnection
+### utility
+
+## shared-ignore > .gitignore
+### config
+### log
+### organization-specific
+### template
+### user-input
+
+## sql
+### da-hub-inventory
+### da-hub-sysaid
+
 # Local Computer
 ## Computer Details
 **Get-fnDomainInventory**
