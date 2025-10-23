@@ -2,37 +2,41 @@
 learning GPO & powershell from https://github.com/EvotecIT/ 
 
 
-## app
-### active-directory
-### archive-logs
-### bcbs
-### comp
-### computer-disable
-### computer-export
-### laps
-### mass-notification
-### missing-slip
-### orders
-### reboot
-### sysaid
-### users
+# app
+## active-directory
+> Get object details (user, computer, & group) from active directory
+> Get Active Directory Configurations
+> Get Organizational Unit details
 
-## shared
-### config-helper
-### email
-### SqlConnection
-### utility
+## archive-logs
+## bcbs
+## comp
+## computer-disable
+## computer-export
+## laps
+## mass-notification
+## missing-slip
+## orders
+## reboot
+## sysaid
+## users
 
-## shared-ignore > .gitignore
-### config
-### log
-### organization-specific
-### template
-### user-input
+# shared
+## config-helper
+## email
+## SqlConnection
+## utility
 
-## sql
-### da-hub-inventory
-### da-hub-sysaid
+# shared-ignore > .gitignore
+## config
+## log
+## organization-specific
+## template
+## user-input
+
+# sql
+## da-hub-inventory
+## da-hub-sysaid
 
 # Local Computer
 ## Computer Details

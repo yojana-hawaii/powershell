@@ -75,7 +75,7 @@ function Get-fnActiveDirectoryDetails{
     }
     #endregion
      
-    break
+    
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){
         Invoke-spActiveDirectory -ActiveDirectory $data -Verbose
