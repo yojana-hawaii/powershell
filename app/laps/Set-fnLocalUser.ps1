@@ -1,80 +1,8 @@
 set-location "\\fileserver\it\apps\powershell"
-function fnLocal_LapsUserExists{
-    [CmdletBinding()]
-    param (
-        [parameter()]
-        [string]$computerName,
-        [parameter()]
-        [string]$lapsUser,
-        [parameter()]
-        [System.Array]$existingUsers
-    )
-
-    $lapsUserExists = $false
-
-    foreach($user in $existingusers){
-        if($user.Name -eq $lapsUser){
-            Write-Verbose "$($MyInvocation.MyCommand.Name): $lapsUser already exists in $computerName"
-            $lapsUserExists = $true
-        }
-    }
-    return $lapsUserExists
-}
-function fnLocal_CreateLapsUsers{
-    [CmdletBinding()]
-    param (
-        [parameter()]
-        [string]$computerName,
-        [parameter()]
-        [System.Object]$laps
-    )
-
-    $serviceName = "WinRm"
-    
-    try{
-        $service = Start-fnService -ComputerName $computerName -serviceName $serviceName -finalState "Auto"
-        if($null -ne $service -and $service.Status -eq 'Running')
-        {
-            $getScriptBlock = { Get-LocalUser }
-            $existingusers = Invoke-Command -ComputerName $computerName -ScriptBlock $getScriptBlock
-            
-            $lapsUserExists = fnLocal_LapsUserExists -computerName $computerName -lapsUser $laps.Username -existingUsers $existingusers
-           
-            if($lapsUserExists){
-                return
-            } else {
-                Invoke-Command -ComputerName $computerName `
-                         -ScriptBlock { 
-                                param($laps)
-                                New-LocalUser -Name $laps.Username -Description $laps.Description -Password $laps.Password  -PasswordNeverExpires -UserMayNotChangePassword -FullName $laps.FullName
-                            } -ArgumentList $laps
-                }
-
-            $newExistingUsers = Invoke-Command -ComputerName $computerName -ScriptBlock $getScriptBlock
-            $lapsUserNowExists = fnLocal_LapsUserExists -computerName $computerName -lapsUser $laps.Username -existingUsers $newExistingUsers
-            
-            if($lapsUserNowExists){
-                Write-Verbose "$($MyInvocation.MyCommand.Name): $($laps.Username) successfully added in $computerName"
-            } else {
-                Write-Warning "$($MyInvocation.MyCommand.Name): failed to add $($laps.Username) in $computerName"
-            }
-        }
-    }
-    catch {
-        Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
-    } 
-    finally {
-        # Stop-fnService -computerName $computerName -serviceName $serviceName -returnToOriginalStatus $true -original $service
-        Write-Verbose "$($MyInvocation.MyCommand.Name): Final Remote Registry Status $($finalServiceStatus.Status)"
-    } 
-
-}
-
-
 function Set-fnLocalUser {
     #region - Import necessary configs and private functions #>
 
-    Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
+    Write-Information "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
     $private    = @(Get-ChildItem -Path "$PWD\app\laps\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
@@ -87,18 +15,21 @@ function Set-fnLocalUser {
         } catch {
             Write-Error -Message "$($MyInvocation.MyCommand.Name): Failed to import functions from $($import.Fullname): $_"
             $true
-        }
-        
+        }  
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
+    Remove-Variable import, utility, private, sqlConn
     #endregion
+    Write-Verbose "$($MyInvocation.MyCommand.Name):  Start laps creation"
+    $startTimer = Start-Timer
+
+    #region initialize
     
-    $config             = Get-fnConfig 
-    $lapsUser           = "$($config.localUser)"  -replace '"',""
-    $lapsPwd            = "$($config.localUserPwd)"  -replace '"',""
+    $lapConf            = Get-fnLapsConfig 
+    $lapsUser           = "$($lapConf.localUser)"  -replace '"',""
+    $lapsPwd            = "$($lapConf.localUserPwd)"  -replace '"',""
     $encodedPwd         = ConvertTo-SecureString $lapsPwd -AsPlainText -Force
-    $lapsFullname       = "$($config.localUserFullname)"  -replace '"',""
-    $lapsDescription    = "$($config.localUserDescription)"  -replace '"',""
+    $lapsFullname       = "$($lapConf.localUserFullname)"  -replace '"',""
+    $lapsDescription    = "$($lapConf.localUserDescription)"  -replace '"',""
     
     $laps = [PSCustomObject]@{
         Username = $lapsUser
@@ -107,8 +38,11 @@ function Set-fnLocalUser {
         FullName = $lapsFullname
     }
 
-    $startTimer = Start-Timer
+    Remove-Variable lapConf, lapsuser, lapsPwd, encodedPwd, lapsFullname, lapsDescription
     
+    #endregion
+
+    # change comp1 to specific computer to target one machine
     $comp = "comp1"
     
     if($comp -eq "comp1")
@@ -117,23 +51,12 @@ function Set-fnLocalUser {
         
         foreach($computer in $computers)
         {
-            Write-Verbose "$($MyInvocation.MyCommand.Name): Create $($laps.Username) in $($computer.ComputerName)"
-            # $computer.ComputerName
-            $ping = Test-Connection $computer.computerName -Quiet -Count 1
-            if($ping){
-                fnLocal_CreateLapsUsers -computerName $computer.ComputerName -laps $laps
-            } else {
-                Write-Warning "$($computer.ComputerName) offline"
-            }
+            Add-fnLapsUser -ComputerName $computer.ComputerName -laps $laps
         }
     } else {
-        $ping = Test-Connection $comp -Quiet -Count 1
-        if($ping){
-            fnLocal_CreateLapsUsers -computerName $comp -laps $laps
-        }
+        Add-fnLapsUser -ComputerName $comp -laps $laps
     }
         
-    
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Local user $localUser addition complete. It took $totalTime" 
 }
