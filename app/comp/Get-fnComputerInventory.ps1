@@ -21,7 +21,7 @@ function Get-fnComputerInventory {
         }
         
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
+    Remove-Variable import, utility, private, sqlConn, config, adproc, adcomp
     #endregion
     
     $startTimer = Start-Timer

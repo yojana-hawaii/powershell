@@ -18,7 +18,7 @@ function Set-fnWorkstationReboot {
         }
         
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
+    Remove-Variable import, utility, private, sqlConn, config
     #endregion
         
     

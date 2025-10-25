@@ -17,7 +17,7 @@ function Set-fnOrganizeZipDelete{
         }
         
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
+    Remove-Variable import, utility, private
     #endregion
     
     $startTimer     = Start-Timer
