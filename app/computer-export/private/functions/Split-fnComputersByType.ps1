@@ -4,7 +4,7 @@ function Split-fnComputersByType {
         [Parameter()]
         [hashtable]$param
     )
-    Write-Information "$($MyInvocation.MyCommand.Name): Split all computer list"
+    Write-Verbose "$($MyInvocation.MyCommand.Name): Split all computer list"
 
     #try cath when there is possibility of exception
     try { 

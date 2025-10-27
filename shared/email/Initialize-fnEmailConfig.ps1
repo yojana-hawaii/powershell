@@ -3,7 +3,7 @@ function Initialize-fnEmailConfig {
     param (
         [Parameter()]
         [array]$param,
-        [string]$str
+        [string]$str = $null
     )
     Write-Verbose "$($MyInvocation.MyCommand.Name): Initialize email config"
 
@@ -55,6 +55,9 @@ function Initialize-fnEmailConfig {
         sysaid2body1 =  ($param.sysaid2body1) -replace '"',""
         sysaid2body2 =  ($param.sysaid2body2) -replace '"',""
         sysaid2body3 =  ($param.sysaid2body3) -replace '"',""
+
+        compExportSubject = ($param.compExportSubject) -replace '"',""
+        compExportBody = ($param.compExportBody) -replace '"',""
     }
     return $email
 }

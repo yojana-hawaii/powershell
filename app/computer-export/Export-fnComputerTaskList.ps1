@@ -8,8 +8,10 @@ function Export-fnComputerTaskList{
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)
+
     
-    foreach ($import in @($utility + $private + $sqlConn + $config)){
+    foreach ($import in @($utility + $private + $sqlConn + $config + $emailConf)){
         try{
             . $import.Fullname
             Write-Information "$($MyInvocation.MyCommand.Name): Importing $($import.Fullname)"
@@ -42,6 +44,12 @@ function Export-fnComputerTaskList{
         $computerHash.All = Invoke-fnSpGetComputerTaskList
         Split-fnComputersByType -param $computerHash
         Export-fnSplitTaskListToExcel -param $computerHash
+
+        $emailConfig =  Get-fnEmailConfig
+        $email = Initialize-fnEmailConfig -param $emailConfig
+        Set-fnCompExportSummaryEmailConfig -email $email
+        Send-fnEmail -email $email
+        Reset-fnEmailConfig -email $email
 
     }
     catch {
