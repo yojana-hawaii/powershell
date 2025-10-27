@@ -39,7 +39,7 @@ function Invoke-spOrganizationalUnitAcl{
         $cmd.Parameters[10].Value = $guid
         
         $return = $cmd.ExecuteNonQuery()
-        Write-Information "Import to sql affected $return row(s)"}
+        Write-Information "Import to sql affected $return row(s)"
 
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message) "
