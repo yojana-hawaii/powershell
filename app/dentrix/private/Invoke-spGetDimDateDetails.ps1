@@ -1,0 +1,31 @@
+function Invoke-spGetDimDateDetails {
+    [CmdletBinding()]
+    param (
+        [parameter()]
+        [string]$param
+    )
+    $StoredProcedure = 'dbo.spGetDimDateDetails'
+    $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
+    $conn = $connection[0]
+    $cmd = $connection[1]
+
+     try{
+        Write-Information -Message "Get dimDate details for $date"
+
+        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@date", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
+        $cmd.Parameters[0].Value = $param
+        
+
+        $result = $cmd.ExecuteReader()
+        $data = New-Object System.Data.DataTable
+        $data.Load($result)
+        return $data
+
+    } catch {
+        Write-Warning "$($MyInvocation.MyCommand.Name) failed : $($_.Exception.Message)"
+        continue
+    } finally {
+        Write-Verbose -Message "$($MyInvocation.MyCommand.Name):Closing Sql Connection"
+        Close-spSqlConnection -cmd $cmd -conn $conn
+    }
+}

@@ -58,6 +58,10 @@ function Initialize-fnEmailConfig {
 
         compExportSubject = ($param.compExportSubject) -replace '"',""
         compExportBody = ($param.compExportBody) -replace '"',""
+
+        dentalSubject = ($param.dentalSubject) -replace '"', ""
+        dentalBody = ($param.dentalBody) -replace '"', ""
+        dentalTo = ($param.dentalTo) -replace '"', ""
     }
     return $email
 }
