@@ -47,7 +47,6 @@ function Set-fnOrganizeZipDelete{
     $totalTime = Stop-Timer -Start $startTimer
     Write-Verbose "$($MyInvocation.MyCommand.Name): Import demographics complete. It took $totalTime"    
 }
-$Global:today = Get-Date # user by Test-fnSourceFile and maybe others
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append

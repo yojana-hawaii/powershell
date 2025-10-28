@@ -96,7 +96,6 @@ function Get-fnActiveDirectoryDetails{
     Write-Information "$($MyInvocation.MyCommand.Name): Active Diretory details complete. It took $totalTime" 
 
 }
-$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append

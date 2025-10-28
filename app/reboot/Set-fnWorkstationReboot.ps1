@@ -24,6 +24,7 @@ function Set-fnWorkstationReboot {
     
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."
+    $today = Get-Date
     
     $rebootConf = Get-fnRebootConfig
     $initiater = ($rebootConf.initiator) -replace '"', ""
@@ -72,7 +73,6 @@ function Set-fnWorkstationReboot {
                         
 
 }
-$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append

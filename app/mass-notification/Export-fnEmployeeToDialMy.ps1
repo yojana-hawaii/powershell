@@ -88,7 +88,6 @@ function Export-fnEmployeeToDialMy {
     Write-Information "$($MyInvocation.MyCommand.Name): Proservice employee data to Dial My Call & Actice Directory. It took $totalTime" 
 
 }
-$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append

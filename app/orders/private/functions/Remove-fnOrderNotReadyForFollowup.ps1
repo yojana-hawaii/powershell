@@ -11,6 +11,7 @@ function Remove-fnOrderNotReadyForFollowup {
     $excludeValue1=($order.exclude[1]).ToString()
     $excludeColumn2=($order.exclude[2]).ToString()
     $excludeValue2=($order.exclude[3]).ToString()
+    $today = Get-Date
     
    <# 
     1. read file

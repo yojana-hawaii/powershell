@@ -46,7 +46,6 @@ function Export-fnEmployeeToRave {
         Write-Warning "Source file cannot be found: $($_.Exception.Message)"
     }
 }
-$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append

@@ -7,6 +7,7 @@ function Test-fnSourceFile {
         [int]$sourceFileValidDays
     )
     $sourceFileValid = $false
+    $today = Get-Date
 
     if (Test-Path -Path $sourceFile){
         Write-Information "Checking $($MyInvocation.MyCommand.Name):  - Source file exists."

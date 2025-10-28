@@ -53,7 +53,6 @@ function New-fnITProductivityReport {
     $totalTime = Stop-Timer -Start $startTimer
     Write-Verbose "$($MyInvocation.MyCommand.Name): Workstation Details complete. It took $totalTime" 
 }
-$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
