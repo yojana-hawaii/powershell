@@ -28,26 +28,24 @@ function New-fnITProductivityReport {
     
     $sysaidConf = Get-fnSysaidConfig
     $emailtoboss = ($sysaidConf.emailtoboss) -replace '"', ""
-    $emailConfig =  Get-fnEmailConfig
-    $email = Initialize-fnEmailConfig -param $emailConfig -str $emailtoboss
-    Remove-Variable emailConfig,sysaidConf
+    $email = Initialize-fnEmailConfig -sysaidemailtoboss $emailtoboss
+    Remove-Variable sysaidConf
     #endregion
 
     $days = -7
     
     # send team summary email
     $summary = Invoke-spGetSummaryForAll -days $days
-    Set-fnSysaidSummaryEmailConfig -arr $summary -email $email
+    Get-fnEmailConfig_SysaidTeamSummary -arr $summary -email $email
     Send-fnEmail -email $email
-    Reset-fnEmailConfig -email $email
 
+    
     # send individual summary email
     $admins = (Invoke-spGetAdmins -days $days).AssignedTo
     foreach($admin in $admins){
         $ticketGroupedByStatus = Get-fnOrganizeTickets -days $days -admin $admin
-        Set-fnSysaidTicketEmailConfig -groupedTicket $ticketGroupedByStatus -email $email -str $admin 
+        Get-fnEmailConfig_SysaidIndividualSummary -groupedTicket $ticketGroupedByStatus -email $email -str $admin 
         Send-fnEmail -email $email
-        Reset-fnEmailConfig -email $email
     }
 
     $totalTime = Stop-Timer -Start $startTimer

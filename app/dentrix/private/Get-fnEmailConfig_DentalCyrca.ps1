@@ -1,4 +1,4 @@
- function Set-fnCompExportSummaryEmailConfig {
+function Get-fnEmailConfig_DentalCyrca {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -6,13 +6,12 @@
     )
     Write-Verbose "$($MyInvocation.MyCommand.Name): set email config for individual email."
 
-    $email.to = $email.helpdesk
+    $email.to = ($email.dentalTo) -Split ";"
     $email.cc = $email.me
 
-    $email.subject = "$($email.compExportSubject)"
-    $tempbody = "<p>$($email.compExportBody)</p>"
+    $email.subject = "$($email.dentalSubject)"
+    $tempbody = "<p>$($email.dentalBody)</p>"
 
     $email.body = $email.bodyintro + $tempbody + $email.bodyhtml + $email.bodysig
     write-host "From: $($email.from) To: $($email.to) Cc: $($email.cc) Subject:$($email.Subject) "
-
 }

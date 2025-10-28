@@ -2,16 +2,17 @@ function Initialize-fnEmailConfig {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [array]$param,
-        [string]$str = $null
+        [string]$sysaidemailtoboss = $null
     )
     Write-Verbose "$($MyInvocation.MyCommand.Name): Initialize email config"
 
-    $me = ($param.myEmail) -replace '"',""
-    $mySig = ($param.mySig) -replace '"',""
+    $conf =  Get-fnEmailConfig
+
+    $me = ($conf.myEmail) -replace '"',""
+    $mySig = ($conf.mySig) -replace '"',""
     $email = @{
-        smtp     = ($param.smtp) -replace '"',""
-        domain   = ($param.domain) -replace '"',""
+        smtp     = ($conf.smtp) -replace '"',""
+        domain   = ($conf.domain) -replace '"',""
 
         from = $me
         to = $null
@@ -19,49 +20,58 @@ function Initialize-fnEmailConfig {
         subject = $null
         body = $null
 
-        bodyintro = ($param.bodyintro) -replace '"',""
+        bodyintro = ($conf.bodyintro) -replace '"',""
         bodyhtml = $null
         bodysig = "<p>Thank you<br />$mySig"
 
         me = $me
         mySig = $mySig
 
-        bossName = ($param.bossName) -replace '"',""
-        bossEmail = ($param.bossEmail) -replace '"',""
+        bossName = ($conf.bossName) -replace '"',""
+        bossEmail = ($conf.bossEmail) -replace '"',""
 
-        helpdesk = (($param.helpdesk) -replace '"',"") -replace "'", ""
-        security = (($param.security) -replace '"',"") -replace "'", ""
-        emr      = (($param.emr) -replace '"',"") -replace "'", ""
-        billing  = (($param.billing) -replace '"',"") -replace "'", ""
-        hr       = (($param.hr) -replace '"',"") -replace "'", ""
+        helpdesk = (($conf.helpdesk) -replace '"',"") -replace "'", ""
+        security = (($conf.security) -replace '"',"") -replace "'", ""
+        emr      = (($conf.emr) -replace '"',"") -replace "'", ""
+        billing  = (($conf.billing) -replace '"',"") -replace "'", ""
+        hr       = (($conf.hr) -replace '"',"") -replace "'", ""
 
-        missingSlipFrom = (($param.hr) -replace '"',"") -replace "'", ""
-        missingSlipCc   = ((($param.missingSlipCc) -replace '"',"") -replace "'", "").Split(';')
-        missingSlipCcBh = ((($param.missingSlipCcBh) -replace '"',"") -replace "'", "").Split(';')
+        missingSlipFrom = (($conf.hr) -replace '"',"") -replace "'", ""
+        missingSlipCc   = ((($conf.missingSlipCc) -replace '"',"") -replace "'", "").Split(';')
+        missingSlipCcBh = ((($conf.missingSlipCcBh) -replace '"',"") -replace "'", "").Split(';')
 
-        orderTo = (($param.orderTo) -replace '"',"") -replace "'", ""
-        orderCC = (($param.orderCC) -replace '"',"") -replace "'", ""
-        supportStaffCC = (($param.supportStaffCC) -replace '"',"") -replace "'", ""
-        supportStaffFrom = (($param.supportStaffFrom) -replace '"',"") -replace "'", ""
+        orderTo = (($conf.orderTo) -replace '"',"") -replace "'", ""
+        orderCC = (($conf.orderCC) -replace '"',"") -replace "'", ""
+        supportStaffCC = (($conf.supportStaffCC) -replace '"',"") -replace "'", ""
+        supportStaffFrom = (($conf.supportStaffFrom) -replace '"',"") -replace "'", ""
         
-        proserviceSubject = (($param.proserviceSubject) -replace '"',"") -replace "'", ""
+        proserviceSubject = (($conf.proserviceSubject) -replace '"',"") -replace "'", ""
                 
-        sysaidsubject =($param.sysaidsubject) -replace '"',""
-        sysaidbody1 =  ($param.sysaidbody1) -replace '"',""
-        sysaidbody2 =  ($param.sysaidbody2) -replace '"',""
-        sysaidbody3 =  ($param.sysaidbody3) -replace '"',""
-        sysaidemailtoboss = $str
-        sysaid2subject =($param.sysaid2subject) -replace '"',""
-        sysaid2body1 =  ($param.sysaid2body1) -replace '"',""
-        sysaid2body2 =  ($param.sysaid2body2) -replace '"',""
-        sysaid2body3 =  ($param.sysaid2body3) -replace '"',""
+        sysaidsubject =($conf.sysaidsubject) -replace '"',""
+        sysaidbody1 =  ($conf.sysaidbody1) -replace '"',""
+        sysaidbody2 =  ($conf.sysaidbody2) -replace '"',""
+        sysaidbody3 =  ($conf.sysaidbody3) -replace '"',""
+        sysaidemailtoboss = $sysaidemailtoboss
+        sysaid2subject =($conf.sysaid2subject) -replace '"',""
+        sysaid2body1 =  ($conf.sysaid2body1) -replace '"',""
+        sysaid2body2 =  ($conf.sysaid2body2) -replace '"',""
+        sysaid2body3 =  ($conf.sysaid2body3) -replace '"',""
 
-        compExportSubject = ($param.compExportSubject) -replace '"',""
-        compExportBody = ($param.compExportBody) -replace '"',""
+        compExportSubject = ($conf.compExportSubject) -replace '"',""
+        compExportBody = ($conf.compExportBody) -replace '"',""
 
-        dentalSubject = ($param.dentalSubject) -replace '"', ""
-        dentalBody = ($param.dentalBody) -replace '"', ""
-        dentalTo = ($param.dentalTo) -replace '"', ""
+        dentalSubject = ($conf.dentalSubject) -replace '"', ""
+        dentalBody = ($conf.dentalBody) -replace '"', ""
+        dentalTo = ($conf.dentalTo) -replace '"', ""
+
+        enableUserSubject = ($conf.enableUserSubject) -replace '"', ""
+        enableUserBody = ($conf.enableUserBody) -replace '"', ""
+        terminatedUserSubject = ($conf.terminatedUserSubject) -replace '"', ""
+        terminatedUserBody = ($conf.terminatedUserBody) -replace '"', ""
+        inactiveUserSubject = ($conf.inactiveUserSubject) -replace '"', ""
+        inactiveUserBody = ($conf.inactiveUserBody) -replace '"', ""
+        removedFromGroupSubject = ($conf.removedFromGroupSubject) -replace '"', ""
+        removedFromGroupBody = ($conf.removedFromGroupBody) -replace '"', ""
     }
     return $email
 }

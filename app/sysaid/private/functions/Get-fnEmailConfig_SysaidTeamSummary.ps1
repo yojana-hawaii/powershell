@@ -1,4 +1,4 @@
-function Set-fnSysaidSummaryEmailConfig {
+function Get-fnEmailConfig_SysaidTeamSummary {
     [CmdletBinding()]
     param (
         [Parameter()]

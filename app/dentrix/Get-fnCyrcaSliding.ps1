@@ -51,11 +51,9 @@ function Get-fnCyrcaSliding{
         Write-Warning "$($MyInvocation.MyCommand.Name) failed $(): $($_.Exception.Message)"
     }
     
-    $emailConfig =  Get-fnEmailConfig
-    $email = Initialize-fnEmailConfig -param $emailConfig
-    Set-fnDentalCyrcaEmailConfig -email $email
+    $email = Initialize-fnEmailConfig
+    Get-fnEmailConfig_DentalCyrca -email $email
     Send-fnEmail -email $email
-    Reset-fnEmailConfig -email $email
 
 
     $totalTime = Stop-Timer -Start $startTimer

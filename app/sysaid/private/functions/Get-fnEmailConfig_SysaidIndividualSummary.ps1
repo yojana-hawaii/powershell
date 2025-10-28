@@ -1,4 +1,4 @@
-function Set-fnSysaidTicketEmailConfig {
+function Get-fnEmailConfig_SysaidIndividualSummary {
     [CmdletBinding()]
     param (
         [Parameter()]
