@@ -1,16 +1,17 @@
 set-location "\\fileserver\it\apps\powershell"
 
 function Set-fnEnableReturningUsers {
-    [CmdletBinding()]
-    param (
-        
-    )
     #region - Import necessary configs and private functions #>
     $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)    
-    $utility            = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
+    $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1" -ErrorAction SilentlyContinue -Recurse)
+    $private    = @(Get-ChildItem -Path "$PWD\app\users\enable-users\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $sqlLookup  = @(Get-ChildItem -Path "$PWD\shared\SqlLookup\Invoke-spGetUserAndManagerDetails.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
+    $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
+
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
-    #import all function
-    foreach ($import in @($utility + $emailConf)){
+
+    foreach ($import in @($utility + $emailConf + $private + $sqlLookup + $sqlConn + $config)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -19,70 +20,42 @@ function Set-fnEnableReturningUsers {
             $true
         }  
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
-
+    Remove-Variable import, utility, emailConf, private, sqlLookup, sqlConn, config
     #endregion
 
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start." 
 
-    $emailConfig =  Get-fnEmailConfig
-
-    $email = @{
-        Smtp            = ($emailConfig.smtp) -replace '"',""
-        To              = ($emailConfig.helpdesk) -replace '"',""
-        From            = ($emailConfig.myEmail) -replace '"',""
-        Sig             = ($emailConfig.mySig) -replace '"',""
-        Subject         = "Users enabled from return list"
-        Body            = ""
-    }
-    
     $path =  "$pwd\shared-ignore\user-input\enable-user-5am.csv"
-    $file = import-csv -Path $path 
+    $enabledUserList = Enable-fnAdAccount -path $path
 
-    $enabledList = ""
+    if($enabledUserList -ne ""){
+        $email = Initialize-fnEmailConfig
 
-    $now = Get-Date -Format "MM/dd/yyyy"
-    foreach($line in $file){
-        $enabledate = ([datetime]$line.date).ToString("MM/dd/yyyy")
+        foreach($staff in $enabledUserList){
 
-        # enable and remove from csv
-        if($enabledate -eq $now){
-            Write-Verbose "Enabling $($line.username)"
-            Enable-ADAccount -Identity $line.username
-            $enabledList = $enabledList + ", " + $line.username
-
-            if((Get-ADUser -Identity $line.username).enabled){
-                Write-Verbose "User $($line.username) has been enabled."
-                $file = $file | Where-Object {$_.username -ne $line.username}
+            try {
+                $userDetail = Invoke-spGetUserAndManagerDetails -username $staff
             }
-        } else {
-            Write-Verbose "$($line.username) not ready to enable. Wait until $($line.date)"
+            catch {
+                Write-Warning "$($MyInvocation.MyCommand.Name) failed $(): $($_.Exception.Message)"
+            }
+            
+            $email.managerEmail = $userDetail.ManagerEmail
+            $email.fullname = $userDetail.DisplayName
+            Get-fnEmailConfig_EnableReturningUsers -email $email
+            Send-fnEmail -email $email
         }
-    }
-
-    $file | Export-Csv -Path $path -NoTypeInformation
-
-    if($enabledList -ne ""){
-        $email.body = "Hello all, This is an automated email." + 
-            "<br><br>The following users from return list have been actived. 
-            <br><br>You can add return user and return date in 
-            <br> \\fileserver\it\apps\powershell\shared-ignore\user-input\enable-user-5am.csv<br><br> 
-            Usernames: $($enabledList.Substring(1))
-            <br><br>Thank you.<br>$($email.sig)"
-
-        Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
-
     }
 
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Enable inactive users complete. It took $totalTime" 
 
 }
-$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append
-$verbosePreference = "continue"
+# $verbosePreference = "continue"
+$InformationPreference = "continue"
 Set-fnEnableReturningUsers -Verbose -InformationAction continue
 Stop-Transcript

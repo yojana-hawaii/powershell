@@ -13,6 +13,5 @@
     $tempbody = "<p>$($email.compExportBody)</p>"
 
     $email.body = $email.bodyintro + $tempbody + $email.bodyhtml + $email.bodysig
-    write-host "From: $($email.from) To: $($email.to) Cc: $($email.cc) Subject:$($email.Subject) "
 
 }

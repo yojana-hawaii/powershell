@@ -11,6 +11,4 @@ function Get-fnEmailConfig_SysaidTeamSummary {
     $email.body = $email.bodyintro + $email.sysaidbody1 + $email.bodyhtml + $email.sysaidbody2 + $email.sysaidbody3 + $email.bodysig
     $email.to = $email.bossEmail
     $email.cc = $email.helpdesk
-    write-host "From: $($email.from) To: $($email.to) Cc: $($email.cc) Subject:$($email.Subject) "
-
 }

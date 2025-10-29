@@ -65,13 +65,17 @@ function Initialize-fnEmailConfig {
         dentalTo = ($conf.dentalTo) -replace '"', ""
 
         enableUserSubject = ($conf.enableUserSubject) -replace '"', ""
-        enableUserBody = ($conf.enableUserBody) -replace '"', ""
+        enableUserBody1 = ($conf.enableUserBody1) -replace '"', ""
+        enableUserBody2 = ($conf.enableUserBody2) -replace '"', ""
+
         terminatedUserSubject = ($conf.terminatedUserSubject) -replace '"', ""
         terminatedUserBody = ($conf.terminatedUserBody) -replace '"', ""
         inactiveUserSubject = ($conf.inactiveUserSubject) -replace '"', ""
         inactiveUserBody = ($conf.inactiveUserBody) -replace '"', ""
         removedFromGroupSubject = ($conf.removedFromGroupSubject) -replace '"', ""
         removedFromGroupBody = ($conf.removedFromGroupBody) -replace '"', ""
+        managerEmail = $null
+        fullname = $null
     }
     return $email
 }
