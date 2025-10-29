@@ -1,17 +1,17 @@
 set-location "\\fileserver\it\apps\powershell"
 
 function Set-fnDisableTerminatedUser {
-    [CmdletBinding()]
-    param (
-        
-    )
     #region - Import necessary configs and private functions #>
-    $utility            = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"                        -ErrorAction SilentlyContinue -Recurse)
-    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)
+    $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)    
+    $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1" -ErrorAction SilentlyContinue -Recurse)
+    $private    = @(Get-ChildItem -Path "$PWD\app\users\terminated-users\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $sqlLookup  = @(Get-ChildItem -Path "$PWD\shared\SqlLookup\Invoke-spGetUserAndManagerDetails.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
+    $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
 
     Write-Information "Read public, private & shared functions, stored procedures and config helpers"
-    #import all function
-    foreach ($import in @($utility + $emailConf)){
+
+    foreach ($import in @($utility + $emailConf + $private + $sqlLookup + $sqlConn + $config)){
         try{
             . $import.Fullname
             Write-Information "importing $($import.Fullname)"
@@ -20,68 +20,35 @@ function Set-fnDisableTerminatedUser {
             $true
         }  
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
-
+    Remove-Variable import, utility, emailConf, private, sqlLookup, sqlConn, config
     #endregion
 
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start." 
 
-    $emailConfig =  Get-fnEmailConfig
-
-    $email = @{
-        Smtp            = ($emailConfig.smtp) -replace '"',""
-        To              = ($emailConfig.helpdesk) -replace '"',""
-        From            = ($emailConfig.myEmail) -replace '"',""
-        Sig             = ($emailConfig.mySig) -replace '"',""
-        Subject         = "Users disabled from termination list"
-        Body            = ""
-    }
-
     $path =  "$pwd\shared-ignore\user-input\disable-user-5pm.csv"
-    $file = import-csv -Path $path 
+    $disabledUserList = Disable-fnTerminatedAdAccount -path $path
 
-    $disabledList = ""
+    if($disabledUserList -ne ""){
+        $email = Initialize-fnEmailConfig
 
-    $now = Get-Date -Format "MM/dd/yyyy"
-    foreach($line in $file){
-        $disabledate = ([datetime]$line.date).ToString("MM/dd/yyyy")
-
-        # disable and remove from csv
-        if($disabledate -eq $now){
-            Write-Verbose "Disabling $($line.username)"
-            Disable-ADAccount -Identity $line.username
-            $disabledList = $disabledList + ", " + $line.username
-
-            if(-not(Get-ADUser -Identity $line.username).enabled){
-                Write-Verbose "User $($line.username) has been disabled."
-                $file = $file | Where-Object {$_.username -ne $line.username}
+        foreach($term in $disabledUserList){
+            try{
+                $userDetail = Invoke-spGetUserAndManagerDetails -username $term
+            } catch {
+                Write-Warning "$($MyInvocation.MyCommand.Name) failed $(): $($_.Exception.Message)"
             }
-        } else {
-            Write-Verbose "$($line.username) not ready to disable. Wait until $($line.date)"
+            $email.managerEmail = $userDetail.ManagerEmail
+            $email.fullname = $userDetail.DisplayName
+            Get-fnEmailConfig_DisableTerminated -email $email
+            Send-fnEmail -email $email
         }
-    }
-
-    $file | Export-Csv -Path $path -NoTypeInformation
-
-    if($disabledList -ne ""){
-        $email.body = "Hello all, This is an automated email." + 
-            "<br><br>The following users from termination list have been disabled. 
-            <br><br>You can add terminated user and termination date in 
-            <br> \\fileserver\it\apps\powershell\shared-ignore\user-input\disable-user-5pm.csv <br><br>
-            Usernames: $($disabledList.Substring(1))
-            <br><br>Thank you.<br>$($email.Sig)"
-
-
-        Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
-
     }
 
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Disable inactive users complete. It took $totalTime" 
 
 }
-$Global:today = Get-Date
 $filenameAppend = Get-Date -Format "yyyMMddHHmm"
 
 Start-Transcript -Path "$pwd\shared-ignore\log\$($MyInvocation.MyCommand.Name)_$filenameAppend.txt" -Append

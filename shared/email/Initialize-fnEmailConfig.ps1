@@ -69,7 +69,10 @@ function Initialize-fnEmailConfig {
         enableUserBody2 = ($conf.enableUserBody2) -replace '"', ""
 
         terminatedUserSubject = ($conf.terminatedUserSubject) -replace '"', ""
-        terminatedUserBody = ($conf.terminatedUserBody) -replace '"', ""
+        terminatedUserBody1 = ($conf.terminatedUserBody1) -replace '"', ""
+        terminatedUserBody2 = ($conf.terminatedUserBody2) -replace '"', ""
+        terminatedUserBody3 = ($conf.terminatedUserBody3) -replace '"', ""
+
         inactiveUserSubject = ($conf.inactiveUserSubject) -replace '"', ""
         inactiveUserBody = ($conf.inactiveUserBody) -replace '"', ""
         removedFromGroupSubject = ($conf.removedFromGroupSubject) -replace '"', ""
