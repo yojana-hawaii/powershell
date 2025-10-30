@@ -1,9 +1,12 @@
+# project file
 sql/da-hub-inventory/da-hub-inventory.ssmssqlproj
 sql/da-hub-sysaid/da-hub-sysaid.ssmssqlproj
 
-shared-ignore/*
-app/comp/Get-fnDomainInventory-Manual.ps1
-
-private/organization-specific/*
+# ignore queries
 sql/da-hub-inventory/zz-random-query.sql
 sql/da-hub-inventory/create-view-vwUserGroupPivot.sql
+sql/da-hub-inventory/get-proc-spGetVendorsAndStudents.sql
+
+# ignore the entire folder. contains - logs, templates, config data etc
+shared-ignore/*
+
