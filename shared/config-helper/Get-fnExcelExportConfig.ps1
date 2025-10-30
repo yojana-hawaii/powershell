@@ -1,8 +1,8 @@
-function Get-fnComputerExportConfig{
+function Get-fnExcelExportConfig{
     [CmdletBinding()]
     param ()
     
-    $global = Get-Content "$PWD\shared-ignore\config\compExport.conf"
+    $global = Get-Content "$PWD\shared-ignore\config\excel-export.conf"
     
     $conf = @()
     

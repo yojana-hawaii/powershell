@@ -9,9 +9,9 @@ function Export-fnComputerTaskList{
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
     $emailConf  = @(Get-ChildItem -Path "$PWD\shared\email\*.ps1" -ErrorAction SilentlyContinue -Recurse)
+    $excel      = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnExcelExportConfig.ps1" -ErrorAction SilentlyContinue -Recurse)
 
-    
-    foreach ($import in @($utility + $private + $sqlConn + $config + $emailConf)){
+    foreach ($import in @($utility + $private + $sqlConn + $config + $emailConf + $excel)){
         try{
             . $import.Fullname
             Write-Information "$($MyInvocation.MyCommand.Name): Importing $($import.Fullname)"
@@ -20,7 +20,7 @@ function Export-fnComputerTaskList{
             $true
         }  
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
+    Remove-Variable import, utility, private, sqlConn, config, emailConf,excel
     #endregion
     
     $startTimer = Start-Timer
@@ -36,7 +36,7 @@ function Export-fnComputerTaskList{
         Windows10 = ""
         Windows11NeedWork = ""
         Windows11Good = ""
-        Root = ($exportConf.root) -replace '"', ""
+        Root = ($exportConf.computerExportPath) -replace '"', ""
         Extension = ($exportConf.extension) -replace '"', ""
     }
     

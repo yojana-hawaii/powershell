@@ -35,6 +35,7 @@ function Initialize-fnEmailConfig {
         emr      = (($conf.emr) -replace '"',"") -replace "'", ""
         billing  = (($conf.billing) -replace '"',"") -replace "'", ""
         hr       = (($conf.hr) -replace '"',"") -replace "'", ""
+        queenB   = (($conf.queenB) -replace '"',"") -replace "'", ""
 
         missingSlipFrom = (($conf.hr) -replace '"',"") -replace "'", ""
         missingSlipCc   = ((($conf.missingSlipCc) -replace '"',"") -replace "'", "").Split(';')
@@ -79,6 +80,10 @@ function Initialize-fnEmailConfig {
         removedFromGroupBody = ($conf.removedFromGroupBody) -replace '"', ""
         managerEmail = $null
         fullname = $null
+
+        vendorstudentsubject = ($conf.vendorstudentsubject) -replace '"', ""
+        vendorstudentbody1 = ($conf.vendorstudentbody1) -replace '"', ""
+        
     }
     return $email
 }
