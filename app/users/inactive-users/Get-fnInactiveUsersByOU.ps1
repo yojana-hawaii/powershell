@@ -21,14 +21,14 @@ function Get-fnInactiveUsersByOU {
         $_.enabled -and # look at only active accounts
         $_.modified -le $lastModifiedDateToKeep -and # if account modifed in last 2 days -> do not disable
         $_.LastLogonDate -le  $lastLoginDateToKeepActive  #last-logon 14 login
-    } | Select-Object Name, sAMAccountName, Enabled, LastLogonDate, Created, Modified, Description , EmailAddress, @{
+    } | Select-Object Name, sAMAccountName, Enabled, LastLogonDate, Created, Modified, Description , EmailAddress, Company, @{
         label = "Manager"
         expression = {
             if($null -ne $_.Manager){ (Get-ADUser -Identity $_.Manager -Properties EmailAddress).emailAddress} else {""}
         }
     },@{
         label = "Type"
-        expression = {if($_.EmailAddress -eq "" -or $null -eq $_.EmailAddress) {$type} else {$_.EmailAddress} }
+        expression = {if($_.EmailAddress) {$_.EmailAddress} elseif ($_.Company) {$_.Company} else  {$type} }
     }
     
     $inactiveUsers = $inactiveUsers | 
