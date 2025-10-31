@@ -20,12 +20,10 @@ function Get-fnEmailConfig_HtmlTable {
     "
 
     foreach($row in $users){
-        $email = if ($row.EmailAddress -eq "" -or $null -eq $row.EmailAddress) {$row.EmailAddress} else {$row.Type}
-
         $HtmlTable += "<tr style='font-size:12px;font-weight=normal;background:#FFFFFF'>
             <td> $($row.Name) </td>
             <td> $($row.LastLogin) </td>
-            <td> $email </td>
+            <td> $($row.type) </td>
         </tr>
         "
     }
