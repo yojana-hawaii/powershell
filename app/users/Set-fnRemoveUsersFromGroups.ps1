@@ -29,6 +29,7 @@ function Set-fnRemoveUsersFromGroups {
 
     $config = Get-fnConfig 
     $groupsToEmpty = (($config.groupsToEmpty) -replace '"', "") -split ","
+    $statusCheck = $false
 
     $actionsTaken = "Daily clean up:"
     foreach($group in $groupsToEmpty){
@@ -38,12 +39,16 @@ function Set-fnRemoveUsersFromGroups {
         foreach ($member in $members){
             $actionsTaken += "Removed $($member.name) from $group<br />"
             Remove-ADGroupMember -Identity $group -Members $member -Confirm:$False
+            $statusCheck = $true
         }
     }
 
-    $email = Initialize-fnEmailConfig
-    Get-fnEmailConfig_RemoveUserGroup -email $email -actionsTaken $actionsTaken
-    Send-fnEmail -email $email
+    if($statusCheck){
+        $email = Initialize-fnEmailConfig
+        Get-fnEmailConfig_RemoveUserGroup -email $email -actionsTaken $actionsTaken
+        Send-fnEmail -email $email
+    }
+
     
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Remove users from groups. It took $totalTime" 
