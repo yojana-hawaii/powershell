@@ -2,7 +2,8 @@
     [CmdletBinding()]
     param (
         [Parameter()]
-        [hashtable]$email
+        [hashtable]$email,
+        [hashtable]$param
     )
     Write-Verbose "$($MyInvocation.MyCommand.Name): set email config for individual email."
 
@@ -12,6 +13,14 @@
     $email.subject = "$($email.compExportSubject)"
     $tempbody = "<p>$($email.compExportBody)</p>"
 
-    $email.body = $email.bodyintro + $tempbody + $email.bodyhtml + $email.bodysig
+    $focus = "<p><h3>Area of focus</h3>
+            <ul>
+                <li>Dell Encryption: $(($param.OldEncryption).Count)</li>
+                <li>Windows 10:  $(($param.Windows10).Count)</li>
+                <li></li>
+            </ul>
+            </p>"
+
+    $email.body = $email.bodyintro + $tempbody + $focus + $email.bodyhtml + $email.bodysig
 
 }

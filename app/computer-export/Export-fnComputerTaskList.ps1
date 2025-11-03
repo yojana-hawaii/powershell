@@ -24,7 +24,6 @@ function Export-fnComputerTaskList{
     #endregion
     
     $startTimer = Start-Timer
-    $exportConf = Get-fnComputerExportConfig
 
     $computerHash = [hashtable]@{
         All = ""
