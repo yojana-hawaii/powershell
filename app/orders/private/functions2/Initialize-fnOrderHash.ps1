@@ -4,33 +4,19 @@ function Initialize-fnOrderHash {
 
     #region - Initialization
     $orderConf = Get-fnOrderConfig
+
     $rootPath  = ($orderConf.rootPath) -replace '"', ""
     $rawFolder = ($orderConf.rawFolder) -replace '"', ""
-
     $v1Source  = ($orderConf.ordersv1file) -replace '"', ""
-    $v1columns = ($orderConf.v1columns) -replace '"', ""
     $v2Source  = ($orderConf.ordersv2file) -replace '"', ""
-    $v2columns = ($orderConf.v2columns) -replace '"', ""
-    $joinColumn = ($orderConf.joinColumn) -replace '"', ""
 
     $provPivotRow = ($orderConf.provPivotRow) -replace '"', ""
-    $deptPivotRow = ($orderConf.deptPivotRow) -replace '"', ""
-    $yearPivotRow = ($orderConf.yearPivotRow) -replace '"', ""
-    $orderTypePivotColumn = ($orderConf.pivotColumn) -replace '"', ""
-
-    $deleteOrders = ($orderConf.deleteOrders) -replace '"', ""
-    $autoClose = ($orderConf.autoCloseOrders) -replace '"', ""
-    $bloodDraw = ($orderConf.bloodDraw) -replace '"', ""
-    $socialDeterminant = ($orderConf.socialDeterminant) -replace '"', ""
-    
-    $alarm = ($orderConf.alarm) -replace '"', ""
-    $lastUpdate = ($orderConf.lastUpdate) -replace '"', ""
-    $expired = ($orderConf.expired) -replace '"', ""
 
     $references = ($orderConf.references) -replace '"', ""
     $internalLab = ($orderConf.internalLab) -replace '"', ""
     $internalConsult = ($orderConf.internalConsult) -replace '"', ""
     $internalImaging = ($orderConf.internalImaging) -replace '"', ""
+    $supportStaff = ($orderConf.supportStaff) -replace '"', ""
     
     $export = ($orderConf.export) -replace '"', ""
 
@@ -41,27 +27,28 @@ function Initialize-fnOrderHash {
         # config for join
         v1Source   = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $rawFolder) -ChildPath $v1Source
         v2Source   = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $rawFolder) -ChildPath $v2Source
-        v1Columns  = $v1columns -split ","
-        v2columns  = $v2columns -split ","
-        v1JoinColumn = $joinColumn
-        v2JoinColumn = $joinColumn
+
+        v1Columns  = (($orderConf.v1columns) -replace '"', "") -split ","
+        v2columns  = (($orderConf.v2columns) -replace '"', "") -split ","
+        v1JoinColumn = ($orderConf.joinColumn) -replace '"', ""
+        v2JoinColumn = ($orderConf.joinColumn) -replace '"', ""
         
         # config for exec summary
-        orderTypePivotColumn = $orderTypePivotColumn
+        orderTypePivotColumn = ($orderConf.pivotColumn) -replace '"', ""
         provPivotRow = $provPivotRow
-        deptPivotRow = $deptPivotRow
-        yearPivotRow = $yearPivotRow
+        deptPivotRow = ($orderConf.deptPivotRow) -replace '"', ""
+        yearPivotRow = ($orderConf.yearPivotRow) -replace '"', ""
 
         # config for filter by string
-        delete = $deleteOrders -split ","
-        autoClose = $autoClose -split ","
-        bloodDraw = $bloodDraw -split ","
-        socialDeterminant = $socialDeterminant -split ","
+        delete = (($orderConf.deleteOrders) -replace '"', "") -split ","
+        autoClose = (($orderConf.autoCloseOrders) -replace '"', "") -split ","
+        bloodDraw = (($orderConf.bloodDraw) -replace '"', "") -split ","
+        socialDeterminant = (($orderConf.socialDeterminant) -replace '"', "") -split ","
         
         # config for filter by dates
-        alarm = $alarm -split ","
-        expired   = $expired -split ","
-        lastUpdate = $lastUpdate -split ","
+        alarm = (($orderConf.alarm) -replace '"', "") -split ","
+        expired   = (($orderConf.expired) -replace '"', "") -split ","
+        lastUpdate = (($orderConf.lastUpdate) -replace '"', "") -split ","
         
         # hardcoded config
         alarmDays = @{"lab"=7;"consult"=42;"imaging"=30;"procedure"=14;"default"=7}
@@ -73,7 +60,8 @@ function Initialize-fnOrderHash {
         internalLab       = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $references) -ChildPath $internalLab
         internalConsult   = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $references) -ChildPath $internalConsult
         internalImaging   = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $references) -ChildPath $internalImaging
-
+        supportStaff      = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $references) -ChildPath $supportStaff
+         
         # calculated
         sourceData=""
         
@@ -104,6 +92,8 @@ function Initialize-fnOrderHash {
         # count
         totalOrders=0
         export=Join-Path -Path $rootPath -ChildPath $export
+        summaryFile="_summary-provider-department-year.xlsx"
+        adminFile="_admin-delete-expired-plus-others.xlsx"
     }
 
 }

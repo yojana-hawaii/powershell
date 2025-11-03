@@ -43,8 +43,10 @@ function Initialize-fnEmailConfig {
 
         orderTo = (($conf.orderTo) -replace '"',"") -replace "'", ""
         orderCC = (($conf.orderCC) -replace '"',"") -replace "'", ""
+        orderSubject = "Incomplete Order Summary"
         supportStaffCC = (($conf.supportStaffCC) -replace '"',"") -replace "'", ""
         supportStaffFrom = (($conf.supportStaffFrom) -replace '"',"") -replace "'", ""
+        incompleteOrderStepByStepProcess = ""
         
         proserviceSubject = (($conf.proserviceSubject) -replace '"',"") -replace "'", ""
                 

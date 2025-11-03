@@ -55,17 +55,20 @@ function New-fnIncompleteOrderReport {
     }
 
     Write-Information "ORGANIZE & SEND EMAIL"
-    if($orderHash.exportSuccess){
-        write-host "send email"
-        # $email = Initialize-fnEmailConfig
-        # Get-fnEmailConfig_VendorsAndStudents -email $email
-        # Send-fnEmail -email $email
-        # email summary
+    if($orderHash.exportSuccess -or $true){
+        $email = Initialize-fnEmailConfig
+
+        # email summary 
+        Get-fnEmailConfig_IncompleteOrdersSummary -email $email -orderHash $orderHash
+        Send-fnEmail -email $email
+        
+        
         # email individual staff
+        # Get-fnEmailConfig_IncompleteOrdersDetails -email $email -orderHash $orderHash
+        #loop and Send-fnEmail -email $email
         
     }
 
-    # email
     $totalTime = Stop-Timer -Start $startTimer
     Write-Verbose "$($MyInvocation.MyCommand.Name): Import demographics complete. It took $totalTime"    
 }

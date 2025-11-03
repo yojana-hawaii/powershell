@@ -54,14 +54,14 @@ function Export-fnDataToExcel {
         }
 
         # export summary
-        $summaryPath = Join-Path -Path $param.export -ChildPath "_summary-provider-department-year.xlsx"
+        $summaryPath = Join-Path -Path $param.export -ChildPath $param.summaryFile
         $param.provSummary | Export-Excel -Path $summaryPath -WorksheetName "Provider" -Autosize
         $param.deptSummary | Export-Excel -Path $summaryPath -WorksheetName "Department" -Autosize
         $param.yearSummary | Export-Excel -Path $summaryPath -WorksheetName "Year" -Autosize
 
 
         # export data not requiring follow up
-        $queenPath = Join-Path -Path $param.export -ChildPath "_queenB.xlsx"
+        $queenPath = Join-Path -Path $param.export -ChildPath $param.adminFile
 
         $param.deleteData| 
             Select-Object PatientId, DocumentId, OrderName, OrderStatus, OrderType, Provider, Department, Bucket | 
