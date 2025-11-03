@@ -45,7 +45,7 @@ function Export-fnComputerTaskList{
         Export-fnSplitTaskListToExcel -param $computerHash
 
         $email = Initialize-fnEmailConfig
-        Get-fnEmailConfig_CompExport -email $email
+        Get-fnEmailConfig_CompExport -email $email -param $computerHash
         Send-fnEmail -email $email
 
     }
