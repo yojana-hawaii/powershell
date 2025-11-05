@@ -10,3 +10,6 @@ sql/da-hub-inventory/get-proc-spGetVendorsAndStudents.sql
 # ignore the entire folder. contains - logs, templates, config data etc
 shared-ignore/*
 
+sql/da-hub-inventory/create-view-vwFaxes.sql
+sql/da-hub-inventory/create-view-vwMitelPhone.sql
+sql/da-hub-inventory/get-proc-spGetADUsers.sql
