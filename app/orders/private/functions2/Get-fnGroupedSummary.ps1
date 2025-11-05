@@ -1,36 +1,3 @@
-function fnLocal_InitializeTempPSCustomObject {
-    [CmdletBinding()]
-    param (
-        [Parameter()]
-        [string]$Type
-    )
-
-    if($type -eq "Detail"){
-        return [PSCustomObject]@{
-                Name  = $row.Name
-                Consult = @()
-                "Internal-Consult" = @()
-                Lab = @()
-                Imaging = @()
-                "Internal-Imaging" = @()
-                Procedure = @()
-                Other = @()
-                Total = $row.Count
-            }
-    }
-    
-    return [PSCustomObject]@{
-                Name  = $row.Name
-                Consult = 0
-                "Internal-Consult" = 0
-                Lab = 0
-                Imaging = 0
-                "Internal-Imaging" = 0
-                Procedure = 0
-                Other = 0
-                Total = $row.Count
-            }
-}
 function Get-fnGroupedSummary {
     [CmdletBinding()]
     param (
@@ -57,8 +24,7 @@ function Get-fnGroupedSummary {
             # need to initialize all properties ahead of time, rather than dynamically adding new property 
             # initialize with 0 if summary count
             # initialize with array detail 
-            $temp = fnLocal_InitializeTempPSCustomObject -Type $propertyAppend
-            
+            $temp = Initialize-fnTempPSCustomObject -Type $propertyAppend -unknownProvider $param.unknownProvider -provname $row.Name
 
             foreach($col in $colGroups) {
                 $columnName = $col.Name

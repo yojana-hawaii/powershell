@@ -27,12 +27,21 @@ function New-fnIncompleteOrderReport {
     
     $startTimer = Start-Timer
     $orderHash  = Initialize-fnOrderHash 
+    $email = Initialize-fnEmailConfig
     
     Write-Information "JOIN TWO CSV FILES"
     Join-fnTwoSourceFile -param $orderHash
+
+    # if the order data is older than 7 days
+    if(-not $orderHash.sourceFileValid){
+        # do something > maybe email syaing download latest files  
+        Get-fnEmailConfig_MissingLatestData -email $email
+        Send-fnEmail -email $email
+        return
+    }
     
     Write-Information "ORGANIZE DATA - INTERNAL ORDERS, DELETED. EXPIRED, UPDATED IN 14 DAYS, NO ALARM YET, SDOH, BLOOD DRAW, NEED FOLLOW UP"
-    if($orderHash.sourceFileValid -and $orderHash.joinSuccess){
+    if( $orderHash.joinSuccess){
         Set-fnInternalOrders -param $orderHash -filterStr "consult"
         # Set-fnInternalOrders -param $orderHash -filterStr "lab" # combine all lab in one
         Set-fnInternalOrders -param $orderHash -filterStr "imaging"
@@ -50,13 +59,12 @@ function New-fnIncompleteOrderReport {
     }
 
     Write-Information "EXPORT TO EXCEL"
-    if($orderHash.provSummarySuccess -and $orderHash.deptSummarySuccess -and $orderHash.provDetailSuccess){
+    if($orderHash.provSummarySuccess -and $orderHash.deptSummarySuccess -and $orderHash.provDetailSuccess -and $orderHash.yearSummarySuccess){
         Export-fnDataToExcel -param $orderHash
     }
 
     Write-Information "ORGANIZE & SEND EMAIL"
-    if($orderHash.exportSuccess -or $true){
-        $email = Initialize-fnEmailConfig
+    if($orderHash.exportSuccess){
 
         # email summary 
         Get-fnEmailConfig_IncompleteOrdersSummary -email $email -orderHash $orderHash
@@ -64,8 +72,17 @@ function New-fnIncompleteOrderReport {
         
         
         # email individual staff
-        # Get-fnEmailConfig_IncompleteOrdersDetails -email $email -orderHash $orderHash
-        #loop and Send-fnEmail -email $email
+        $supportStaffList = Read-fnCsvDefaultHeader -filename $orderHash.supportStaff
+        
+        foreach($prov in $orderHash.provDetail){
+            $email.From = $email.supportStaffFrom
+            $email.cc = $email.supportStaffCC 
+
+            $email.To = Get-fnSupportStaffEmail -provider $prov.Name -supportStaffList $supportStaffList
+
+            Get-fnEmailConfig_IncompleteOrdersDetails -email $email -providerDetail $prov
+            Send-fnEmail -email $email
+        }
         
     }
 

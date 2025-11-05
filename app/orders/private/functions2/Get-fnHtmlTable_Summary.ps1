@@ -1,8 +1,7 @@
-function Get-fnSummaryHtmlTable {
+function Get-fnHtmlTable_Summary {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [hashtable]$email,
         [hashtable]$orderHash
     )
     Write-Verbose "$($MyInvocation.MyCommand.Name): convert summary object into html table"

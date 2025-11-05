@@ -3,22 +3,20 @@ function Get-fnEmailConfig_IncompleteOrdersDetails {
     param (
         [Parameter()]
         [hashtable]$email,
-        [hastable]$orderHash
+        [PSCustomObject]$providerDetail
     )
     Write-Verbose "$($MyInvocation.MyCommand.Name): set email config for individual email."
+    
+    $email.Subject = "Incomplete Orders for $($providerDetail.Name)"
 
+    if($null -eq $email.To){
+        $email.To = $email.supportStaffFrom
+        $email.Cc = $email.me
+        $email.Subject = "Incomplete Order - Missing support staff for $($providerDetail.Name)"
+    }
 
-    $email.From = $email.supportStaffFrom
-    $email.to = ""
-    $email.cc = $email.supportStaffCC
-    $email.subject = "Incomplete Orders for $()"
+    $email.bodyhtml = Get-fnHtmlTable_Provider -providerDetail $providerDetail
 
-    $email.to = $email.me
-    $email.cc = $email.me
-
-    $tempbody = "<p>$($actionsTaken)</p>"
-
-    $email.body = $email.bodyintro + $tempbody + $email.bodyhtml + $email.bodysig
-        $orderHash.provDetail
-
+    $email.body = $email.bodyintro + $email.bodyhtml + $email.bodysig
+    
 }

@@ -12,7 +12,7 @@ function Get-fnEmailConfig_IncompleteOrdersSummary {
     $email.subject = $email.orderSubject   
 
     $email.incompleteOrderStepByStepProcess  = Get-fnStepByStepProcess -email $email -orderHash $orderHash
-    $email.bodyhtml = Get-fnSummaryHtmlTable -email $email -orderHash $orderHash
+    $email.bodyhtml = Get-fnHtmlTable_Summary -orderHash $orderHash
 
     $email.body = $email.bodyintro + $email.bodyhtml + $email.incompleteOrderStepByStepProcess + $email.bodysig    
 }

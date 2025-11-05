@@ -25,6 +25,9 @@ function Join-fnTwoSourceFile {
         $param.sourceData | ForEach-Object {
             $conditionalDate = if($_.performDate){Get-Date $_.performDate} else {Get-Date $_.OrderDate }
             $_ | Add-Member -MemberType "NoteProperty" -Name "Year" -Value $conditionalDate.Year.ToString()
+            if($_.Provider -eq "" -or $null -eq $_.Provider) {
+                $_.Provider = "unknown"
+            }
         }
 
         $param.joinSuccess = $true

@@ -24,6 +24,7 @@ function Initialize-fnOrderHash {
     
 
     return [hashtable]@{
+        rawFolder = Join-Path -Path $rootPath -ChildPath $rawFolder
         # config for join
         v1Source   = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $rawFolder) -ChildPath $v1Source
         v2Source   = Join-Path -Path (Join-Path -Path $rootPath -ChildPath $rawFolder) -ChildPath $v2Source
@@ -94,6 +95,7 @@ function Initialize-fnOrderHash {
         export=Join-Path -Path $rootPath -ChildPath $export
         summaryFile="_summary-provider-department-year.xlsx"
         adminFile="_admin-delete-expired-plus-others.xlsx"
+        unknownProvider="_unknown-approving-provider"
     }
 
 }

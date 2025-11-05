@@ -12,44 +12,41 @@ function Export-fnDataToExcel {
         # export data per provider
         Get-ChildItem -Path $param.export -Include * | Remove-Item
         foreach($prov in $param.provDetail){
-            $fileName = "$($prov.Name) - $($prov.Total)"
-            if($prov.Name -eq "") {$fileName = "_unknown Approving Provider"}
-            $provPath = Join-Path -Path $param.export -ChildPath "$fileName.xlsx"
             
             if($prov.lab.count -gt 0){
                 $prov.Lab | 
-                    Export-Excel -Path $provPath -WorksheetName "Lab - $($prov.lab.count)" -Autosize
+                    Export-Excel -Path $prov.FilePath -WorksheetName "Lab - $($prov.lab.count)" -Autosize
             }
 
             if($prov.Procedure.count -gt 0){
                 $prov.Procedure | 
-                    Export-Excel -Path $provPath -WorksheetName "Procedure - $($prov.Procedure.count)" -Autosize
+                    Export-Excel -Path $prov.FilePath -WorksheetName "Procedure - $($prov.Procedure.count)" -Autosize
             }
 
             
             if($prov.Imaging.count -gt 0){
                 $prov.Imaging | 
-                    Export-Excel -Path $provPath -WorksheetName "Imaging - $($prov.Imaging.count)" -Autosize
+                    Export-Excel -Path $prov.FilePath -WorksheetName "Imaging - $($prov.Imaging.count)" -Autosize
             }
             
             if($prov.Other.count -gt 0){
                 $prov.Other | 
-                    Export-Excel -Path $provPath -WorksheetName "Other - $($prov.Other.count)" -Autosize
+                    Export-Excel -Path $prov.FilePath -WorksheetName "Other - $($prov.Other.count)" -Autosize
             }
             
             if($prov.Vaccine.count -gt 0){
                 $prov.Vaccine | 
-                    Export-Excel -Path $provPath -WorksheetName "Vaccine - $($prov.Vaccine.count)" -Autosize
+                    Export-Excel -Path $prov.FilePath -WorksheetName "Vaccine - $($prov.Vaccine.count)" -Autosize
             }
             
             if($prov."Internal-Consult".count -gt 0){
                 $prov."Internal-Consult" | 
-                    Export-Excel -Path $provPath -WorksheetName "Internal-Consult - $($prov."Internal-Consult".count)" -Autosize
+                    Export-Excel -Path $prov.FilePath -WorksheetName "Internal-Consult - $($prov."Internal-Consult".count)" -Autosize
             }
             
             if($prov.Consult.count -gt 0){
                 $prov.Consult | 
-                    Export-Excel -Path $provPath -WorksheetName "Consult - $($prov.Consult.count)" -Autosize
+                    Export-Excel -Path $prov.FilePath -WorksheetName "Consult - $($prov.Consult.count)" -Autosize
             }
         }
 
