@@ -25,6 +25,8 @@ function Export-fnComputerTaskList{
     
     $startTimer = Start-Timer
 
+    $exportConf = Get-fnExcelExportConfig
+
     $computerHash = [hashtable]@{
         All = ""
         Server = ""
