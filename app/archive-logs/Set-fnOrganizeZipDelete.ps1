@@ -33,7 +33,7 @@ function Set-fnOrganizeZipDelete{
     $eventExtension = "$($achiveConfig.eventExtension)"  -replace '"',""
 
     Move-fnFilesIntoYearMonthDayFolders -source $psLog -extension $psLogExt -filePrefix 'all'
-    Start-fnZipAndDelete -path $psLog -daysToWait 14
+    Start-fnZipAndDelete -path $psLog -daysToWait 21
 
     Move-fnFilesIntoYearMonthDayFolders -source $dc1 -extension $eventExtension -filePrefix $eventFilePrefixToArchive
     Start-fnZipAndDelete -path $dc1 -daysToWait 3
