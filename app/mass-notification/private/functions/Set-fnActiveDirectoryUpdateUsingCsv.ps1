@@ -1,4 +1,4 @@
-function Set-fnActiveDirectoryUpdate {
+function Set-fnActiveDirectoryUpdateUsingCsv {
     [CmdletBinding()]
     param (
         [parameter()]

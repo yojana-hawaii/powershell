@@ -18,7 +18,7 @@ function Export-fnEmployeeToDialMy {
         }
         
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
+    Remove-Variable import, utility, private, emailConf
     #endregion
 
     $startTimer = Start-Timer
@@ -60,7 +60,7 @@ function Export-fnEmployeeToDialMy {
         
     
 
-    $failedUsers = Set-fnActiveDirectoryUpdate -CsvPath $activeDirectoryCsv
+    $failedUsers = Set-fnActiveDirectoryUpdateUsingCsv -CsvPath $activeDirectoryCsv
 
     $userStr = ""
     foreach($user in $failedUsers){
@@ -82,7 +82,7 @@ function Export-fnEmployeeToDialMy {
             $issue
             <br><br>Thank you.<br>$($email.Sig)"
 
-    Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
+    # Send-MailMessage -smtpserver $email.smtp -from $email.from -to $email.to -subject $email.subject -body $email.body -bodyashtml
 
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Proservice employee data to Dial My Call & Actice Directory. It took $totalTime" 
