@@ -5,7 +5,7 @@ function Get-fnSupportStaffEmail {
         [string]$provider,
         [PSCustomObject]$supportStaffList
     )
-    Write-Verbose "$($MyInvocation.MyCommand.Name): set email config for individual email."
+    Write-Verbose "$($MyInvocation.MyCommand.Name): get support staff for $provider."
 
     $prov = $provider -split ","
     $currentProvFirst = ($prov[1].Trim()).Replace(" ","-")
