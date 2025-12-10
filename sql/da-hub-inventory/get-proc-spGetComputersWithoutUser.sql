@@ -22,7 +22,7 @@ begin
 	from DaHubInventory.dbo.vwWorkstationScanOrder vw 
 	where vw.ComputerName not in (select ComputerName from #lapsCompleted)
 		and vw.IsThinClient = 0
-	order by vw.LastScanOffline
+	order by NEWID()
 		
 
 end
