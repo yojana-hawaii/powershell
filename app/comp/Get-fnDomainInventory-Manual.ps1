@@ -30,7 +30,7 @@ function Get-fnDomainInventoryManual {
         }
         
     }
-    Remove-Variable import, utility, private, sqlConn, config, emailConf
+    Remove-Variable import, utility, private, sqlConn, config
     #endregion
     
     $startTimer = Start-Timer
