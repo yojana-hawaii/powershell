@@ -9,11 +9,12 @@ create table dbo.WorkstationServices
 	ComputerName varchar(50) ,
 	ServiceName varchar(50),
 	ServiceDisplayName varchar(50),
-	ServiceStatus varchar(20),
-	ServiceStartType varchar(20),
-	ServiceCanPauseAndContinue bit,
-	ServiceCanShutdown bit,
-	ServiceCanStop bit,
+	ServiceState varchar(50),
+	ServiceStartMode varchar(50),
+	ServiceAcceptPause bit,
+	ServiceAcceptStop bit,
+	ServiceDelayedAutoStart bit,
+	ServiceStartName varchar(50),
 	ServiceScanSuccessDate datetime
 );
 

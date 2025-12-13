@@ -6,11 +6,8 @@ function Get-fnWorkstationServices {
     )
     Write-Information "$($MyInvocation.MyCommand.Name): $($computerName)"
     try{
-        $services = Invoke-Command -ComputerName $computerName `
-            -ScriptBlock { 
-                Get-Service | Select-Object Name, DisplayName, Status, 
-                    StartType, CanPauseAndContinue, CanShutdown, CanStop
-            }
+        $services = Get-CimInstance -ClassName Win32_Service -ComputerName $computer | 
+            Select-Object Name, DisplayName, State,StartMode, AcceptPause, AcceptStop, DelayedAutoStart, StartName
          
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
