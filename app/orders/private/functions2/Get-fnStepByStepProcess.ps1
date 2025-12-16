@@ -11,7 +11,7 @@ function Get-fnStepByStepProcess {
             <li> Identify internal imaging - $($orderHash.internalImaging) </li>
             <li> Separate orders waiting to be deleted</li>
             <li> Separate expired orders - 180 days for lab and imaging. 365 days for rest</li>
-            <li> Separate orders nnot time to follow up yet</li>
+            <li> Separate orders not due for follow up yet</li>
             <li> Separate followed up within last 2 weeks</li>
             <li> Export Summary by Provider, Year & Department</li>
             <li> Export orders with admin action needed</li>
