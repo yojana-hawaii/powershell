@@ -26,36 +26,12 @@ function Add-fnHpScannerProfile{
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start." 
 
-    $hpScanConfig  = Get-fnHpScannerConfig 
     
     # set all the constants in hash table. variable are set as blank key-value
-    $hash = @{
-        userDirPrefix="\\"
-        userDirSuffix="\c$\users\"
-        userDir=""
-        compName=""
+    $hash = Get-fnHpScanObject
 
-        excludeProfiles = ("$($hpScanConfig.excludeProfiles)"  -replace '"',"") -split(";")
-
-        hp_path="\AppData\Local\HP"
-        hp_alt_path="\HP Scan"
-        hp_s3="\HP ScanJet Pro 3000 s3\"
-        hp_s4="\HP ScanJet Pro 3000 s4\"
-
-        scanner_profile_name="ATHENA_SCAN"
-        default_username="newUser"
-
-        s3_src_ini_file=$hpScanConfig.s4fileLocation  -replace '"',""
-        s4_src_ini_file=$hpScanConfig.s3FileLocation  -replace '"',""
-        s3_sha256=""
-        s4_sha256=""
-        src_sha256=""
-    }
-    Remove-Variable hpScanConfig
-
-    # to compare file
-    $hash.s3_sha256 = (Get-FileHash -Path $hash.s3_src_ini_file -Algorithm SHA256).hash
-    $hash.s4_sha256 = (Get-FileHash -Path $hash.s4_src_ini_file -Algorithm SHA256).hash
+    $hash.s3_modified_date = (Get-ChildItem -Path $hash.s3_src_ini_file).LastWriteTime
+    $hash.s4_modified_date = (Get-ChildItem -Path $hash.s4_src_ini_file).LastWriteTime
 
     # change comp1 to specific computer to target one machine
     $comp = "comp1"
@@ -64,11 +40,11 @@ function Add-fnHpScannerProfile{
 
         foreach($computer in $computers){
             Write-Verbose "Working on $computer"
-            $hash.compName = $computer.ComputerName
+            $hash.srcCompName = $computer.ComputerName
             Get-fnUserProfileAndPushHpScannerConfig -hash $hash
         }
     } else {
-        $hash.compName = $comp
+        $hash.srcCompName = $comp
         Get-fnUserProfileAndPushHpScannerConfig -hash $hash
     }
 
