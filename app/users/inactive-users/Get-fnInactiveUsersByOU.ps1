@@ -53,7 +53,7 @@ function Get-fnInactiveUsersByOU {
         $inactiveUsers = $inactiveUsers | 
         Where-Object {
             # never login but created within 30 days (new hire account creation)
-            -not ((  $null -eq $_.LastLogon -or $_.LastLogon -eq "" ) -and 
+            -not ((  $null -eq $_.LastLogon -or $_.LastLogon -eq "" -or $_.LastLogon -eq "12/31/1600 2:00:00 PM" ) -and 
                 $_.Created -ge $neverLoggedInDateToKeepActive)
         }
     }
