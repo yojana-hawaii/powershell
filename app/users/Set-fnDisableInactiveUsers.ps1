@@ -24,7 +24,7 @@ function Set-fnDisableInactiveUsers {
     Write-Verbose "$($MyInvocation.MyCommand.Name): start." 
 
     Write-Verbose "GET INACTIVE USERS"
-    $inactiveDays = 14
+    $inactiveDays = 17
     $inactiveUsers = Get-fnInactiveUsers -$inactiveDays
 
     if($null -eq $inactiveUsers -or $inactiveUsers -eq "") {

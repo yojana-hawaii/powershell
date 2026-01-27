@@ -19,7 +19,7 @@ function Get-fnEmailConfig_DisableInactiveUsers {
 
     $tempbody = "<p>$($email.compExportBody)</p>"
 
-    $email.bodyhtml = Get-fnEmailConfig_HtmlTable -users $groupedUsers.Group 
+    $email.bodyhtml = Get-fnEmailConfig_DisableInactiveUsers_HtmlTable -users $groupedUsers.Group 
 
 
     $tempbody = 

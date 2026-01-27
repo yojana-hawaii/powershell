@@ -1,4 +1,4 @@
-function Get-fnEmailConfig_HtmlTable {
+function Get-fnEmailConfig_DisableInactiveUsers_HtmlTable {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
