@@ -57,7 +57,7 @@ function Send-fnIncompleteLabToSupportStaff {
     $orderAssignment | Group-Object -Property Email | ForEach-Object {
         Set-fnEmailBodySupportStaff -email $email -task $_
         Set-fnEmailHtmlCombine -email $email
-        Send-MailMessage -From $email.from -To $email.to -Cc $email.cc -Subject $email.subject -Body $email.body -SmtpServer $email.smtp -BodyAsHtml
+        # Send-MailMessage -From $email.from -To $email.to -Cc $email.cc -Subject $email.subject -Body $email.body -SmtpServer $email.smtp -BodyAsHtml
 
     }
 }

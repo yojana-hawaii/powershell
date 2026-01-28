@@ -63,7 +63,7 @@ function New-fnOrderReport {
     if($sendEmail) {
         Set-fnEmailBodyOrder -email $email
         Set-fnEmailHtmlCombine -email $email
-        Send-MailMessage -From $email.from -To $email.to -Cc $email.cc  -Subject $email.subject -Body $email.body -SmtpServer $email.smtp -BodyAsHtml
+        # Send-MailMessage -From $email.from -To $email.to -Cc $email.cc  -Subject $email.subject -Body $email.body -SmtpServer $email.smtp -BodyAsHtml
 
         $OrdersToDelete | Where-Object {$null -ne $_ }| Export-csv -Path "$($order[0].delDestination)\delete.csv" -NoTypeInformation
     }
