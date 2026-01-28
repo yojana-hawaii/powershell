@@ -37,7 +37,7 @@ function Initialize-fnEmailConfig {
         hr       = (($conf.hr) -replace '"',"") -replace "'", ""
         queenB   = (($conf.queenB) -replace '"',"") -replace "'", ""
 
-        missingSlipFrom = (($conf.hr) -replace '"',"") -replace "'", ""
+        missingSlipFrom = (($conf.missingSlipFrom) -replace '"',"") -replace "'", ""
         missingSlipCc   = ((($conf.missingSlipCc) -replace '"',"") -replace "'", "").Split(';')
         missingSlipCcBh = ((($conf.missingSlipCcBh) -replace '"',"") -replace "'", "").Split(';')
 
