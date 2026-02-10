@@ -24,9 +24,13 @@ function Get-fnBcbsCbpData {
         }
 
         # set gaps dates & values  
-        $bcbs.'Date of Service' = if($emr.'Multiple BP Lowest Date') {($emr.'Multiple BP Lowest Date').ToString("MM/dd/yyyy")}
-        $bcbs.'Systolic Value' = if($emr.'Multiple BP Lowest Systolic') {($emr.'Multiple BP Lowest Systolic')}
-        $bcbs.'Diastolic Value' = if($emr.'Multiple BP Lowest Diastolic') {($emr.'Multiple BP Lowest Diastolic')}
+        # $bcbs.'Date of Service' = if($emr.'Multiple BP Lowest Date') {($emr.'Multiple BP Lowest Date').ToString("MM/dd/yyyy")}
+        # $bcbs.'Systolic Value' = if($emr.'Multiple BP Lowest Systolic') {($emr.'Multiple BP Lowest Systolic')}
+        # $bcbs.'Diastolic Value' = if($emr.'Multiple BP Lowest Diastolic') {($emr.'Multiple BP Lowest Diastolic')}
+
+        $bcbs.'Date of Service' = if($emr.'BP Date  Dt') {($emr.'BP Date  Dt').ToString("MM/dd/yyyy")}
+        $bcbs.'Systolic Value' = if($emr.'Systolic-1') {($emr.'Systolic-1')}
+        $bcbs.'Diastolic Value' = if($emr.'Diastolic-1') {($emr.'Diastolic-1')}
         write-host ""
     }
     return $bcbsData

@@ -24,6 +24,10 @@ function Get-fnBcbsBcsXclData {
             continue 
         }
 
+        # reset before next patient
+        $dos = $null
+        $type = $null
+
         # set gaps dates & values
         if([string]::IsNullOrEmpty($emr.'Age-Relation Exclusion Date')){
             $type = "Age-Related ($($emr.'Age-Related Exclusion Detail') )"

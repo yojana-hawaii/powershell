@@ -17,11 +17,16 @@ function Get-fnBcbsColXclData {
         #set emr id
         $bcbs.'Medical Record'  = $emrId
 
+
         # find data for that emr id
         $emr = $emrData | Where-Object {$_.MRN -eq $emrId -and $_.Exclusion -eq 'Y'}
         if([string]::IsNullOrEmpty($emr.MRN)){
             continue 
         }
+
+        # reset before next patient
+        $dos = $null
+        $type = $null
 
         # set gaps dates & values    
         if($emr.'Age-Relation Exclusion Date'){
@@ -44,6 +49,7 @@ function Get-fnBcbsColXclData {
 
         $bcbs.'Date of Service' = $dos
         $bcbs.'Exclusion Type' = $type
+
     }
     return $bcbsData
 }

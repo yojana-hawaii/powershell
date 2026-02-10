@@ -14,6 +14,9 @@ function Get-fnBcbsWcvData {
             $bcbs.'Medical Record' = "no-patient-match"
             continue
         }
+
+        $dos = $null
+        
         #set emr id
         $bcbs.'Medical Record'  = $emrId
 
