@@ -24,7 +24,7 @@ function Get-fnEmailConfig_DisableInactiveUsers {
 
     $tempbody = 
         "<p>The following have not logged into computers system in office or remotely in the past " + 
-        $days + " days. Their accounts have been disabled as of now.<br /><br />" + 
+        $inactiveUsers + " days. Their accounts have been disabled as of now.<br /><br />" + 
         "Please notify $($email.helpdesk) whether the user has been " +
         "<ul><li>Terminated: Notify IT to initiate termination process</li>" + 
         "<li>Leave: Notify IT before return to office. It takes more than one hour for account to be ready for use.</li></ul></p>"
