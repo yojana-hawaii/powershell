@@ -1,6 +1,16 @@
 # Powershell
 learning GPO & powershell from https://github.com/EvotecIT/ 
 
+# modules
+* rsat
+* install-Module Microsoft.Graph  // new email sender
+* install-Module PnP.Powershell // sharepoint
+* Install-Module ImportExcel // manipulate excel files
+* Install-Module JoinModule // inner join, left join two objects 
+* Install-Module SqlServer // talk to sql server
+* powershell v7
+* VSCode
+
 
 # app
 
