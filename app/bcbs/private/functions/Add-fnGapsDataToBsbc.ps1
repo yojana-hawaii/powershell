@@ -14,6 +14,10 @@ function Add-fnGapsDataToBsbc {
 
         Write-Verbose "$($bcbsSheet) --> $isGapsFileReady)"
 
+        # if($bcbsSheet -ne "COL XCL" ){
+        #     continue
+        # }
+
         if($isGapsFileReady){
             $bcbsData   = Import-Excel -Path $FilePath -WorksheetName $bcbsSheet
             $emrData    = Import-Excel -Path $gapsHashtable[$bcbsSheet] #-WorksheetName Results - dont use results sheet, use first sheet

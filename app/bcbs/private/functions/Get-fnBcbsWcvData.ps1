@@ -26,9 +26,9 @@ function Get-fnBcbsWcvData {
             continue 
         }
 
-        # set gaps dates & values  
-        $dos = if($emr.'Most Recent Annual Well-Child Care (3-21 yrs) 3y-21y') {($emr.'Most Recent Annual Well-Child Care (3-21 yrs) 3y-21y').ToString("MM/dd/yyyy")}
-        $bcbs.'Date of Service' = $dos
+        $bcbs.'Date of Service' = if($emr.'Most Recent Annual Well-Child Care (3-21 yrs) 3y-21y') {($emr.'Most Recent Annual Well-Child Care (3-21 yrs) 3y-21y').ToString("MM/dd/yyyy")}
+
+        $bcbs.Note = 1
     }
     return $bcbsData
 }
