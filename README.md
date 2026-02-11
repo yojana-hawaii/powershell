@@ -3,7 +3,7 @@ learning GPO & powershell from https://github.com/EvotecIT/
 
 # modules
 * rsat
-* install-Module Microsoft.Graph  // new email sender
+* install-Module Microsoft.Graph  // api for office 365. exchange, azure ad (replaces ms-online & azure-ad)
 * install-Module PnP.Powershell // sharepoint
 * Install-Module ImportExcel // manipulate excel files
 * Install-Module JoinModule // inner join, left join two objects 
