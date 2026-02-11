@@ -4,6 +4,8 @@ function Get-fnCalendarQuarter {
         [Parameter()]
         [string]$ThisQuarterOrLastQuarter = "ThisQuarter" 
     )
+    Write-Information "$($MyInvocation.MyCommand.Name): Get Quarter year, number, start & end date for the quarter"  
+
     # today midnight
     $today = [datetime]::Today
 
