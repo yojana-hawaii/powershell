@@ -56,22 +56,40 @@ function Get-fnActiveDirectoryDetails{
     # 50 after that -> changes in last 50 hours 
     $deltaChange = 48
 
+    # --- Process Groups ---
     $groups = Get-fnAdGroups -deltaChangeHours $deltaChange
-    $totalGroups = $groups.count
-    $count = 1
-    foreach($group in $groups){
-        Write-Information "inserting $count of $totalGroups : $($group.sAMAccountName)"
-        Invoke-spAdGroup -group $group
-        $count++
+    $totalGroups = @($groups).Count # Wrapping in @() ensures .Count works even for 1 result
+    
+    if ($totalGroups -gt 0) {
+        $count = 1
+        foreach($group in $groups){
+            Write-Progress -Activity "Inserting Groups to DB" -Status "Group $count of $totalGroups" -PercentComplete (($count / $totalGroups) * 100)
+            
+            # Write-Information for logging
+            Write-Information "Processing: $($group.sAMAccountName)"
+            
+            Invoke-spAdGroup -group $group
+            $count++
+        }
+    } else {
+        Write-Warning "No groups found to update in the last $deltaChange hours."
     }
+    
+    # --- Process Members ---
     $groupMembers = Get-fnAdGroupMembers -deltaChangeHours $deltaChange
-    $totalGm = $groupMembers.count
-    $countGm = 1
-    foreach($gm in $groupMembers){
-        Write-Information "Inserting $countGm of $totalGm users, $($gm.GroupsAMAccountName), $($gm.Username)"
-
-        Invoke-spAdGroupMembers -groupMember $gm
-        $countGm++
+    $totalGm = @($groupMembers).Count
+    
+    if ($totalGm -gt 0) {
+        $countGm = 1
+        foreach($gm in $groupMembers){
+            Write-Progress -Activity "Inserting Members to DB" -Status "User $countGm of $totalGm" -PercentComplete (($countGm / $totalGm) * 100)
+            
+            # Note: Corrected property name case to match your previous PSCustomObject (GroupSamAccountName)
+            Write-Information "Inserting member: $($gm.Username) for group: $($gm.GroupSamAccountName)"
+    
+            Invoke-spAdGroupMembers -groupMember $gm
+            $countGm++
+        }
     }
     #endregion
      
