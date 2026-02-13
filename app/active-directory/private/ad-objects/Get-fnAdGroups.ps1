@@ -16,7 +16,7 @@ function Get-fnAdGroups {
     }
 
     if ($Test) {
-        Write-Host "--- TEST MODE ENABLED ---" -ForegroundColor Cyan
+        Write-Host "--- TEST MODE Get-fnAdGroups ---" -ForegroundColor Cyan
         Write-Host "Target Date: $changeSinceDate"
         Write-Host "Filter String: { whenChanged -gt `$changeSinceDate }"
         
