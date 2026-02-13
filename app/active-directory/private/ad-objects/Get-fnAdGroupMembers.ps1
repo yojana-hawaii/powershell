@@ -16,7 +16,7 @@ function Get-fnAdGroupMembers {
 
     try {
         # Get groups modified since the cutoff
-        $groups = Get-ADGroup -Filter "whenChanged -gt '$changeSinceDate'" 
+        $groups = Get-ADGroup -Filter {whenChanged -gt $changeSinceDate}
 
         # Directly assign the loop output to the variable (Avoids +=)
         $groupMembers = foreach ($group in $groups) {
