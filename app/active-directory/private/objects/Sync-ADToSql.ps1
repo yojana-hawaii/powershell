@@ -41,4 +41,24 @@ function Sync-ADToSql {
         $data = ConvertTo-SqlComputerObject -AdObject $comp
         Invoke-ADSqlStoredProcedure -StoredProcedure "dbo.spAdComputers" -Parameters ($data | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name | ForEach-Object -Begin {$h=@{}} -Process {$h[$_] = $data.$_} -End {$h})
     }
+
+    # Add this inside the Sync-ADToSql function
+    Write-Information "Starting User Sync..."
+    
+    $userProps = @(
+        'GivenName', 'Surname', 'DisplayName', 'mail', 'Department', 'Title', 
+        'whenCreated', 'whenChanged', 'lastLogonDate', 'PasswordLastSet', 
+        'accountExpires', 'Manager', 'EmployeeId', 'Enabled'
+    )
+    
+    $users = Get-ADData -Type User -Filter $filter -Properties $userProps
+    
+    foreach ($u in $users) {
+        $userData = ConvertTo-SqlUserObject -AdUser $u
+        # Convert PSCustomObject to Hashtable for the SQL Invoker
+        $params = @{}
+        $userData.PSObject.Properties | ForEach-Object { $params[$_.Name] = $_.Value }
+        
+        Invoke-ADSqlStoredProcedure -StoredProcedure "dbo.spAdUser" -Parameters $params
+    }
 }
