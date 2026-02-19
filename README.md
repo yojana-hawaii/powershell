@@ -2,14 +2,31 @@
 learning GPO & powershell from https://github.com/EvotecIT/ 
 
 # modules
-* rsat
+* windows app store - powershell v7 & vs code
+
 * install-Module Microsoft.Graph  // api for office 365. exchange, azure ad (replaces ms-online & azure-ad)
 * install-Module PnP.Powershell // sharepoint
 * Install-Module ImportExcel // manipulate excel files
 * Install-Module JoinModule // inner join, left join two objects 
 * Install-Module SqlServer // talk to sql server
-* powershell v7
-* VSCode
+
+* rsat
+Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online
+
+1. Bypass WSUS
+$registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+$originalValue = (Get-ItemProperty -Path $registryPath).UseWUServer
+Set-ItemProperty -Path $registryPath -Name "UseWUServer" -Value 0
+Restart-Service wuauserv
+
+2. Attempt Installation
+Write-Host "Installing RSAT... this may take a minute." -ForegroundColor Cyan
+Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0
+
+3. Restore Original WSUS Setting
+Set-ItemProperty -Path $registryPath -Name "UseWUServer" -Value $originalValue
+Restart-Service wuauserv
+Write-Host "WSUS settings restored and installation complete!" -ForegroundColor Green
 
 
 # app
