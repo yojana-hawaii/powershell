@@ -7,14 +7,15 @@ learning GPO & powershell from https://github.com/EvotecIT/
 * windows app store - powershell v7 & vs code
 * vscode extension store - powershell, github
 
-### install modules 
-* install-Module Microsoft.Graph  <!-- api for office 365. exchange, azure ad (replaces ms-online & azure-ad) -->
-* install-Module PnP.Powershell   <!-- sharepoint -->
-* Install-Module ImportExcel      <!-- manipulate excel files -->
-* Install-Module JoinModule       <!-- inner join, left join two objects  -->
-* Install-Module SqlServer        <!-- talk to sql server -->
-
-### install optional features
+### powershell modules 
+```powershell
+install-Module Microsoft.Graph  <!-- api for office 365. exchange, azure ad (replaces ms-online & azure-ad) -->
+install-Module PnP.Powershell   <!-- sharepoint -->
+Install-Module ImportExcel      <!-- manipulate excel files -->
+Install-Module JoinModule       <!-- inner join, left join two objects  -->
+Install-Module SqlServer        <!-- talk to sql server -->
+```
+### windows optional features
 
 RSAT
 ```bash
