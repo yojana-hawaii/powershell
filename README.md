@@ -9,20 +9,20 @@ learning GPO & powershell from https://github.com/EvotecIT/
 
 ### powershell modules 
 ```powershell
-install-Module Microsoft.Graph  <!-- api for office 365. exchange, azure ad (replaces ms-online & azure-ad) -->
-install-Module PnP.Powershell   <!-- sharepoint -->
-Install-Module ImportExcel      <!-- manipulate excel files -->
-Install-Module JoinModule       <!-- inner join, left join two objects  -->
-Install-Module SqlServer        <!-- talk to sql server -->
+install-Module Microsoft.Graph  # api for office 365. exchange, azure ad (replaces ms-online & azure-ad) 
+install-Module PnP.Powershell   # sharepoint 
+Install-Module ImportExcel      # manipulate excel files 
+Install-Module JoinModule       # inner join, left join two objects  
+Install-Module SqlServer        # talk to sql server 
 ```
 ### windows optional features
 
 RSAT
-```bash
+```powershell
 Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online
 Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0
 ```
-WSUS enabled devices to to bypass wsus firat 
+WSUS enabled devices to to bypass wsus first 
 
 # app
 
