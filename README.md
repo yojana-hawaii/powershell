@@ -8,11 +8,11 @@ learning GPO & powershell from https://github.com/EvotecIT/
 * vscode extension - powershell
 
 ### install modules 
-* install-Module Microsoft.Graph  // api for office 365. exchange, azure ad (replaces ms-online & azure-ad)
-* install-Module PnP.Powershell // sharepoint
-* Install-Module ImportExcel // manipulate excel files
-* Install-Module JoinModule // inner join, left join two objects 
-* Install-Module SqlServer // talk to sql server
+* install-Module Microsoft.Graph  <!-- api for office 365. exchange, azure ad (replaces ms-online & azure-ad) -->
+* install-Module PnP.Powershell   <!-- sharepoint -->
+* Install-Module ImportExcel      <!-- manipulate excel files -->
+* Install-Module JoinModule       <!-- inner join, left join two objects  -->
+* Install-Module SqlServer        <!-- talk to sql server -->
 
 ### install optional features
 
