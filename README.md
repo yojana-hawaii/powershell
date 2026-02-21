@@ -3,9 +3,12 @@ learning GPO & powershell from https://github.com/EvotecIT/
 
 # Installations
 
+### download
+* git scm for windows
+
 ### app stores
 * windows app store - powershell v7 & vs code
-* vscode extension store - powershell, github
+* vscode extension store - powershell, github pull request
 
 ### powershell modules 
 ```powershell
