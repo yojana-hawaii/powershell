@@ -1,18 +1,23 @@
 # Powershell
 learning GPO & powershell from https://github.com/EvotecIT/ 
 
-# modules
+# preparation
+
+### install
 * windows app store - powershell v7 & vs code
 * vscode extension - powershell
 
+### install modules 
 * install-Module Microsoft.Graph  // api for office 365. exchange, azure ad (replaces ms-online & azure-ad)
 * install-Module PnP.Powershell // sharepoint
 * Install-Module ImportExcel // manipulate excel files
 * Install-Module JoinModule // inner join, left join two objects 
 * Install-Module SqlServer // talk to sql server
 
-* rsat
+### install windows optional features
+
 Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online
+
 
 1. Bypass WSUS
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
