@@ -1,11 +1,11 @@
 # Powershell
 learning GPO & powershell from https://github.com/EvotecIT/ 
 
-# preparation
+# Installations
 
-### install
+### app stores
 * windows app store - powershell v7 & vs code
-* vscode extension - powershell
+* vscode extension store - powershell, github
 
 ### install modules 
 * install-Module Microsoft.Graph  <!-- api for office 365. exchange, azure ad (replaces ms-online & azure-ad) -->
@@ -17,9 +17,10 @@ learning GPO & powershell from https://github.com/EvotecIT/
 ### install optional features
 
 RSAT
+```bash
 Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online
 Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0
-
+```
 WSUS enabled devices to to bypass wsus firat 
 
 # app
