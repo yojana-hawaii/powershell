@@ -3,6 +3,7 @@ learning GPO & powershell from https://github.com/EvotecIT/
 
 # modules
 * windows app store - powershell v7 & vs code
+* vscode extension - powershell
 
 * install-Module Microsoft.Graph  // api for office 365. exchange, azure ad (replaces ms-online & azure-ad)
 * install-Module PnP.Powershell // sharepoint
