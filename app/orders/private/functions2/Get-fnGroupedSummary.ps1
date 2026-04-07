@@ -24,7 +24,7 @@ function Get-fnGroupedSummary {
             # need to initialize all properties ahead of time, rather than dynamically adding new property 
             # initialize with 0 if summary count
             # initialize with array detail 
-            $temp = Initialize-fnTempPSCustomObject -Type $propertyAppend -unknownProvider $param.unknownProvider -provname $row.Name
+            $temp = Initialize-fnTempPSCustomObject -Type $propertyAppend -provname $row.Name
 
             foreach($col in $colGroups) {
                 $columnName = $col.Name

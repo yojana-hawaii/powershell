@@ -3,23 +3,13 @@ function Initialize-fnTempPSCustomObject {
     param (
         [Parameter()]
         [string]$type,
-        [string]$unknownProvider,
         [string]$provname
     )
 
     if($type -eq "Detail"){
-        # file name
-        if($row.Name -eq "unknown") {
-            $filename = "$unknownProvider.xlsx"
-        } else {
-            $provider = ($provname.ToLower() )-split ","
-            $first = ($provider[1].Trim()).Replace(" ","-")
-            $last = ($provider[0].Trim()).Replace(" ","-")
-            $fileName = "$first-$last.xlsx"
-        }
-
+        $fileName = Get-fnProviderFileName -provname $provname
         return [PSCustomObject]@{
-                Name  = $row.Name
+                Name  = $provname
                 Consult = @()
                 "Internal-Consult" = @()
                 Lab = @()
@@ -33,7 +23,7 @@ function Initialize-fnTempPSCustomObject {
     }
     
     return [PSCustomObject]@{
-                Name  = $row.Name
+                Name  = $provname
                 Consult = 0
                 "Internal-Consult" = 0
                 Lab = 0

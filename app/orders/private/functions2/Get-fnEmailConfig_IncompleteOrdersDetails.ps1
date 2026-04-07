@@ -11,7 +11,7 @@ function Get-fnEmailConfig_IncompleteOrdersDetails {
 
     if($null -eq $email.To){
         $email.To = $email.supportStaffFrom
-        $email.Cc = $email.me
+        $email.Cc = $email.supportStaffCC
         $email.Subject = "Incomplete Order - Missing support staff for $($providerDetail.Name)"
     }
 
