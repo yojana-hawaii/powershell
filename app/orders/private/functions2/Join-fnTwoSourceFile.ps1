@@ -7,8 +7,8 @@ function Join-fnTwoSourceFile {
     Write-Verbose "$($MyInvocation.MyCommand.Name): Join the two csv files"
 
 
-    $v1Valid = Test-fnSourceFile -sourceFile $param.v1Source -sourceFileValidDays 7
-    $v2Valid = Test-fnSourceFile -sourceFile $param.v2Source -sourceFileValidDays 7
+    $v1Valid = Test-fnSourceFile -sourceFile $param.v1Source -sourceFileValidDays 6
+    $v2Valid = Test-fnSourceFile -sourceFile $param.v2Source -sourceFileValidDays 6
     if(-not ($v1Valid -and $v2Valid)){
         return
     }
