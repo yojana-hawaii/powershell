@@ -11,18 +11,31 @@ function Start-fnService {
     Write-Information "$($MyInvocation.MyCommand.Name): Start $serviceName in $($computerName)"
     
     try {
-        $service = Get-Service -ComputerName $computerName -Name $serviceName
+        $service = Invoke-Command -ComputerName $computerName -ScriptBlock {
+            param($serviceName, $finalState)
+            $service = Get-Service $serviceName
 
-        if($service.StartType -eq "disabled"){
-            Set-Service -ComputerName $computerName -Name $serviceName -StartupType "Manual"
-        }
+            # disabled service cannot be started
+            if($service.StartType -eq "disabled"){
+                Set-Service -Name $serviceName -StartupType "Manual"
+            }
 
-        if($service.State -ne "Running"){
-            Start-Service -InputObject ($service)
-        }
-        if($finalState -eq "Auto"){
-            Set-Service -ComputerName $computerName -Name $serviceName -StartupType $finalState
-        }
+            # start service if it is not running
+            if($service.Status -eq "Running"){
+                Start-Service -InputObject $service
+            }
+
+            # set the final state of the service
+            if($finalState -eq "Auto"){
+                Set-Service -Name $serviceName -StartupType $finalState
+            }
+
+            # return from invoke-command
+            $service
+        } -ArgumentList $serviceName, $finalState
+
+
+
         Write-Information "$($MyInvocation.MyCommand.Name): $computerName service $ServiceName status $($service.Status) StartType $($service.StartType)"
         return $service
     }
