@@ -41,11 +41,12 @@ function Initialize-fnEmailConfig {
         missingSlipCc   = ((($conf.missingSlipCc) -replace '"',"") -replace "'", "").Split(';')
         missingSlipCcBh = ((($conf.missingSlipCcBh) -replace '"',"") -replace "'", "").Split(';')
 
-        orderTo = (($conf.orderTo) -replace '"',"") -replace "'", ""
-        orderCC = (($conf.orderCC) -replace '"',"") -replace "'", ""
+        orderTo = ((($conf.orderTo) -replace '"',"") -replace "'", "").Split(';')
+        orderCC = ((($conf.orderCC) -replace '"',"") -replace "'", "").Split(';')
         orderSubject = "Incomplete Order Summary"
-        supportStaffCC = (($conf.supportStaffCC) -replace '"',"") -replace "'", ""
+        supportStaffCC = ((($conf.supportStaffCC) -replace '"',"") -replace "'", "").Split(';')
         supportStaffFrom = (($conf.supportStaffFrom) -replace '"',"") -replace "'", ""
+        supportStaffFilepath = (($conf.supportStaffFilepath) -replace '"',"") -replace "'", ""
         incompleteOrderStepByStepProcess = ""
         
         proserviceSubject = (($conf.proserviceSubject) -replace '"',"") -replace "'", ""
@@ -65,7 +66,7 @@ function Initialize-fnEmailConfig {
 
         dentalSubject = ($conf.dentalSubject) -replace '"', ""
         dentalBody = ($conf.dentalBody) -replace '"', ""
-        dentalTo = ($conf.dentalTo) -replace '"', ""
+        dentalTo = (($conf.dentalTo) -replace '"', "").Split(';')
 
         enableUserSubject = ($conf.enableUserSubject) -replace '"', ""
         enableUserBody1 = ($conf.enableUserBody1) -replace '"', ""
