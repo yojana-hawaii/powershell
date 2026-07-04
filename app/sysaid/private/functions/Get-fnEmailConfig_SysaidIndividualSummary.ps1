@@ -10,7 +10,7 @@ function Get-fnEmailConfig_SysaidIndividualSummary {
 
     $email.to = if($str -eq "unassigned"){$email.helpdesk}else{"$str@$($email.domain)"}
     $email.to = if($email.to -eq $email.me){$email.helpdesk}else{$email.to}
-    $email.to = if($str -eq $email.sysaidemailtoboss){"$($email.to);$($email.bossEmail)"}else{$email.to}
+    # $email.to = if($str -eq $email.sysaidemailtoboss){"$($email.to);$($email.bossEmail)"}else{$email.to}
     $email.to = $email.to -split ";"
     $email.cc = $email.me
 
