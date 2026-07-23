@@ -20,6 +20,8 @@ function Export-fnEmployeeData{
     }
     Remove-Variable import, utility, emailConf, private, private2
     #endregion
+
+    Import-Module ImportExcel
     
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start." 
@@ -27,17 +29,20 @@ function Export-fnEmployeeData{
 
     $sourceFile = $dialMyConf.employeeFileV2 -replace '"',""
     $dialMyExcel = (Join-Path -Path $dialMyConf.employeeFilepath -ChildPath $dialMyConf.dialMyExcel) -replace '"',""
-
     
     try { 
         $data = Get-fnEmployeeData -Filename $sourceFile
         
-        $updateStatus = Set-fnUpdateUserInActiveDirectory -users $data
+        # $ceo = $dialMyConf.ceo -replace '"',""
+        # $updateStatus = Set-fnUpdateUserInActiveDirectory -users $data -ceo $ceo
 
-        $data | 
-            Select-Object 'First Name', 'Last Name', 'E-mail Address', Phone, Miscellaneous, "Group Assignments" | 
-            Export-Excel -Path $dialMyExcel -AutoSize
-        
+        $export = $data | 
+            Select-Object 'First Name', 'Last Name', 'E-mail Address', Phone, Miscellaneous, "Group Assignments" 
+
+        Remove-Item -Path $dialMyExcel -ErrorAction Ignore
+        $export | Export-Excel -Path $dialMyExcel -AutoSize
+
+        write-host "set up email"
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed $(): $($_.Exception.Message)"
