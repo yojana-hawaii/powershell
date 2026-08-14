@@ -17,6 +17,10 @@ function Get-fnWorkstationDetails {
     Invoke-fnSpWorkstationSpecs -workstation $workstation
     $workstation
 
+    # services bulk insert > 6 time faster than inserting one at a time. 200+ database open & close
+    $services = Get-fnWorkstationServices -computerName $computer
+    Invoke-fnSpWorkstationServicesMergeScd2 -currentServices $services -computerName $computer
+
     # Get local users
     $users = Get-fnWorkstationLocalUser -computerName $computer
     foreach($user in $users){
@@ -52,11 +56,6 @@ function Get-fnWorkstationDetails {
         Invoke-fnSpWorkstationSoftware -software $software 
     }
         
-    # Get services and status
-    $services = Get-fnWorkstationServices -computerName $computer
-    foreach($service in $services){
-        Invoke-fnSpWorkstationServices -service $service -computerName $computer
-    }
     
     # VM does not have monitor - wmi causing problem
     if($workstation.IsVm -ne 1){
