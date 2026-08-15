@@ -18,10 +18,11 @@ create table dbo.WorkstationServices
 	ServiceStartName nvarchar(100),
 	ServiceScanSuccessDate datetime,
 	IsCurrent bit not null default 1,
-	IsDeleted bit not null default 0,
 	EffectiveDate datetime not null default getdate(),
 	ExpiryDate datetime null,
 	RowHash varbinary(32),
 	SlowlyChangingDimensionReason nvarchar(255) null
 ) 
+go
+select top 10 * from dbo.WorkstationServices;
 go
