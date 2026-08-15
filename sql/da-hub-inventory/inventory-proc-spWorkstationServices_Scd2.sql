@@ -2,9 +2,9 @@ use DaHubInventory
 go
 
 
-drop proc if exists dbo.spWorkstationServicesMergeScd2
+drop proc if exists dbo.spWorkstationServices_Scd2
 go
-create proc dbo.spWorkstationServicesMergeScd2
+create proc dbo.spWorkstationServices_Scd2
 	@services dbo.tvpWorkstationServices readonly
 as 
 begin
