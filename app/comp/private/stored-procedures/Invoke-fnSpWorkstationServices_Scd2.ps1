@@ -25,7 +25,7 @@ function Invoke-fnSpWorkstationServices_Scd2 {
             )
     }
     
-    $StoredProcedure = 'dbo.spWorkstationServicesMergeScd2'
+    $StoredProcedure = 'dbo.spWorkstationServices_Scd2'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]
@@ -35,8 +35,8 @@ function Invoke-fnSpWorkstationServices_Scd2 {
     $param.Value = $dataTable
 
     try{
-
-        Write-Information "Import to sql affected $return row(s)"
+        $cmd.ExecuteNonQuery() | Out-Null
+        Write-Verbose "Import services to sql. Try branch success."
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($ComputerName): $($_.Exception.Message)"
         continue
