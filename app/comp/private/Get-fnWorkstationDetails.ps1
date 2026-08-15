@@ -21,6 +21,10 @@ function Get-fnWorkstationDetails {
     $services = Get-fnWorkstationServices -computerName $computer
     Invoke-fnSpWorkstationServices_Scd2 -currentServices $services -computerName $computer
 
+    # Get printer specs
+    $printers = Get-fnWorkstationPrinter -computerName $computer
+    Invoke-fnSpWorkstationPrinters_Scd2 -printers $printers
+
     # Get local users
     $users = Get-fnWorkstationLocalUser -computerName $computer
     foreach($user in $users){
@@ -33,11 +37,6 @@ function Get-fnWorkstationDetails {
         Invoke-fnSpWorkstationUserLoggedIn -loggedInUser $user
     }
 
-    # Get printer specs
-    $printers = Get-fnWorkstationPrinter -computerName $computer
-    foreach( $printer in $printers){
-        Invoke-fnSpWorkstationPrinters -printer $printer
-    }
 
     # Get drive partition
     $partitions = Get-fnWorkstationPartition -computerName $computer

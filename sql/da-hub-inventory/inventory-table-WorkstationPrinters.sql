@@ -11,7 +11,12 @@ create table dbo.WorkstationPrinters
 	PrinterDriverName  varchar(50) null,
 	PrinterDriverVersion varchar(50) null,
 	PrinterIP varchar(50) null,
-	PrinterScanSuccessDate datetime
+	PrinterScanSuccessDate datetime,
+	IsCurrent bit not null default 1,
+	EffectiveDate datetime not null default getdate(),
+	ExpiryDate datetime null,
+	RowHash varbinary(32),
+	SlowlyChangingDimensionReason nvarchar(255) null
 )
 go 
 select * from dbo.WorkstationPrinters

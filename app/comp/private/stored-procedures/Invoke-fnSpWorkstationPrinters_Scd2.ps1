@@ -2,41 +2,37 @@ function Invoke-fnSpWorkstationPrinters_Scd2 {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [System.Object]$currentServices,
-        [Parameter(Mandatory)]
-        [string]$computerName
+        [System.Object]$printers
     )
 
     $dataTable = New-Object System.Data.DataTable
     $dataTable.Columns.Add("ComputerName", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceName", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceDisplayName", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceState", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceStartMode", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceAcceptPause", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceAcceptStop", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceDelayedAutoStart", [string]) | Out-Null
-    $dataTable.Columns.Add("ServiceStartName", [string]) | Out-Null
+    $dataTable.Columns.Add("PrinterName", [string]) | Out-Null
+    $dataTable.Columns.Add("PrinterShared", [string]) | Out-Null
+    $dataTable.Columns.Add("PrinterShareName", [string]) | Out-Null
+    $dataTable.Columns.Add("PrinterDriverName", [string]) | Out-Null
+    $dataTable.Columns.Add("PrinterDriverVersion", [string]) | Out-Null
+    $dataTable.Columns.Add("PrinterIP", [string]) | Out-Null
 
-    foreach($row in $currentServices){
+    foreach($row in $printers){
         $dataTable.Rows.Add(
-                $computerName, $row.Name, $row.DisplayName, $row.State, $row.StartMode,
-                    $row.AcceptPause, $row.AcceptStop, $row.DelayedAutoStart, $row.StartName
+                $row.ComputerName, $row.PrinterName, $row.PrinterShared, $row.PrinterShareName, $row.PrinterDriverName,
+                    $row.PrinterDriverVersion, $row.PrinterIP
             )
     }
     
-    $StoredProcedure = 'dbo.spWorkstationServicesMergeScd2'
+    $StoredProcedure = 'dbo.spWorkstationPrinters_Scd2'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]
 
-    $param = $cmd.Parameters.Add("@services", [System.Data.SqlDbType]::Structured)
-    $param.TypeName = "dbo.tvpWorkstationServices"
+    $param = $cmd.Parameters.Add("@printers", [System.Data.SqlDbType]::Structured)
+    $param.TypeName = "dbo.tvpWorkstationPrinters"
     $param.Value = $dataTable
 
     try{
-
-        Write-Information "Import to sql affected $return row(s)"
+        $cmd.ExecuteNonQuery() | Out-Null
+        Write-Verbose "Import printer to sql. Try branch success."
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($ComputerName): $($_.Exception.Message)"
         continue
