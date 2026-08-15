@@ -19,7 +19,7 @@ function Get-fnWorkstationDetails {
 
     # services bulk insert > 6 time faster than inserting one at a time. 200+ database open & close
     $services = Get-fnWorkstationServices -computerName $computer
-    Invoke-fnSpWorkstationServicesMergeScd2 -currentServices $services -computerName $computer
+    Invoke-fnSpWorkstationServices_Scd2 -currentServices $services -computerName $computer
 
     # Get local users
     $users = Get-fnWorkstationLocalUser -computerName $computer

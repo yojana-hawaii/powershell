@@ -1,4 +1,4 @@
-function Invoke-fnSpWorkstationServicesMergeScd2 {
+function Invoke-fnSpWorkstationServices_Scd2 {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
