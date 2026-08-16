@@ -1,13 +1,13 @@
 
 use DaHubInventory
 go
---drop table if exists dbo.WorkstationLocalUsers
+
+drop type if exists dbo.tvpWorkstationLocalUsers;
 go
-create table dbo.WorkstationLocalUsers
-(
+create type dbo.tvpWorkstationLocalUsers as table (
 	ComputerName varchar(50),
 	LocalUserName varchar(100),
-	LocalUserStatus  varchar(50),
+	LocalUserStatus  varchar(100),
 	LocalUserLocalAccount  bit,
 
 	LocalUserPasswordExpires bit,
@@ -18,12 +18,9 @@ create table dbo.WorkstationLocalUsers
 
 	LocalUserDescription varchar(500),
 	LocalUserFullName  varchar(100),
-	LocalUserAccountType varchar(50),
+	LocalUserAccountType varchar(100),
 
-	LocalUserInstallDate date,
-    LocalUserScanSuccessDate datetime
-)
-go 
-select * from dbo.WorkstationLocalUsers
+	LocalUserInstallDate date
+);
+
 go
-

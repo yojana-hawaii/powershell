@@ -15,7 +15,6 @@ function Get-fnWorkstationDetails {
     # Get computer specs
     $workstation =  Get-fnWorkstationSpecs -computerName $computer -vpnIp $vpnIp
     Invoke-fnSpWorkstationSpecs -workstation $workstation
-    $workstation
 
     # services bulk insert > 6 time faster than inserting one at a time. 200+ database open & close
     $services = Get-fnWorkstationServices -computerName $computer
@@ -27,10 +26,10 @@ function Get-fnWorkstationDetails {
 
     # Get local users
     $users = Get-fnWorkstationLocalUser -computerName $computer
-    foreach($user in $users){
-        Invoke-fnSpWorkstationLocalUser -localUser $user
-    }
+    Invoke-fnSpWorkstationLocalUser_Scd2 -localUsers $users
 
+
+    
     # Get any user that has logged in - local or domain
     $users = Get-fnWorkstationUserLoggedIn -computerName $computer
     foreach($user in $users){
