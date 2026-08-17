@@ -41,12 +41,9 @@ function Get-fnWorkstationDetails {
         Invoke-fnSpWorkstationUserLoggedIn -loggedInUser $user
     }
 
-
     # Get drive partition
     $partitions = Get-fnWorkstationPartition -computerName $computer
-    foreach($partition in $partitions){
-        Invoke-fnSpWorkstationPartition -parition $partition
-    }
+    Invoke-fnSpWorkstationPartitions_Scd2 -partitions $partitions
 
     # Get installed computers
     $softwares = Get-fnWorkstationSoftware -computerName $computer
