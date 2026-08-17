@@ -12,7 +12,7 @@ function Invoke-fnSpWorkstationMonitors_Scd2 {
     $dataTable.Columns.Add("MonitorSerial", [string]) | Out-Null
     $dataTable.Columns.Add("MonitorYear", [string]) | Out-Null
     $dataTable.Columns.Add("MonitorCaption", [string]) | Out-Null
-    $dataTable.Columns.Add("", [string]) | Out-Null
+    $dataTable.Columns.Add("MonitorResolution", [string]) | Out-Null
 
     foreach($row in $monitors){
         $dataTable.Rows.Add(
