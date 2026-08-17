@@ -28,7 +28,12 @@ function Get-fnWorkstationDetails {
     $users = Get-fnWorkstationLocalUser -computerName $computer
     Invoke-fnSpWorkstationLocalUser_Scd2 -localUsers $users
 
-
+    # VM does not have monitor - wmi causing problem
+    if($workstation.IsVm -ne 1){
+        $monitors = Get-fnWorkstationMonitor -computerName $computer
+        Invoke-fnSpWorkstationMonitors_Scd2 -monitors $monitors
+        
+    }
     
     # Get any user that has logged in - local or domain
     $users = Get-fnWorkstationUserLoggedIn -computerName $computer
@@ -53,13 +58,5 @@ function Get-fnWorkstationDetails {
         }
         Invoke-fnSpWorkstationSoftware -software $software 
     }
-        
     
-    # VM does not have monitor - wmi causing problem
-    if($workstation.IsVm -ne 1){
-        $monitors = Get-fnWorkstationMonitor -computerName $computer
-        foreach($monitor in $monitors){
-            Invoke-fnSpWorkstationMonitors -monitor $monitor
-        }
-    }
 }
