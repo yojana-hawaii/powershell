@@ -37,9 +37,7 @@ function Get-fnWorkstationDetails {
     
     # Get any user that has logged in - local or domain
     $users = Get-fnWorkstationUserLoggedIn -computerName $computer
-    foreach($user in $users){
-        Invoke-fnSpWorkstationUserLoggedIn -loggedInUser $user
-    }
+    Invoke-fnSpWorkstationUserLoggedIn_Scd2 -loggedInUsers $users
 
     # Get drive partition
     $partitions = Get-fnWorkstationPartition -computerName $computer
