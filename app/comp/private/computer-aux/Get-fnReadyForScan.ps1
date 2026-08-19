@@ -10,7 +10,7 @@ function Get-fnReadyForScan {
     # return false if computer offline > update database
     $ping = Test-Connection $computer -Quiet -Count 1
     if(-not $ping) {
-        Invoke-fnSpWorkstationSpecsOffline -computerName $computer
+        Invoke-fnSpSetWorkstationOffline -computerName $computer
         Write-Information "$computer offline"
         return $false
     }

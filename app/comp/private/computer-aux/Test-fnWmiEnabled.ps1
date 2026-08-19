@@ -9,13 +9,13 @@ function Test-fnWmiEnabled {
         $ErrorActionPreference = 'Stop'
         $wmi = Get-WmiObject -ComputerName $computerName -Class "win32_operatingsystem"
         Write-Information "WMI response: $wmi"
-        Invoke-fnSpWorkstationSpecWmi -computerName $computerName -enabled "1"
+        Invoke-fnSpSetWorkstationWmiStatus -computerName $computerName -enabled "1"
         return $true
     }
     catch {
         Write-Information "Wmi Failed"
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"
-        Invoke-fnSpWorkstationSpecWmi -computerName $computerName -enabled "0"
+        Invoke-fnSpSetWorkstationWmiStatus -computerName $computerName -enabled "0"
         return $false
     }
 }

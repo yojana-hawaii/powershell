@@ -1,14 +1,12 @@
-function Invoke-fnSpWorkstationSpecWinRm {
+function Invoke-fnSpSetWorkstationOffline {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
-        [string]$computerName,
-        [Parameter(Mandatory)]
-        [string]$enabled
+        [string]$computerName
     )
 
     
-    $StoredProcedure = 'dbo.spWorkstationSpecsWinRm'
+    $StoredProcedure = 'dbo.spSetWorkstationOffline'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]
@@ -16,10 +14,8 @@ function Invoke-fnSpWorkstationSpecWinRm {
      try{
         Write-Information -Message "Insert $($computerName)"
         $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@ComputerName", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
-        $cmd.Parameters.Add((New-Object Data.SqlClient.SqlParameter("@WinRmEnabled", [System.Data.SqlDbType]::Varchar, 100)))|Out-Null
 
         $cmd.Parameters[0].Value = $computerName
-        $cmd.Parameters[1].Value = $enabled
 
         $return = $cmd.ExecuteNonQuery()
         Write-Information "Import to sql affected $return row(s)"

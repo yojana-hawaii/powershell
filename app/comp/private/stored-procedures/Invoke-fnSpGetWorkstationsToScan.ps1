@@ -1,4 +1,4 @@
-function Invoke-spGetComputersToScan {
+function Invoke-fnSpGetWorkstationsToScan {
     [CmdletBinding()]
     param (
         [parameter()]
@@ -8,7 +8,7 @@ function Invoke-spGetComputersToScan {
     )
 
     
-    $StoredProcedure = 'dbo.spGetComputersToScan'
+    $StoredProcedure = 'dbo.spGetWorkstationsToScan'
     $connection = New-spSqlConnection -StoredProcedureName $StoredProcedure
     $conn = $connection[0]
     $cmd = $connection[1]
