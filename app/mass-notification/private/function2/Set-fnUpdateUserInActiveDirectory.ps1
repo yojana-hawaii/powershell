@@ -2,7 +2,8 @@ function Set-fnUpdateUserInActiveDirectory {
     [CmdletBinding()]
     param (
         [parameter()]
-        [object]$users
+        [object]$users,
+        [string]$ceo
     )
 
     $usersWithErrors = @()
@@ -10,6 +11,10 @@ function Set-fnUpdateUserInActiveDirectory {
 
     foreach($user in $users){
         write-host $user
+        if($user.staffEmail -eq $ceo){
+            write-verbose "No Manager for CEO"
+            continue
+        }
         # $location = $user.location
         # $department = $user.department
         # $jobtitle = $user.jobtitle
