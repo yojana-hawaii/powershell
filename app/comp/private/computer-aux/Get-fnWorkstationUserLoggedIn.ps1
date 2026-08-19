@@ -17,7 +17,8 @@ function Get-fnWorkstationUserLoggedIn {
                UserLastLoggedInDate = $user.LastLogon
             }
         }
-        return $userObject
+        $users = $userObject | Where-Object {$null -ne $_.UserLoggedIn -and $_.UserLoggedIn -ne ""}
+        return $users
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed for $($computerName): $($_.Exception.Message)"

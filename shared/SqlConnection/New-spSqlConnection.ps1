@@ -22,7 +22,8 @@ function New-spSqlConnection {
     $conn.Open()
     
     $cmd = $conn.CreateCommand()
-    $cmd.CommandType = 'StoredProcedure'
+    $cmd.CommandType = [System.Data.CommandType]::StoredProcedure
     $cmd.CommandText = $StoredProcedureName
+    $cmd.CommandTimeout = 300
     return ($conn,$cmd)
 }

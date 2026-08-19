@@ -9,7 +9,7 @@ function Get-fnWorkstationSoftware {
     $softwareObject = @()
     $serviceName = "RemoteRegistry"
     try {
-        $service = Start-fnService -ComputerName $computerName -serviceName $serviceName -finalstate "Automatic"
+        $service = Start-fnService -ComputerName $computerName -serviceName $serviceName -finalState "Auto"
 
         if($null -ne $service -and $service.Status -eq 'Running'){
 

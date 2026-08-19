@@ -19,15 +19,15 @@ function Start-fnService {
             if($service.StartType -eq "disabled"){
                 Set-Service -Name $serviceName -StartupType "Manual"
             }
-
-            # start service if it is not running
-            if($service.Status -eq "Running"){
-                Start-Service -InputObject $service
+            
+            # set the final state of the service
+            if($finalState -eq "Auto" -or $finalState -eq "Automatic"){
+                Set-Service -Name $serviceName -StartupType $finalState
             }
 
-            # set the final state of the service
-            if($finalState -eq "Auto"){
-                Set-Service -Name $serviceName -StartupType $finalState
+            # start service if it is not running
+            if($service.Status -ne "Running"){
+                Start-Service -InputObject $service
             }
 
             # return from invoke-command
