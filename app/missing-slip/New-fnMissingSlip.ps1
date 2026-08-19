@@ -32,11 +32,11 @@ function New-fnMissingSlip {
     $source = "$($config.missingSlipSource)"  -replace '"',""
     #endregion
     
-    $sourceValid = Test-fnSourceFile -sourceFile $source -sourceFileValidDays 1
+    $sourceValid = Test-fnSourceFile -sourceFile $source -sourceFileValidDays 2
 
     if($sourceValid){
         $data = Import-Excel $source
-        $groupByProvider = $data | Group-Object Provider
+        $groupByProvider = $data | Group-Object 'Rendering Provider'
 
         foreach($prov in $groupByProvider){
             $email = Initialize-fnEmailConfig
