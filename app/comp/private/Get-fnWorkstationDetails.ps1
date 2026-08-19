@@ -14,7 +14,9 @@ function Get-fnWorkstationDetails {
 
     # Get computer specs
     $workstation =  Get-fnWorkstationSpecs -computerName $computer -vpnIp $vpnIp
-    Invoke-fnSpWorkstationSpecs -workstation $workstation
+    # Invoke-fnSpWorkstationSpecs -workstation $workstation
+    Invoke-fnSpWorkstationSpecs_Scd2 -workstation $workstation
+
 
     # services bulk insert > 6 time faster than inserting one at a time. 200+ database open & close
     $services = Get-fnWorkstationServices -computerName $computer
