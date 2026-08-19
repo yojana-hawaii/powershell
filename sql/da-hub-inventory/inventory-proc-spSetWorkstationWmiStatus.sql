@@ -1,10 +1,10 @@
 use DaHubInventory
 go
 
-drop proc if exists dbo.spWorkstationSpecsWmi;
+drop proc if exists dbo.spSetWorkstationWmiStatus;
 go
 
-create proc dbo.spWorkstationSpecsWmi
+create proc dbo.spSetWorkstationWmiStatus
 (
 	@ComputerName	varchar(50),
 	@WmiEnabled varchar(50)

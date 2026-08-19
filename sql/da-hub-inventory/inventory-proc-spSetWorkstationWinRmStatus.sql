@@ -1,10 +1,10 @@
 use DaHubInventory
 go
 
-drop proc if exists dbo.spWorkstationSpecsWinRm;
+drop proc if exists dbo.spSetWorkstationWinRmStatus;
 go
 
-create proc dbo.spWorkstationSpecsWinRm
+create proc dbo.spSetWorkstationWinRmStatus
 (
 	@ComputerName	varchar(50),
 	@WinRmEnabled varchar(50)

@@ -1,10 +1,10 @@
 use DaHubInventory
 go
 
-drop proc if exists dbo.spWorkstationSpecsOffline;
+drop proc if exists dbo.spSetWorkstationOffline;
 go
 
-create proc dbo.spWorkstationSpecsOffline
+create proc dbo.spSetWorkstationOffline
 (
 	@ComputerName	varchar(50)
 )

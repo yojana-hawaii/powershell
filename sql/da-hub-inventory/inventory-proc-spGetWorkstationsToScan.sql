@@ -1,10 +1,10 @@
 use DaHubInventory
 go
-drop proc if exists dbo.spGetComputersToScan;
+drop proc if exists dbo.spGetWorkstationsToScan;
 
 go
 
-create proc dbo.spGetComputersToScan(
+create proc dbo.spGetWorkstationsToScan(
 	@count varchar(3) = 500,
 	@scanAfterHours varchar(4) = 24,
 	@scanAttemptHours varchar(4) = 1
@@ -31,4 +31,4 @@ end
 
 go
 
-exec dbo.spGetComputersToScan;
+exec dbo.spGetWorkstationsToScan;
