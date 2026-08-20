@@ -13,7 +13,7 @@ function Get-fnDomainInventoryManual {
     #region - Import necessary configs and private functions #>
 
     Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
-    $private    = @(Get-ChildItem -Path "$PWD\app\comp\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $private    = @(Get-ChildItem -Path "$PWD\app\computer-inventory\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
