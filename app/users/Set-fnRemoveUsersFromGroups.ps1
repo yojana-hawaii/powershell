@@ -31,14 +31,33 @@ function Set-fnRemoveUsersFromGroups {
     $groupsToEmpty = (($config.groupsToEmpty) -replace '"', "") -split ","
     $statusCheck = $false
 
-    $actionsTaken = "Daily clean up:"
+    $today = Get-Date -Format "MM/dd/yyyy"
+    $path =  "$pwd\shared-ignore\user-input\disable-youtube-5pm.csv"
+    $data = Import-Csv -Path $path
+    $youtube_users_to_keep = $data | Where-Object {([datetime]$_.date) -gt $today}
+
+    $actionsTaken = "<p>Daily clean up:</p><p>For more than one day access to youtube, add user to $path with removal date</p>"
     foreach($group in $groupsToEmpty){
         Write-Verbose "Checking group: $group"
         $members = Get-ADGroupMember -Identity $group
-        
+
+        if($group -like "*youtube*"){
+
+            $members = (
+                    Compare-Object -Property username `
+                        -ReferenceObject ($members | Select-Object @{ N='username'; E={$_.SamAccountName} }) `
+                        -DifferenceObject ($youtube_users_to_keep | Select-Object username)
+                    ) | 
+                    Where-Object {$_.SideIndicator -eq "<="} |
+                    ForEach-Object  {Get-ADUser $_.username}
+                
+
+        }
+
         foreach ($member in $members){
             $actionsTaken += "Removed $($member.name) from $group<br />"
             Remove-ADGroupMember -Identity $group -Members $member -Confirm:$False
+            $youtube_users_to_keep  | Export-Csv -Path $path -NoTypeInformation
             $statusCheck = $true
         }
     }
