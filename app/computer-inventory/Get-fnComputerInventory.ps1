@@ -41,7 +41,7 @@ function Get-fnComputerInventory {
         $cnt++
     }
 
-    $computers = GetWorkstationsToScan -count 50 -scanAfterHours 24
+    $computers = Invoke-fnSpGetWorkstationsToScan -count 50 -scanAfterHours 24
     $total = $computers.count
     $cnt = 1
     foreach($comp in $computers){
