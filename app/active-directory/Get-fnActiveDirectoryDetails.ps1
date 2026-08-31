@@ -74,25 +74,12 @@ function Get-fnActiveDirectoryDetails{
     } else {
         Write-Warning "No groups found to update in the last $deltaChange hours."
     }
-    
     # --- Process Members ---
     $groupMembers = Get-fnAdGroupMembers -deltaChangeHours $deltaChange
-    $totalGm = @($groupMembers).Count
-    
-    if ($totalGm -gt 0) {
-        $countGm = 1
-        foreach($gm in $groupMembers){
-            Write-Progress -Activity "Inserting Members to DB" -Status "User $countGm of $totalGm" -PercentComplete (($countGm / $totalGm) * 100)
-            
-            # Note: Corrected property name case to match your previous PSCustomObject (GroupSamAccountName)
-            Write-Information "Inserting member: $($gm.Username) for group: $($gm.GroupSamAccountName)"
-    
-            Invoke-spAdGroupMembers -groupMember $gm
-            $countGm++
-        }
-    }
+    Invoke-spAdGroupMembers_Scd2 -groupMembers $groupMembers
+
     #endregion
-     
+    
     
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){
