@@ -36,13 +36,14 @@ function Add-fnHpScannerProfile{
     # change comp1 to specific computer to target one machine
     $comp = "comp1"
     if($comp -eq "comp1"){
-        $computers = Invoke-spGetHpScannerComputer
+        write-host "change $comp to computer name"
+        # $computers = Invoke-spGetHpScannerComputer
 
-        foreach($computer in $computers){
-            Write-Verbose "Working on $computer"
-            $hash.srcCompName = $computer.ComputerName
-            Get-fnUserProfileAndPushHpScannerConfig -hash $hash
-        }
+        # foreach($computer in $computers){
+        #     Write-Verbose "Working on $computer"
+        #     $hash.srcCompName = $computer.ComputerName
+        #     Get-fnUserProfileAndPushHpScannerConfig -hash $hash
+        # }
     } else {
         $hash.srcCompName = $comp
         Get-fnUserProfileAndPushHpScannerConfig -hash $hash

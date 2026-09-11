@@ -37,12 +37,11 @@ function New-fnNecessaryFoldersAndCopyIniFile {
             # }
 
             
-            # if file not not exist or has been deleted > copy file
-            Copy-Item -Path $hash.src -Destination $hash.dst
-    
-            # replace default_username with correct username
-            (Get-Content -Path $dst_path) -replace ($hash.default_username, $hash.currentUser) | Set-Content -Path $dst_path
         }
+        # if file not not exist or has been deleted > copy file
+        Copy-Item -Path $hash.src -Destination $hash.dst
+        # replace default_username with correct username
+        (Get-Content -Path $dst_path) -replace ($hash.default_username, $hash.currentUser) | Set-Content -Path $dst_path
 
         return
     }
