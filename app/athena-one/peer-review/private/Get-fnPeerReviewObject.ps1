@@ -1,4 +1,9 @@
 function Get-fnPeerReviewObject {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [int]$days = 7
+    )
     Write-Information "$($MyInvocation.MyCommand.Name): create peer review hash object"  
 
     $conf = Get-fnAthenaConfig
@@ -13,6 +18,9 @@ function Get-fnPeerReviewObject {
         QuarterNumber = $q.QuarterNumber
         QuarterStart = $q.QuarterStart
         QuarterEnd = $q.QuarterEnd
+
+        RandomStart = (Get-Date).AddDays(-$days).ToString("MM/dd/yyyy")
+        RandomEnd = Get-Date -Format "MM/dd/yyyy"
 
         QualifyingVisits = ""
         RandomVisits = ""

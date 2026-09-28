@@ -24,8 +24,15 @@ function Get-fnPeerReview{
     Write-Verbose "$($MyInvocation.MyCommand.Name): start peer reivew process from uds includsion table" 
     Import-Module ImportExcel
 
-    $hash = Get-fnPeerReviewObject
-    Get-fnQualifiyingVisits -hash $hash
+    # $type = '90-day'
+    $type = 'quarterly'
+
+    $random = @{
+        Days = 90
+        Type = $type
+    }
+    $hash = Get-fnPeerReviewObject -days $random.Days
+    Get-fnQualifiyingVisits -hash $hash -type $random.Type
     Get-fnSelectRandomVisits -hash $hash 
     Export-fnPeerReviewFile -hash $hash
 

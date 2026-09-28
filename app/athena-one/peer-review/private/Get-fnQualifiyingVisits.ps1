@@ -2,7 +2,8 @@ function Get-fnQualifiyingVisits {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [hashtable]$hash
+        [hashtable]$hash,
+        [string]$type = 'quarterly'
     )
     Write-Information "$($MyInvocation.MyCommand.Name): filter by last quarter, select visit types, uds visits, non test & with encounter id "  
     
@@ -14,10 +15,17 @@ function Get-fnQualifiyingVisits {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed $(): $($_.Exception.Message)"
     }
 
+    $startDate = $hash.QuarterStart
+    $endDate = $hash.QuarterEnd
+    if($type -ne 'quarterly'){
+        $startDate = $hash.RandomStart
+        $endDate = $hash.RandomEnd
+    }
+
     $hash.QualifyingVisits = $raw |
         Where-Object {
-            $_.Visit_Date -ge $hash.QuarterStart -and 
-            $_.Visit_Date -le $hash.QuarterEnd -and 
+            $_.Visit_Date -ge $startDate -and 
+            $_.Visit_Date -le $endDate -and 
             $_.Visit_Type -in @("Medical","Vision","MentalHealth") -and
             $_.Is_Uds -eq "Y" -and
             $_.Patient_Name -notlike "test*" -and
