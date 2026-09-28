@@ -4,7 +4,7 @@ function New-fnIncompleteOrderReport {
     #region - Import necessary configs and private functions #>
 
     Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config & utility"
-    $private    = @(Get-ChildItem -Path "$PWD\app\orders\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $private    = @(Get-ChildItem -Path "$PWD\app\athena-one\orders\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
