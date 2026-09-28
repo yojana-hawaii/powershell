@@ -3,7 +3,7 @@ function New-fnMissingSlip {
     #region - Import necessary configs and private functions #>
 
     Write-Verbose "$($MyInvocation.MyCommand.Name): Import necessary private functions & config helpers in "
-    $private    = @(Get-ChildItem -Path "$PWD\app\missing-slip\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
+    $private    = @(Get-ChildItem -Path "$PWD\app\athena-one\missing-slip\private\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $utility    = @(Get-ChildItem -Path "$PWD\shared\utility\*.ps1"    -ErrorAction SilentlyContinue -Recurse)
     $sqlConn    = @(Get-ChildItem -Path "$PWD\shared\SqlConnection\*.ps1"      -ErrorAction SilentlyContinue -Recurse)
     $config     = @(Get-ChildItem -Path "$PWD\shared\config-helper\Get-fnConfig.ps1"    -ErrorAction SilentlyContinue )
@@ -29,23 +29,32 @@ function New-fnMissingSlip {
 
     #region Initialize Config
     $config = Get-fnMissingSlipConfig   
-    $source = "$($config.missingSlipSource)"  -replace '"',""
+    $excelSource = "$($config.missingSlipSource)"  -replace '"',""
+    $csvSource = "$($config.missingSlipSourceCsv)"  -replace '"',""
     #endregion
     
-    $sourceValid = Test-fnSourceFile -sourceFile $source -sourceFileValidDays 2
+    $excelSourceValid = Test-fnSourceFile -sourceFile $excelSource -sourceFileValidDays 2
+    $csvSourceValid = Test-fnSourceFile -sourceFile $csvSource -sourceFileValidDays 2
 
-    if($sourceValid){
-        $data = Import-Excel $source
-        $groupByProvider = $data | Group-Object 'Rendering Provider'
-
-        foreach($prov in $groupByProvider){
-            $email = Initialize-fnEmailConfig
-            Get-fnEmailConfig_MissingSlip -email $email -providerDetails $prov            
-            Send-fnEmail -email $email
-        }
+    if($excelSourceValid){
+        $data = Import-Excel $excelSource
+    } elseif($csvSourceValid) {
+        $data = Import-Csv $csvSource
     } else {
         Write-Warning "Missing slip file too old"
     }
+
+    if($data){
+        $groupByProvider = $data | Group-Object 'Rendering Provider'
+    
+        foreach($prov in $groupByProvider){
+            $email = Initialize-fnEmailConfig
+            Get-fnEmailConfig_MissingSlip -email $email -providerDetails $prov            
+            # Send-fnEmail -email $email
+        }
+    }
+    
+
 
     $totalTime = Stop-Timer -Start $startTimer
     Write-Information "$($MyInvocation.MyCommand.Name): Missing slip email sent. It took $totalTime"    
