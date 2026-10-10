@@ -27,7 +27,8 @@ function Get-fnCyrcaSliding{
     $exportPath   = ($denConf.exportPath)-replace '"',""
     $payer   = ($denConf.payer3)-replace '"',""
 
-    $date = Get-Date -Format "yyyy-MM-dd"
+    $date = (Get-Date).AddDays(-20) 
+
     
     $dimdate = Invoke-spGetDimDateDetails -param $date
     $start = Get-Date $dimdate.FiscalStart -Format "yyyy-MM-dd"

@@ -10,7 +10,7 @@ function Get-fnEmailConfig_DentalCyrca {
     $email.cc = $email.me
 
     $email.subject = "$($email.dentalSubject)"
-    $tempbody = "<p>$($email.dentalBody)</p>"
+    $tempbody = "<p>$($email.dentalBody)</p> $path"
 
     $email.body = $email.bodyintro + $tempbody + $email.bodyhtml + $email.bodysig
 }
