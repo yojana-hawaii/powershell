@@ -8,6 +8,7 @@ create table dbo.WorkstationUserLoggedIn
 	ComputerName varchar(50),
 	UserLoggedIn  varchar(100) null,
 	UserLastLoggedInDate  datetime2 null,
+
 	UserLoggedInScanSuccessDate datetime,
 	IsCurrent bit not null default 1,
 	EffectiveDate datetime not null default getdate(),
