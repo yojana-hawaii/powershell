@@ -11,6 +11,7 @@ function Send-fnEmail {
         # $email.to = $email.me
         # $email.cc = $email.me
         Send-MailMessage -From $email.from -To $email.to -Cc $email.cc -Subject $email.Subject -Body $email.Body -SmtpServer $email.smtp -BodyAsHtml
+        Write-Verbose "$($MyInvocation.MyCommand.Name): email sent to $($email.to)"
         Reset-fnEmailConfig -email $email
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed $(): $($_.Exception.Message)"

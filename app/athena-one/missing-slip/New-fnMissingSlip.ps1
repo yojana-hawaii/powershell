@@ -50,7 +50,7 @@ function New-fnMissingSlip {
         foreach($prov in $groupByProvider){
             $email = Initialize-fnEmailConfig
             Get-fnEmailConfig_MissingSlip -email $email -providerDetails $prov            
-            # Send-fnEmail -email $email
+            Send-fnEmail -email $email
         }
     }
     
