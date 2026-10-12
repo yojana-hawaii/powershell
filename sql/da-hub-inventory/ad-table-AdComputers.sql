@@ -21,6 +21,7 @@ create table dbo.AdComputers
     OperatingSystemVersion varchar(50),
     Description varchar(500),
     UserAccountControl varchar(100),
+	[Location] varchar(max),
 
     CreatedDate datetime,
 	ModifiedDate datetime,
@@ -30,15 +31,29 @@ create table dbo.AdComputers
 
     LogonCount int,
 
-	AdComputerScanSuccessDate datetime
+	AdComputerScanSuccessDate datetime,
+	IsCurrent bit not null default 1,
+	EffectiveDate datetime not null default getdate(),
+	ExpiryDate datetime null,
+	RowHash varbinary(32),
+	SlowlyChangingDimensionReason nvarchar(255) null
 );
 
 go
 
-alter table dbo.adcomputers
-add [Location] varchar(max);
-
+select AdComputerScanSuccessDate scaned, * from DaHubInventory.dbo.AdComputers where enabled = 1 order by AdComputerScanSuccessDate ;
 go
 
-select * from DaHubInventory.dbo.AdComputers;
-go
+/*
+begin tran
+alter table dbo.AdComputers
+add
+	IsCurrent bit not null default 1,
+	EffectiveDate datetime not null default getdate(),
+	ExpiryDate datetime null,
+	RowHash varbinary(32),
+	SlowlyChangingDimensionReason nvarchar(255) null
+
+--commit
+
+*/

@@ -13,7 +13,7 @@ function Get-fnActiveDirectoryDetails{
     foreach ($import in @($utility + $private + $sqlConn + $config)){
         try{
             . $import.Fullname
-            Write-Information "$($MyInvocation.MyCommand.Name): Importing $($import.Fullname)"
+            Write-Verbose "$($MyInvocation.MyCommand.Name): Importing $($import.Fullname)"
         } catch {
             Write-Error -Message "$($MyInvocation.MyCommand.Name): Failed to import functions from $($import.Fullname): $_"
             $true
@@ -26,6 +26,36 @@ function Get-fnActiveDirectoryDetails{
     $startTimer = Start-Timer
     Write-Verbose "$($MyInvocation.MyCommand.Name): start."  
 
+
+
+    #region Groups and Members
+
+    # --- Process Groups ---
+    $groups = Get-fnAdGroups 
+    Invoke-spAdGroups_Scd2 -groups $groups
+    
+    # --- Process Members ---
+    $groupMembers = Get-fnAdGroupMembers 
+    Invoke-spAdGroupMembers_Scd2 -groupMembers $groupMembers
+
+    #endregion
+
+    #region Computers
+    ## Import in 3 groups. server, Active non servers and Inactive non server - too many computers in AD
+
+    # Active
+    $activeComputers = Get-fnAdComputers -enabled $true
+    Push-fnInsertAdComputers -computers $activeComputers
+    # Inactive
+    $inactiveComputers = Get-fnAdComputers -enabled $false
+    Push-fnInsertAdComputers -computers $inactiveComputers
+    # Servers
+    $servers = Get-fnAdComputers -enabled $false -server $true
+    Push-fnInsertAdComputers -computers $servers
+    #endregion
+
+
+
     #region Users
     # Active
     $activeUsers = Get-fnAdUsers -enabled $true
@@ -36,49 +66,9 @@ function Get-fnActiveDirectoryDetails{
     
     #endregion
     
-    #region Computers
-    ## Import in 3 groups. server, Active non servers and Inactive non server - too many computers in AD
-
-    # Servers
-    $servers = Get-fnAdComputers -enabled $false -server $true
-    Push-fnInsertAdComputers -computers $servers
-    # Active
-    $activeComputers = Get-fnAdComputers -enabled $true
-    Push-fnInsertAdComputers -computers $activeComputers
-    # Inactive
-    $inactiveComputers = Get-fnAdComputers -enabled $false
-    Push-fnInsertAdComputers -computers $inactiveComputers
-    #endregion
-
-
-    #region Groups
-    # First run or all groups deltaChangeHours = 0 (50 years)
-    # 50 after that -> changes in last 50 hours 
-    $deltaChange = 48
-
-    # --- Process Groups ---
-    $groups = Get-fnAdGroups -deltaChangeHours $deltaChange
-    $totalGroups = @($groups).Count # Wrapping in @() ensures .Count works even for 1 result
     
-    if ($totalGroups -gt 0) {
-        $count = 1
-        foreach($group in $groups){
-            Write-Progress -Activity "Inserting Groups to DB" -Status "Group $count of $totalGroups" -PercentComplete (($count / $totalGroups) * 100)
-            
-            # Write-Information for logging
-            Write-Information "Processing: $($group.sAMAccountName)"
-            
-            Invoke-spAdGroup -group $group
-            $count++
-        }
-    } else {
-        Write-Warning "No groups found to update in the last $deltaChange hours."
-    }
-    # --- Process Members ---
-    $groupMembers = Get-fnAdGroupMembers -deltaChangeHours $deltaChange
-    Invoke-spAdGroupMembers_Scd2 -groupMembers $groupMembers
 
-    #endregion
+
     
     
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  

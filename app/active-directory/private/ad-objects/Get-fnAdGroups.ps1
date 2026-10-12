@@ -2,7 +2,7 @@ function Get-fnAdGroups {
     [CmdletBinding()]
     param (
         [Parameter()]
-        [int]$deltaChangeHours = 1,
+        [int]$deltaChangeHours = 0,
 
         [Parameter()]
         [switch]$Test  # Added a test switch
