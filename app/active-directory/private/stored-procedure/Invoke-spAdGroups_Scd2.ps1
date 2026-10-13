@@ -35,10 +35,7 @@ function Invoke-spAdGroups_Scd2 {
     $param.Value = $dataTable
 
     try{
-        $result = $cmd.ExecuteReader()
-        $data = New-Object System.Data.DataTable
-        $data.Load($result)
-        return $data
+        $cmd.ExecuteNonQuery() | Out-Null
         Write-Verbose "Import AD groups to sql. Try branch success."
     } catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
