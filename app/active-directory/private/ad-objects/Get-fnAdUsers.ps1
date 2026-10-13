@@ -12,11 +12,25 @@ function Get-fnAdUsers {
 
     if($identity -ne 'all'){
         $filter = "Name -eq $identity"
+    } else {
+        $filter = "*"
     }
 
  
+    $properties = @(
+                    "CanonicalName", "sAMAccountName","userPrincipalName", "GivenName", "SurName",
+                    "DisplayName", "emailAddress", "DistinguishedName", "StreetAddress",
+                    "HomePhone", "MobilePhone", "OfficePhone", "Fax",
+                    "Company", "Department","Title", "Description",
+                    "Enabled", "LastLogonDate", 
+                    "AccountExpires", "whenCreated", "whenChanged",
+                    "PasswordNeverExpires", "PasswordExpired", "PasswordLastSet",
+                    "ScriptPath", "LogonCount", "EmployeeId",
+                    "Manager"
+                )
+
     try {
-        $users = Get-ADUser  -Filter $filter -Properties * |
+        $users = Get-ADUser  -Properties $properties -Filter $filter | 
                     Select-Object CanonicalName, sAMAccountName,userPrincipalName,
                         @{
                             label = "FirstName"
@@ -31,7 +45,7 @@ function Get-fnAdUsers {
                         Company, Department,Title, Description,
                         @{
                             label="AccountExpirationDate"
-                            expression={[datetime]::FromFileTime($_.AccoountExpires) }
+                            expression={[datetime]::FromFileTime($_.AccountExpires) }
                         },
                         Enabled, LastLogonDate, 
                         @{
@@ -42,22 +56,21 @@ function Get-fnAdUsers {
                             label = 'ModifiedDate'
                             expression = {$_.whenChanged}
                         },
-                        PasswordNeverExpires, PasswordExpired, 
+                        PasswordNeverExpires, PasswordExpired,PasswordLastSet,
                         @{
                             label = "PasswordLastSetDate"
-                            expression = {_.PasswordLastSet}
-
+                            expression = {$_.PasswordLastSet}
                         },
-                        ScriptPath, LogonCount, EmployeeId,
                         @{
                             label="Manager"
                             expression={
-                                if($null -ne $_.Manager){ (Get-Aduser -Identity $_.Manager).sAMAccountName} else {""}
-                            }
-                        }
+                                    if($null -ne $_.Manager){ (Get-Aduser -Identity $_.Manager).sAMAccountName} else {""}
+                                }
+                        },
+                    ScriptPath, LogonCount, EmployeeId
+        return $users
     }
     catch {
         Write-Warning "$($MyInvocation.MyCommand.Name) failed: $($_.Exception.Message)"
     }
-    return $users
 }

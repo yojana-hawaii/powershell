@@ -28,7 +28,7 @@ function Get-fnActiveDirectoryDetails{
 
 
 
-    #region Groups and Members
+    #region Groups and Members and Users
 
     # --- Process Groups ---
     $groups = Get-fnAdGroups 
@@ -37,6 +37,10 @@ function Get-fnActiveDirectoryDetails{
     # --- Process Members ---
     $groupMembers = Get-fnAdGroupMembers 
     Invoke-spAdGroupMembers_Scd2 -groupMembers $groupMembers
+
+    # --- Process Users ---
+    $users = (Get-fnAdUsers) | Where-Object {$null -ne $_.CanonicalName }
+    Invoke-spAdUsers_Scd2 -users $users
 
     #endregion
 
@@ -53,23 +57,7 @@ function Get-fnActiveDirectoryDetails{
     $servers = Get-fnAdComputers -enabled $false -server $true
     Push-fnInsertAdComputers -computers $servers
     #endregion
-
-
-
-    #region Users
-    # Active
-    $activeUsers = Get-fnAdUsers -enabled $true
-    Push-fnInsertAdUsers -users $activeUsers 
-    # Inactive 
-    $inactiveUsers = Get-fnAdUsers -enabled $false
-    Push-fnInsertAdUsers -users $inactiveUsers 
-    
-    #endregion
-    
-    
-
-
-    
+   
     
     $ActiveDirectoryData = Get-fnActiveDirectory -Verbose  
     foreach($data in $ActiveDirectoryData.GetEnumerator()){

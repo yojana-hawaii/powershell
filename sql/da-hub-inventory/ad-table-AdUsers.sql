@@ -8,40 +8,62 @@ go
 
 create table dbo.AdUsers
 (
-	CanonicalName varchar(100) not null, 
-	sAMAccountName varchar(50) not null,
-	userPrincipalName varchar(50),
-	FirstName varchar(50),
-	LastName varchar(50),
-	DisplayName varchar(50),
-	emailAddress varchar(50),
-	DistinguishedName varchar(100),
-	StreetAddress varchar(50),
-	HomePhone varchar(50),
-	MobilePhone varchar(50),
-	OfficePhone varchar(50),
-	Fax varchar(50),
-	Company varchar(50),
-	Department varchar(50),
-	Title varchar(50),
-	Description varchar(500),
-	AccountExpirationDate date,
+	CanonicalName varchar(max) not null, 
+	sAMAccountName varchar(100) not null,
+	userPrincipalName varchar(100),
+	FirstName varchar(100),
+	LastName varchar(100),
+	DisplayName varchar(200),
+	emailAddress varchar(100),
+	DistinguishedName varchar(max),
+	StreetAddress varchar(max),
+	HomePhone varchar(100),
+	MobilePhone varchar(100),
+	OfficePhone varchar(100),
+	Fax varchar(100),
+	Company varchar(max),
+	Department varchar(max),
+	Title varchar(max),
+	Description varchar(max),
+	AccountExpirationDate datetime2,
 	Enabled bit,
-	LastLogonDate date,
-	CreatedDate date,
-	ModifiedDate date,
+	LastLogonDate datetime2,
+	CreatedDate datetime2,
+	ModifiedDate datetime2,
 	PasswordNeverExpires bit,
 	PasswordExpired bit, 
-	PasswordLastSetDate date,
-	ScriptPath varchar(50),
+	PasswordLastSetDate datetime2,
+	ScriptPath varchar(100),
 	LogonCount int,
-	EmployeeId varchar(50),
-	Manager varchar(50),
+	EmployeeId varchar(100),
+	Manager varchar(max),
     
-	AdUserScanSuccessDate datetime
+	AdUserScanSuccessDate datetime,
+	IsCurrent bit not null default 1,
+	EffectiveDate datetime not null default getdate(),
+	ExpiryDate datetime null,
+	RowHash varbinary(32),
+	SlowlyChangingDimensionReason nvarchar(255) null
 );
 
 go
 
-select * from dbo.AdUsers;
+select AdUserScanSuccessDate scanned, * from DaHubInventory.dbo.AdUsers where IsCurrent =1 order by AdUserScanSuccessDate;
 go
+
+
+
+/*
+begin tran
+alter table dbo.AdUsers
+add
+	IsCurrent bit not null default 1,
+	EffectiveDate datetime not null default getdate(),
+	ExpiryDate datetime null,
+	RowHash varbinary(32),
+	SlowlyChangingDimensionReason nvarchar(255) null
+
+--commit
+
+*/
+
