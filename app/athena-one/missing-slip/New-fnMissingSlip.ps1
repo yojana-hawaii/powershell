@@ -51,7 +51,7 @@ function New-fnMissingSlip {
     }
 
     if($data){
-        $groupByProvider = $data | Group-Object 'Rendering Provider'
+        $groupByProvider = $data | Group-Object $groupProperty
     
         foreach($prov in $groupByProvider){
             $email = Initialize-fnEmailConfig
