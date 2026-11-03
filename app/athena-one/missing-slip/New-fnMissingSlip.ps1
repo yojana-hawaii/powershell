@@ -43,6 +43,12 @@ function New-fnMissingSlip {
     } else {
         Write-Warning "Missing slip file too old"
     }
+    $groupProperty = 'Rendering Provider'
+    if($null -eq $data.'Rendering Provider' ){
+        $groupProperty = 'Provider'
+    } else {
+        write-host "it is using rendering provider"
+    }
 
     if($data){
         $groupByProvider = $data | Group-Object 'Rendering Provider'
